@@ -2,8 +2,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import StoreProvider from './StoreProvider';
 const inter = Inter({ subsets: ["latin"] });
+import dynamic from "next/dynamic";
+
+const ReduxProvider = dynamic(() => import("./StoreProvider"), {
+  ssr: false
+});
 
 export const metadata: Metadata = {
   title: "Money Dashboard",
@@ -16,11 +20,13 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <StoreProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </StoreProvider>
+    <html lang="en">
+      <body>
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
+      </body>
+    </html>
   );
 };
 

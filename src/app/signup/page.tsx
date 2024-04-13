@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 // import { useSelector, useDispatch } from 'react-redux';;
-import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { useAppSelector, useAppDispatch } from "../../lib/store";
 import { addTokenToUser } from "../../lib/features/users/usersSlice"
 import { RootState } from "@reduxjs/toolkit/query";
 
 export default function Signup() {
 
-  const users = useAppSelector((state: RootState) => state.users.value);
+  const users = useAppSelector((state) => state.users.value);
   const dispatch = useAppDispatch();
   interface UserState {
     value: {
@@ -96,8 +96,8 @@ export default function Signup() {
 
       const data = await response.json();
       console.log(data);
-      dispatch(addTokenToUser({ token: data.token }));
-      console.log('users : ', users);
+      dispatch(addTokenToUser(data.token));
+      console.log('users after register : ', users);
 
 
 
@@ -110,13 +110,14 @@ export default function Signup() {
 
   }
 
-  
+
   return (
     <main className="bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
 
       <div className="flex justify-center items-center flex-col">
         <p className=" font-bold text-primary text-3xl">Start taking control of your finances today! </p>
         <p className="font-bold text-white text-3xl">Signup</p>
+        <p className="font-bold text-white text-3xl">{users.token !== "" ? 'You have a token' : "You don't have a token"}</p>
       </div>
 
       <div className="bg-white rounded-2xl p-5">
