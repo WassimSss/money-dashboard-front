@@ -4,15 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 // import { useSelector, useDispatch } from 'react-redux';;
-import { useAppSelector, useAppDispatch } from "../../lib/store";
-import { addTokenToUser } from "../../lib/features/users/usersSlice"
+import { useAppSelector, useAppDispatch } from "../../reducer/store";
+import { addTokenToUser } from "../../reducer/slices/usersSlice"
 import { RootState } from "@reduxjs/toolkit/query";
 // import { requireAuth } from "../modules/requireAuth";
 // import { useRouter } from "next/router";
-import useAuth from '../hooks/useAuth'
+import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect'
+import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect'
 
 export default function Signup() {
-  useAuth();
+  const requireAuth = false;
+  const redirect = "/dashboard" 
+
+  useAuthServerAndRedirect(requireAuth, redirect);
+  useAuthClientAndRedirect(requireAuth, redirect);
 
   const users = useAppSelector((state) => state.users.value);
 

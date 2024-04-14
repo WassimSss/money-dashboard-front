@@ -42,7 +42,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { persistReducer } from "redux-persist";
-import { userReducer } from "./features/users/usersSlice";
+import { userReducer } from "./slices/usersSlice";
 // import users from './features/users/usersSlice'
 
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";

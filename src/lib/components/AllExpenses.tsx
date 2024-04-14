@@ -1,4 +1,4 @@
-import '../app/globals.css';
+import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 

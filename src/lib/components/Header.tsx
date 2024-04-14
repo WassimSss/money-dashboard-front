@@ -1,15 +1,24 @@
-import '../app/globals.css';
+import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAppDispatch } from '@/reducer/store';
+import { disconnect } from '@/reducer/slices/usersSlice';
 
 
 const Header: React.FC = () => {
-    const [chevronDownActive, setChevronDownActive] = useState<boolean>(false)
 
+    const dispatch = useAppDispatch();
+
+    const [chevronDownActive, setChevronDownActive] = useState<boolean>(false)
+    
     const handleOpenMenuHeader = (): void => {
         setChevronDownActive(!chevronDownActive);
+    }
+
+    const handleDisconnect = () => {
+        dispatch(disconnect())
     }
 
     return (
@@ -43,7 +52,7 @@ const Header: React.FC = () => {
 
                     {chevronDownActive && <div className='absolute right-0 -bottom-24 pt-4 pr-2 pb-8 pl-2 bg-white '>
                         <ul className='p-0'>
-                            <Link href="./" className='font-bold whitespace-nowrap cursor-pointer text-black'>Se deconnecter</Link>
+                            <button className='font-bold whitespace-nowrap cursor-pointer text-black' onClick={handleDisconnect}>Se deconnecter</button>
                         </ul>
                     </div>}
 

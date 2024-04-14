@@ -1,4 +1,4 @@
-import '../app/globals.css';
+import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
 import Header from './Header';

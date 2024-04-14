@@ -20,7 +20,7 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "../lib/store";
+import { store } from "../reducer/store";
 import { persistStore } from "redux-persist";
 
 persistStore(store);

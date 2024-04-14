@@ -3,8 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import useAuthServerAndRedirect from "../hooks/useAuthServerAndRedirect";
+import useAuthClientAndRedirect from "../hooks/useAuthClientAndRedirect";
 
 export default function Signin() {
+  const requireAuth = false;
+  const redirect = "/dashboard" 
+
+  useAuthServerAndRedirect(requireAuth, redirect);
+  useAuthClientAndRedirect(requireAuth, redirect);
 
   interface FormData {
     email: string;

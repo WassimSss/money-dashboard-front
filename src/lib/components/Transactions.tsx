@@ -1,7 +1,7 @@
-import '../app/globals.css';
+import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import landscape from '../images/Landscape-Color.jpg'
+import landscape from '../../images/Landscape-Color.jpg'
 import Image from 'next/image'
 
 const Transactions: React.FC = () => {

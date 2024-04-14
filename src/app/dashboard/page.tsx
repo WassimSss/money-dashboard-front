@@ -3,20 +3,26 @@
 import '../globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
-import Header from '../../components/Header';
-import MiniCard from '../../components/MiniCard';
+import Header from '../../lib/components/Header';
+import MiniCard from '../../lib/components/MiniCard';
 import { faWallet, faHandHoldingDollar, faCircleDollarToSlot, faSackDollar } from '@fortawesome/free-solid-svg-icons';
-import Budget from '../../components/Budget';
-import Finances from '../../components/Finances';
-import AllExpenses from '../../components/AllExpenses';
-import Transactions from '../../components/Transactions';
-import IDontKnow from '../../components/IDontKnow';
-import useAuth from '../hooks/useAuth';
+import Budget from '../../lib/components/Budget';
+import Finances from '../../lib/components/Finances';
+import AllExpenses from '../../lib/components/AllExpenses';
+import Transactions from '../../lib/components/Transactions';
+import IDontKnow from '../../lib/components/IDontKnow';
+import useAuth from '../hooks/useAuthClientAndRedirect';
+import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
+import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 
 
 const Home: React.FC = () => {
-    useAuth();
-
+    const requireAuth = true;
+    const redirect = "/signin" 
+  
+    useAuthServerAndRedirect(requireAuth, redirect);
+    useAuthClientAndRedirect(requireAuth, redirect);
+    
     return (
         <div className="bg-neutral-900  w-full grid grid-rows-layout grid-cols-4">
             <Header />
