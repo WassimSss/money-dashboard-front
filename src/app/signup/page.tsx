@@ -82,7 +82,7 @@ export default function Signup() {
 
     try {
 
-      const response = await fetch('http://localhost:3001/users/register', {
+      const response = await fetch('http://localhost:3001/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -130,7 +130,7 @@ export default function Signup() {
         <p className="font-bold text-white text-3xl">{users.token !== "" ? 'You have a token' : "You don't have a token"}</p>
       </div>
 
-      <div className="bg-white rounded-2xl p-5">
+      <div className="bg-white rounded-2xl p-5 w-1/2">
         <div>
           <div className="flex">
             <input type="text" name="first_name" id="firstName" placeholder="First Name" onChange={(e) => handleChangeFormData(e)} value={formData.firstName} className="w-full border border-gray-300 rounded-md py-2 px-3 m-3 focus:outline-none focus:border-primary" />

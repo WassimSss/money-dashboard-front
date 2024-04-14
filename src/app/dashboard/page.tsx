@@ -25,6 +25,7 @@ const Home: React.FC = () => {
     
     return (
         <div className="bg-neutral-900  w-full grid grid-rows-layout grid-cols-4">
+            
             <Header />
 
             <div className='flex flex-row  row-start-2 row-end-3 col-start-1 col-end-4 m-4'>
