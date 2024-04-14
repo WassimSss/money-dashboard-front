@@ -11,7 +11,12 @@ import Finances from '../../components/Finances';
 import AllExpenses from '../../components/AllExpenses';
 import Transactions from '../../components/Transactions';
 import IDontKnow from '../../components/IDontKnow';
+import useAuth from '../hooks/useAuth';
+
+
 const Home: React.FC = () => {
+    useAuth();
+
     return (
         <div className="bg-neutral-900  w-full grid grid-rows-layout grid-cols-4">
             <Header />

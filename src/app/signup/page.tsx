@@ -2,15 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { useSelector, useDispatch } from 'react-redux';;
 import { useAppSelector, useAppDispatch } from "../../lib/store";
 import { addTokenToUser } from "../../lib/features/users/usersSlice"
 import { RootState } from "@reduxjs/toolkit/query";
+// import { requireAuth } from "../modules/requireAuth";
+// import { useRouter } from "next/router";
+import useAuth from '../hooks/useAuth'
 
 export default function Signup() {
+  useAuth();
 
   const users = useAppSelector((state) => state.users.value);
+
   const dispatch = useAppDispatch();
   interface UserState {
     value: {
