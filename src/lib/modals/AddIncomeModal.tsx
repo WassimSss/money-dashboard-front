@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import '../../app/globals.css'
+import { addIncome, getIncome } from "../fetchRequest/income"
+import { useAppSelector } from "@/reducer/store";
+
+
 var moment = require('moment');
 moment().format();
 
-const AddIncomeModal = (): React.FC => {
+const AddIncomeModal = ({ closeAddIncomeModal }): React.FC => {
+    const user = useAppSelector(state => state.users.value)
 
     const [amount, setAmount] = useState<number>(0)
     const [date, setDate] = useState<string>("")
@@ -18,8 +23,9 @@ const AddIncomeModal = (): React.FC => {
         setDate(e.target.value)
     }
 
-    const handleSubmit = () => {
-        console.log(amount, new Date(date));
+    const handleSubmit = async () => {
+        addIncome(user.token, amount, date)
+        // amount, moment(date).toDate()
 
     }
 
@@ -51,7 +57,7 @@ const AddIncomeModal = (): React.FC => {
                             <button type="button" onClick={handleSubmit} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Envoyer
                             </button>
-                            <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            <button type="button" onClick={closeAddIncomeModal} className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Annuler
                             </button>
                         </div>

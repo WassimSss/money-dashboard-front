@@ -30,14 +30,19 @@ const Home: React.FC = () => {
 
     const [isAddIncomeModalOpen, setIsAddIncomeModalOpen] = useState<boolean>(false)
 
-    const toggleAddIncomeModal = (name) => {
+    const toggleAddIncomeModal = (name: string) => {
         setIsAddIncomeModalOpen(true);
+        console.log(`${name} modal open`)
+    };
+
+    const closeAddIncomeModal = (name: string) => {
+        setIsAddIncomeModalOpen(false);
         console.log(`${name} modal open`)
     };
 
     return (
         <>
-            {isAddIncomeModalOpen && <AddIncomeModal />}
+            {isAddIncomeModalOpen && <AddIncomeModal closeModal={closeAddIncomeModal} />}
 
             <div className="bg-neutral-900 w-full grid grid-rows-layout grid-cols-4">
 
