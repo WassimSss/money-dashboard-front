@@ -1,12 +1,6 @@
 import { useAppSelector } from '@/reducer/store';
 
-/**
- * Récupère le solde a venir de l'utilisateur à partir de l'API.
- * Utilise le token d'authentification stocké dans le Redux store pour s'authentifier.
- * @param {string} token - Le token d'authentification de l'utilisateur.
- * @returns {Promise<number | undefined>} Une promesse qui résout soit le solde arrivant de l'utilisateur, soit undefined si la récupération échoue.
- */
-const getIncome = async (token: string): Promise<number | undefined> => {
+export const getIncome = async (token: string): Promise<number | undefined> => {
     try {
 
         const response = await fetch('http://localhost:3001/users/getIncome', {
@@ -27,9 +21,9 @@ const getIncome = async (token: string): Promise<number | undefined> => {
 
         const getIncomeData = await response.json();
 
-
+        console.log(getIncomeData)
         if (getIncomeData.result) {
-            return getIncomeData.balance
+            return getIncomeData.income
         }
 
     }
@@ -40,15 +34,11 @@ const getIncome = async (token: string): Promise<number | undefined> => {
 
 }
 
-/**
- * Ajoute un solde a venir de l'utilisateur à partir de l'API.
- * Utilise le token d'authentification stocké dans le Redux store pour s'authentifier.
- * @param {string} token - Le token d'authentification de l'utilisateur.
- * @param {number} amount - Le montant du solde a venir l'utilisateur.
- * @param {string} date - La date du solde a venir l'utilisateur.
- * @returns {Promise<number | undefined>} Une promesse qui résout soit true, soit false si la récupération échoue.
- */
-const addIncome = async (token: string, amount: number, date: Date): Promise<number | undefined> => {
+type ObjectResponseAddIncome = {
+    result: boolean,
+    message: string
+}
+export const addIncome = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddIncome> => {
     try {
 
         const response = await fetch('http://localhost:3001/users/addIncome', {
@@ -65,20 +55,22 @@ const addIncome = async (token: string, amount: number, date: Date): Promise<num
         if (!response.ok) {
             // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
             const errorData = await response.json();
+            return errorData
+
             console.error('Erreur lors de l\'envoi des données:', errorData);
         }
 
         const data = await response.json();
-
-        return data.result
+        console.log('data.result : ', data.result)
+        return data
 
     }
 
     catch (error) {
         console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
     }
 
 }
 
-module.exports = { addIncome, getIncome }
 

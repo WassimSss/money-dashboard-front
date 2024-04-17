@@ -20,7 +20,6 @@ import { useState } from 'react';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
-
 const Home: React.FC = () => {
     const requireAuth = true;
     const redirect = "/signin"
@@ -30,14 +29,12 @@ const Home: React.FC = () => {
 
     const [isAddIncomeModalOpen, setIsAddIncomeModalOpen] = useState<boolean>(false)
 
-    const toggleAddIncomeModal = (name: string) => {
+    const toggleAddIncomeModal = () => {
         setIsAddIncomeModalOpen(true);
-        console.log(`${name} modal open`)
     };
 
-    const closeAddIncomeModal = (name: string) => {
+    const closeAddIncomeModal = () => {
         setIsAddIncomeModalOpen(false);
-        console.log(`${name} modal open`)
     };
 
     return (

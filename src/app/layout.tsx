@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import dynamic from "next/dynamic";
+import { Toaster } from 'react-hot-toast';
 
 const ReduxProvider = dynamic(() => import("./StoreProvider"), {
   ssr: false
@@ -24,6 +25,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       <body>
         <ReduxProvider>
           {children}
+          <Toaster />
         </ReduxProvider>
       </body>
     </html>
