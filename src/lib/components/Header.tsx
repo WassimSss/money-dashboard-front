@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAppDispatch } from '@/reducer/store';
 import { disconnect } from '@/reducer/slices/usersSlice';
-
+import { IconType } from "react-icons";
 
 const Header: React.FC = () => {
 
@@ -22,7 +22,7 @@ const Header: React.FC = () => {
     }
 
     return (
-        <header id="Header" className=" row-start-1 row-end-2 col-start-1 col-end-5 bg-neutral-950 h-16 w-full flex justify-between items-center p-3">
+        <header id="Header" className=" row-start-1 row-end-2 col-start-1 col-end-5 bg-neutral-950 h-32 w-full flex justify-between items-center p-3">
             <div>
                 <a className='text-white text-2xl no-underline font-bold' href="#">Dashboard</a>
             </div>

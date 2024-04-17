@@ -5,15 +5,17 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 import getBalance from '../fetchRequest/getBalance';
 import { useAppSelector } from '@/reducer/store';
+import { getIncome } from '../fetchRequest/income';
+// import { IconType } from "react-icons";
 
-interface MiniCardProps {
-    icon: IconProp,
-    name: string,
-    money?: number,
-    active?: boolean
-}
+type MiniCardProps = {
+    icon: IconProp;
+    name: string;
+    active: boolean;
+    openModal: () => void
+};
 
-const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active }) => {
+const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, openModal }) => {
     let [money, setMoney] = useState<number | undefined>(0)
     const token = useAppSelector(state => state.users.value).token; // Assurez-vous que le sélecteur correspond à la structure de votre store Redux
 
@@ -26,9 +28,10 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active }) =>
                     setMoney(balance)
                     break;
                 case 'Income':
-                    // const balance = await getBalance(token)
+                    const income = await getIncome(token)
+                    console.log('income serv : ', income)
                     // console.log("balance : ", balance)
-                    setMoney(3300)
+                    setMoney(income)
                     break;
                 case 'Saving':
                     // const balance = await getBalance(token)
@@ -55,7 +58,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active }) =>
     return (
         <div className={`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} w-40 h-40 m-8 p-3 rounded-2xl text-white flex flex-col`}>
             <div className='flex justify-end'>
-                <span>
+                <span onClick={() => openModal()}>
                     <FontAwesomeIcon icon={faEllipsisVertical} />
                 </span>
             </div>

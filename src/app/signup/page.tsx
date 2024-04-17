@@ -14,7 +14,7 @@ import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect'
 
 export default function Signup() {
   const requireAuth = false;
-  const redirect = "/dashboard" 
+  const redirect = "/dashboard"
 
   useAuthServerAndRedirect(requireAuth, redirect);
   useAuthClientAndRedirect(requireAuth, redirect);
@@ -84,9 +84,9 @@ export default function Signup() {
 
       const response = await fetch('http://localhost:3001/users/signup', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-         },
+        },
         body: JSON.stringify(formData)
       })
 

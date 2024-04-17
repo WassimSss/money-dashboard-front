@@ -10,7 +10,7 @@ import { useAppDispatch } from "@/reducer/store";
 
 export default function Signin() {
   const requireAuth = false;
-  const redirect = "/dashboard" 
+  const redirect = "/dashboard"
 
   useAuthServerAndRedirect(requireAuth, redirect);
   useAuthClientAndRedirect(requireAuth, redirect);
@@ -48,17 +48,16 @@ export default function Signin() {
 
   const handleSubmitFormData = async () => {
     console.log('aled');
-    
     const response = await fetch('http://localhost:3001/users/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     })
-    
+
     const data = await response.json();
     if (!response.ok) {
       // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
-      
+
       // console.error('Erreur lors de l\'envoi des données:', errorData);
 
       if (data.errors && data.errors.length > 0) {
@@ -71,18 +70,18 @@ export default function Signin() {
         setErrorsForm([])
       }
 
-      if(data.message){
+      if (data.message) {
         setErrorsForm((prev: string[]) => {
           return [...prev,
-            data.message]
+          data.message]
         })
       }
 
       // throw new Error(`Erreur ${response.status}: ${errorData.msg}`);
     }
 
-    if(data.result){
-      console.log('data : ',data);
+    if (data.result) {
+      console.log('data : ', data);
       dispatch(addTokenToUser(data.token));
     }
   }
@@ -102,7 +101,6 @@ export default function Signin() {
           <input type="password" name="password" placeholder="Password" id="password" onChange={(e) => handleChangeFormData(e)} value={formData.password} className="w-full border border-gray-300 rounded-md py-2 px-3 m-3 focus:outline-none focus:border-primary" />
         </div>
 
-        
 
         <div className="bg-white rounded-2xl p-5">
           {/* Les champs de formulaire */}
@@ -118,12 +116,12 @@ export default function Signin() {
 
           {/* Le bouton de soumission et le lien de connexion */}
           <div className="flex items-center justify-center flex-col mt-10">
-          <button onClick={handleSubmitFormData} className="bg-gradient-to-r from-primary to-secondary hover:bg-blue-800 px-3 py-2 text-white font-bold rounded-lg mb-1">
-            Signin
-          </button>
-          <p>You don’t have an account ?</p>
-          <Link href="/signup" className="text-primary underline">Signup</Link>
-        </div>
+            <button onClick={handleSubmitFormData} className="bg-gradient-to-r from-primary to-secondary hover:bg-blue-800 px-3 py-2 text-white font-bold rounded-lg mb-1">
+              Signin
+            </button>
+            <p>You don’t have an account ?</p>
+            <Link href="/signup" className="text-primary underline">Signup</Link>
+          </div>
         </div>
       </div>
     </main>
