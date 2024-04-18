@@ -18,6 +18,7 @@ import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 import AddIncomeModal from "../../lib/modals/AddIncomeModal";
 import { useState } from 'react';
 import AddSavingModal from '@/lib/modals/AddSavingModal';
+import AddExpensesModal from '@/lib/modals/AddExpensesModal';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
@@ -30,6 +31,8 @@ const Home: React.FC = () => {
 
     const [isAddIncomeModalOpen, setIsAddIncomeModalOpen] = useState<boolean>(false)
     const [isAddSavingModalOpen, setIsAddSavingModalOpen] = useState<boolean>(false)
+    const [isAddExpensesModalOpen, setIsAddExpensesModalOpen] = useState<boolean>(false)
+
 
 
     const toggleAddIncomeModal = () => {
@@ -50,10 +53,21 @@ const Home: React.FC = () => {
         setIsAddSavingModalOpen(false);
     };
 
+    const toggleAddExpensesModal = () => {
+        console.log('isAddExpensesModalOpen : ', isAddExpensesModalOpen)
+        setIsAddExpensesModalOpen(true);
+    };
+
+    const closeAddExpensesModal = () => {
+        setIsAddExpensesModalOpen(false);
+    };
+
     return (
         <>
             {isAddIncomeModalOpen && <AddIncomeModal closeModal={closeAddIncomeModal} />}
             {isAddSavingModalOpen && <AddSavingModal closeModal={closeAddSavingModal} />}
+            {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />}
+
 
             <div className="bg-neutral-900 w-full grid grid-rows-layout grid-cols-4">
 
@@ -63,7 +77,7 @@ const Home: React.FC = () => {
                     <MiniCard icon={faWallet} name="Balance" /*money={money}*/ active={true} key="Balance" />
                     <MiniCard icon={faHandHoldingDollar} name="Income" money={2130.00} openModal={toggleAddIncomeModal} key="Income" />
                     <MiniCard icon={faCircleDollarToSlot} name="Saving" money={1875.10} openModal={toggleAddSavingModal} key="Saving" />
-                    <MiniCard icon={faSackDollar} name="Expenses" money={1912.00} key="Expenses" />
+                    <MiniCard icon={faSackDollar} name="Expenses" money={1912.00} openModal={toggleAddExpensesModal} key="Expenses" />
                 </div>
 
                 <Budget />
