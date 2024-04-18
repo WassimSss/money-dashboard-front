@@ -1,48 +1,9 @@
-// import { configureStore } from '@reduxjs/toolkit'
-// import users from './features/users/usersSlice'
-
-// export const makeStore = () => {
-//     return configureStore({
-//         reducer: {
-//             users
-//         },
-//     })
-// }
-
-// // Infer the type of makeStore
-// export type AppStore = ReturnType<typeof makeStore>
-// // Infer the `RootState` and `AppDispatch` types from the store itself
-// export type RootState = ReturnType<AppStore['getState']>
-// export type AppDispatch = AppStore['dispatch']
-
-// // import { configureStore } from '@reduxjs/toolkit';
-// // import { persistReducer, persistStore } from 'redux-persist';
-// // import storage from 'redux-persist/lib/storage'; // Pour localStorage
-
-// // import users from './features/users/usersSlice';
-
-// // const persistConfig = {
-// //     key: 'root',
-// //     storage,
-// // };
-
-// // const persistedReducer = persistReducer(persistConfig, users);
-
-// // export const makeStore = () => {
-// //     const store = configureStore({
-// //         reducer: {
-// //             users: persistedReducer,
-// //         },
-// //     });
-
-// //     const persistor = persistStore(store);
-// //     return { store, persistor };
-// // };
-
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { persistReducer } from "redux-persist";
 import { userReducer } from "./slices/usersSlice";
+import { moneyReducer } from "./slices/moneySlice";
+
 // import users from './features/users/usersSlice'
 
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
@@ -67,16 +28,26 @@ const storage =
         : createNoopStorage();
 
 const authPersistConfig = {
-    key: "users",
+    key: "auth",
     storage: storage,
     // whitelist: ["users"],
 };
 
+const moneyPersistConfig = {
+    key: 'money',
+    storage: storage,
+};
+
+
 const persistedReducer = persistReducer(authPersistConfig, userReducer);
+const persistedMoneyReducer = persistReducer(moneyPersistConfig, moneyReducer);
+
 
 const rootReducer = combineReducers({
     users: persistedReducer,
+    moneys: persistedMoneyReducer, 
 });
+
 
 export const store = configureStore({
     reducer: rootReducer,

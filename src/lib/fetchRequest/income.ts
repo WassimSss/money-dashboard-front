@@ -36,7 +36,8 @@ export const getIncome = async (token: string): Promise<number | undefined> => {
 
 type ObjectResponseAddIncome = {
     result: boolean,
-    message: string
+    message: string,
+    income: number
 }
 export const addIncome = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddIncome> => {
     try {

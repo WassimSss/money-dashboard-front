@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import '../../app/globals.css'
 import { addIncome, getIncome } from "../fetchRequest/income"
-import { useAppSelector } from "@/reducer/store";
+import { useAppDispatch, useAppSelector } from "@/reducer/store";
 import { toast } from 'react-hot-toast';
+import { setIncomeToStore } from "@/reducer/slices/moneySlice";
 
 
 var moment = require('moment');
@@ -14,7 +15,7 @@ interface AddIncomeModalProps {
 
 const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
     const user = useAppSelector(state => state.users.value)
-
+    const dispatch = useAppDispatch()
     const [amount, setAmount] = useState<number>(0)
     const [date, setDate] = useState<string>("")
 
@@ -31,6 +32,8 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
     const handleSubmit = async () => {
         const responseAddIncome = await addIncome(user.token, amount, moment(date))
         console.log(responseAddIncome)
+
+        dispatch(setIncomeToStore(responseAddIncome.income))
         if (responseAddIncome.result) {
             toast.success('Revenu ajouté avec succès');
             closeModal();

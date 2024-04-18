@@ -30,6 +30,7 @@ const Home: React.FC = () => {
     const [isAddIncomeModalOpen, setIsAddIncomeModalOpen] = useState<boolean>(false)
 
     const toggleAddIncomeModal = () => {
+        console.log('isAddIncomeModalOpen : ', isAddIncomeModalOpen)
         setIsAddIncomeModalOpen(true);
     };
 
@@ -46,10 +47,10 @@ const Home: React.FC = () => {
                 <Header />
 
                 <div className='flex flex-row  row-start-2 row-end-3 col-start-1 col-end-4 m-4'>
-                    <MiniCard icon={faWallet} name="Balance" /*money={money}*/ active={true} />
-                    <MiniCard icon={faHandHoldingDollar} name="Income" money={2130.00} openModal={toggleAddIncomeModal} />
-                    <MiniCard icon={faCircleDollarToSlot} name="Saving" money={1875.10} />
-                    <MiniCard icon={faSackDollar} name="Expenses" money={1912.00} />
+                    <MiniCard icon={faWallet} name="Balance" /*money={money}*/ active={true}  key="Balance"/>
+                    <MiniCard icon={faHandHoldingDollar} name="Income" money={2130.00} openModal={toggleAddIncomeModal} key="Income" />
+                    <MiniCard icon={faCircleDollarToSlot} name="Saving" money={1875.10} key="Saving" />
+                    <MiniCard icon={faSackDollar} name="Expenses" money={1912.00} key="Expenses" />
                 </div>
 
                 <Budget />
