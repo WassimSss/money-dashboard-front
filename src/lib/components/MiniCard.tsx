@@ -7,10 +7,9 @@ import getBalance from '../fetchRequest/getBalance';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
-import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
-import AddIncomeModal from '../modals/AddIncomeModal';
-import { setBalanceToStore, setIncomeToStore } from '@/reducer/slices/moneySlice';
+import { setBalanceToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
+import { getSaving } from '../fetchRequest/saving';
 
 type MiniCardProps = {
     icon: IconProp;
@@ -51,9 +50,10 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     setMoney(moneys.income)
                     break;
                 case 'Saving':
-                    // const balance = await getBalance(token)
-                    setOption([{ option: "Option 1", action: null }, { option: "Option 2", action: null }, { option: "Option 3", action: null }]);
-                    setMoney(300)
+                    const saving = await getSaving(token)
+                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: null }]);
+                    dispatch(setSavingToStore(saving))
+                    setMoney(moneys.saving)
                     break;
                 case 'Expenses':
                     // const balance = await getBalance(token)
