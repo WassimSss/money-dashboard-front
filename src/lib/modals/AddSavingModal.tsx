@@ -3,8 +3,8 @@ import '../../app/globals.css'
 
 import { useAppDispatch, useAppSelector } from "@/reducer/store";
 import { toast } from 'react-hot-toast';
-import { setSavingToStore } from "@/reducer/slices/moneySlice";
 import { addSaving, getSaving } from "../fetchRequest/saving";
+import { setSavingToStore } from "@/reducer/slices/moneySlice";
 
 
 var moment = require('moment');

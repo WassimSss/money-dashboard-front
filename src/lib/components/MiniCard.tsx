@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState, useRef } from 'react';
-import getBalance from '../fetchRequest/getBalance';
+import {getBalance} from '../fetchRequest/getBalance';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
@@ -16,7 +16,7 @@ type MiniCardProps = {
     icon: IconProp;
     name: string;
     active: boolean;
-    openModal: () => void
+    openModal: (modalName: string) => void
 };
 
 type objectOption = {
@@ -40,7 +40,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
             switch (name) {
                 case 'Balance':
                     const balance = await getBalance(token)
-                    setOption([{ option: "Option 1", action: null }, { option: "Option 2", action: null }, { option: "Option 3", action: null }]);
+                    setOption([{ option: "Modification de votre montant actuel", action: openModal }]);
                     dispatch(setBalanceToStore(balance))
                     setMoney(moneys.balance)
                     break;
@@ -79,7 +79,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 event.preventDefault(); // Empêche le comportement par défaut de l'élément <a>
                 event.stopPropagation(); // Empêche la propagation de l'événement de clic
                 if (e.action) {
-                    e.action(); // Exécute l'action si elle est définie
+                    e.action(name); // Exécute l'action si elle est définie
                 }
             }}>
                 {e.option}

@@ -15,8 +15,10 @@ import IDontKnow from '../../lib/components/IDontKnow';
 import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
 import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 // import getBalance from '@/lib/fetchRequest/getBalance';
-import AddIncomeModal from "../../lib/modals/AddIncomeModal";
 import { useState } from 'react';
+import AddModal from "../../lib/modals/AddModal";
+import AddBalanceModal from "../../lib/modals/AddBalanceModal";
+import AddIncomeModal from "../../lib/modals/AddIncomeModal";
 import AddSavingModal from '@/lib/modals/AddSavingModal';
 import AddExpensesModal from '@/lib/modals/AddExpensesModal';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
@@ -29,44 +31,44 @@ const Home: React.FC = () => {
     useAuthServerAndRedirect(requireAuth, redirect);
     useAuthClientAndRedirect(requireAuth, redirect);
 
-    const [isAddIncomeModalOpen, setIsAddIncomeModalOpen] = useState<boolean>(false)
-    const [isAddSavingModalOpen, setIsAddSavingModalOpen] = useState<boolean>(false)
-    const [isAddExpensesModalOpen, setIsAddExpensesModalOpen] = useState<boolean>(false)
+    const [modalOpen, setModalOpen] = useState<string>("")
 
-
-
-    const toggleAddIncomeModal = () => {
-        console.log('isAddIncomeModalOpen : ', isAddIncomeModalOpen)
-        setIsAddIncomeModalOpen(true);
+    const toggleAddModal = (modalName: string) => {
+        console.log('test')
+        console.log('modalName : ', modalName)
+        setModalOpen(modalName)
+        // setIsAddBalanceModalOpen(true);
     };
 
-    const closeAddIncomeModal = () => {
-        setIsAddIncomeModalOpen(false);
+    const closeAddModal = () => {
+        setModalOpen("")
+        // setIsAddBalanceModalOpen(false);
     };
 
-    const toggleAddSavingModal = () => {
-        console.log('isAddSavingModalOpen : ', isAddSavingModalOpen)
-        setIsAddSavingModalOpen(true);
-    };
+    const miniCards : string[] = ["Balance", "Income", "Saving","Expenses"];
 
-    const closeAddSavingModal = () => {
-        setIsAddSavingModalOpen(false);
-    };
+    const miniCardsIcons = {
+        Balance: faWallet,
+        Income: faHandHoldingDollar,
+        Saving: faCircleDollarToSlot,
+        Expenses: faSackDollar,
+    }
 
-    const toggleAddExpensesModal = () => {
-        console.log('isAddExpensesModalOpen : ', isAddExpensesModalOpen)
-        setIsAddExpensesModalOpen(true);
-    };
-
-    const closeAddExpensesModal = () => {
-        setIsAddExpensesModalOpen(false);
-    };
+    const miniCardsComponent = miniCards.map(card => {
+        let isActive = false
+        if(card === "Balance"){
+            isActive = true
+        }
+        return <MiniCard icon={miniCardsIcons[card]} name={card} active={isActive} openModal={toggleAddModal} key={card} />
+    })
 
     return (
         <>
+        {modalOpen && <AddModal closeModal={closeAddModal} title={modalOpen} needsDate={true}/>}
+            {/* {isAddBalanceModalOpen && <AddModal closeModal={closeAddBalanceModal} title='Balance' needsDate={true}/>}
             {isAddIncomeModalOpen && <AddIncomeModal closeModal={closeAddIncomeModal} />}
             {isAddSavingModalOpen && <AddSavingModal closeModal={closeAddSavingModal} />}
-            {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />}
+            {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />} */}
 
 
             <div className="bg-neutral-900 w-full grid grid-rows-layout grid-cols-4">
@@ -74,10 +76,10 @@ const Home: React.FC = () => {
                 <Header />
 
                 <div className='flex flex-row  row-start-2 row-end-3 col-start-1 col-end-4 m-4'>
-                    <MiniCard icon={faWallet} name="Balance" /*money={money}*/ active={true} key="Balance" />
-                    <MiniCard icon={faHandHoldingDollar} name="Income" money={2130.00} openModal={toggleAddIncomeModal} key="Income" />
-                    <MiniCard icon={faCircleDollarToSlot} name="Saving" money={1875.10} openModal={toggleAddSavingModal} key="Saving" />
-                    <MiniCard icon={faSackDollar} name="Expenses" money={1912.00} openModal={toggleAddExpensesModal} key="Expenses" />
+                {miniCardsComponent}
+                    {/* <MiniCard icon={faHandHoldingDollar}  active={false} name="Income" openModal={toggleAddIncomeModal} key="Income" />
+                    <MiniCard icon={faCircleDollarToSlot}  active={false} name="Saving" openModal={toggleAddSavingModal} key="Saving" />
+                    <MiniCard icon={faSackDollar}  active={false} name="Expenses" openModal={toggleAddExpensesModal} key="Expenses" /> */}
                 </div>
 
                 <Budget />

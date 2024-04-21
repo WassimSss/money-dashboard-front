@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import '../../app/globals.css'
-
+// Remplacer import setBalance, getBalance par setX, get X from X
 import { useAppDispatch, useAppSelector } from "@/reducer/store";
 import { toast } from 'react-hot-toast';
-import { addIncome, getIncome } from "../fetchRequest/income"
-import { setIncomeToStore } from "@/reducer/slices/moneySlice";
+import { setBalance, getBalance } from "../fetchRequest/getBalance"
+import { setBalanceToStore } from "@/reducer/slices/moneySlice";
 
 
 var moment = require('moment');
 moment().format();
 
-interface AddIncomeModalProps {
+// Remplacer AddBalanceModalProps par AddXModalProps
+interface AddBalanceModalProps {
     closeModal: () => void;
 }
 
-const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
+// Remplacer AddBalanceModal par AddXModal
+const AddBalanceModal: React.FC<AddBalanceModalProps> = ({ closeModal }) => {
     const user = useAppSelector(state => state.users.value)
     const dispatch = useAppDispatch()
     const [amount, setAmount] = useState<number>(0)
+    // Mettre un params date a true ou false (besoin de la date ou pas)
     const [date, setDate] = useState<string>("")
 
     const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -25,21 +28,30 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
         setAmount(Number(e.target.value))
     }
 
+    // Mettre un params date a true ou false (besoin de la date ou pas)
     const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
         console.log(moment(e.target.value).toDate())
         setDate(e.target.value)
     }
 
     const handleSubmit = async () => {
-        const responseAddIncome = await addIncome(user.token, amount, moment(date))
-        console.log(responseAddIncome)
+        // Remplacer responseAddBalance par responseAddX
+        // Remplacer setBalance par setX
 
-        dispatch(setIncomeToStore(responseAddIncome.income))
-        if (responseAddIncome.result) {
+        const responseAddBalance = await setBalance(user.token, amount, moment(date))
+        console.log(responseAddBalance)
+
+        // Remplacer setBalanceToStore par setXToStore
+        // Remplacer setBalanceToStore par setXToStore
+        
+        // Remplacer responseAddBalance.balance par responseAddX.x
+
+        dispatch(setBalanceToStore(responseAddBalance.balance))
+        if (responseAddBalance.result) {
             toast.success('Revenu ajouté avec succès');
             closeModal();
         } else {
-            toast.error(responseAddIncome.message);
+            toast.error(responseAddBalance.message);
         }
     }
 
@@ -54,16 +66,16 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
                             <div className="sm:flex sm:items-start">
                                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                     <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                        Entrer les détails de paiement
+                                        Entrer votre montant actuel
                                     </h3>
                                     <div className="mt-2">
                                         <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Montant</label>
                                         <input type="number" onChange={(e) => handleChangeAmount(e)} value={amount === 0 ? "" : amount} name="amount" id="amount" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Entrer le montant" />
                                     </div>
-                                    <div className="mt-2">
+                                    {/* <div className="mt-2">
                                         <label htmlFor="paymentDate" className="block text-sm font-medium text-gray-700">Date de paiement</label>
                                         <input type="date" onChange={(e) => handleDate(e)} name="paymentDate" id="paymentDate" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -82,5 +94,5 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({ closeModal }) => {
     );
 };
 
-export default AddIncomeModal;
+export default AddBalanceModal;
 
