@@ -20,63 +20,117 @@ interface ModalProps {
     needsDate: boolean; // Indique si une date est nécessaire
 }
 
-const addFunctions = {
-    Balance: setBalance,
-    Expenses: addExpenses,
-    Income: addIncome,
-    Saving: addSaving
-   };
+interface Category {
+    addFunction: Function; // Remplacez 'Function' par le type de la fonction addFunction
+    getFunction: Function; // Remplacez 'Function' par le type de la fonction getFunction
+    setToStore: Function; // Remplacez 'Function' par le type de la fonction setToStore
+    form: {
+        title: string;
+        input: string[];
+    };
+}
 
-   const setToStore = {
-    Balance: setBalanceToStore,
-    Expenses: setExpensesToStore,
-    Income: setIncomeToStore,
-    Saving: setSavingToStore
-   }
+interface Categories {
+    Balance: Category;
+    Expenses: Category;
+    Income: Category;
+    Saving: Category;
+}
+const categories: Categories = {
+    Balance: {
+        addFunction: setBalance,
+        getFunction: getBalance,
+        setToStore: setBalanceToStore,
+        form: {
+            title: "Entrer votre montant actuel",
+            input: ['amount']
+        }
+    },
+    Expenses: {
+        addFunction: addExpenses,
+        getFunction: getExpenses,
+        setToStore: setExpensesToStore,
+        form: {
+            title: "Entrer les détails de la dépense",
+            input: ['amount', 'date']
+        }
+    },
+    Income: {
+        addFunction: addIncome,
+        getFunction: getIncome,
+        setToStore: setIncomeToStore,
+        form: {
+            title: "Entrer les détails de paiement",
+            input: ['amount', 'date']
+        }
+    },
+    Saving: {
+        addFunction: addSaving,
+        getFunction: getSaving,
+        setToStore: setSavingToStore,
+        form: {
+            title: "Entrer les détails de l'économie",
+            input: ['amount', 'date']
+        }
+    }
+}
+// const addFunctions = {
+//     Balance: setBalance,
+//     Expenses: addExpenses,
+//     Income: addIncome,
+//     Saving: addSaving
+// };
 
-   const getFunctions = {
-    Balance: getBalance,
-    Expenses: getExpenses,
-    Income: getIncome,
-    Saving: getSaving
-   };
+// const setToStore = {
+//     Balance: setBalanceToStore,
+//     Expenses: setExpensesToStore,
+//     Income: setIncomeToStore,
+//     Saving: setSavingToStore
+// }
+
+// const getFunctions = {
+//     Balance: getBalance,
+//     Expenses: getExpenses,
+//     Income: getIncome,
+//     Saving: getSaving
+// };
 
 // Remplacer AddBalanceModal par AddXModal
 const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
     console.log("AddModal : ", title)
-    console.log("addFunctions[title] : ", addFunctions[title])
+    console.log("addFunctions[title] : ", categories[title]["addFunction"])
 
     const user = useAppSelector(state => state.users.value)
     const dispatch = useAppDispatch()
     const [amount, setAmount] = useState<number>(0)
     const [date, setDate] = useState<string>("")
     // Mettre un params date a true ou false (besoin de la date ou pas)
-    
+
     const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
         console.log(e.target.value)
         setAmount(Number(e.target.value))
     }
-    
+
     // Mettre un params date a true ou false (besoin de la date ou pas)
     const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
         console.log(moment(e.target.value).toDate())
         setDate(e.target.value)
     }
-    
+
 
     const handleSubmit = async () => {
         // Remplacer responseAddBalance par responseAddX
         // Remplacer setBalance par setX
 
-        const responseAdd = await addFunctions[title](user.token, amount, moment(date))
+        const responseAdd = await categories[title]["addFunction"](user.token, amount, moment(date))
         console.log(responseAdd)
 
         // Remplacer setBalanceToStore par setXToStore
         // Remplacer setBalanceToStore par setXToStore
-        
+
         // Remplacer responseAddBalance.balance par responseAddX.x
 
-        dispatch(setToStore[title](responseAdd[title.toLocaleLowerCase()]))
+        dispatch(categories[title]["setToStore"](responseAdd[title.toLocaleLowerCase()]))
         if (responseAdd.result) {
             toast.success('Revenu ajouté avec succès');
             closeModal();
@@ -96,17 +150,17 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
                             <div className="sm:flex sm:items-start">
                                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                     <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                        Entrer votre {title} actuel
+                                        {categories[title].form.title}
                                     </h3>
                                     <div className="mt-2">
                                         <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Montant</label>
                                         <input type="number" onChange={(e) => handleChangeAmount(e)} value={amount === 0 ? "" : amount} name="amount" id="amount" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Entrer le montant" />
                                     </div>
-                                    {needsDate && <div className="mt-2">
+                                    {categories[title].form.input.includes("date") && <div className="mt-2">
                                         <label htmlFor="paymentDate" className="block text-sm font-medium text-gray-700">Date de paiement</label>
                                         <input type="date" onChange={(e) => handleDate(e)} name="paymentDate" id="paymentDate" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
                                     </div>}
-                                    
+
                                 </div>
                             </div>
                         </div>
