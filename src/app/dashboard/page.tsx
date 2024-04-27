@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         // setIsAddBalanceModalOpen(false);
     };
 
-    const miniCards : string[] = ["Balance", "Income", "Saving","Expenses"];
+    const miniCards: string[] = ["Balance", "Income", "Saving", "Expenses"];
 
     const miniCardsIcons = {
         Balance: faWallet,
@@ -52,27 +52,34 @@ const Home: React.FC = () => {
 
     const miniCardsComponent = miniCards.map(card => {
         let isActive = false
-        if(card === "Balance"){
+        if (card === "Balance") {
             isActive = true
         }
         return <MiniCard icon={miniCardsIcons[card]} name={card} active={isActive} openModal={toggleAddModal} key={card} />
     })
 
+    const mediaQueriesStyle = {
+        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
+        xlStyle: `xl:row-start-2 xl:row-end-3 xl:col-start-1 xl:col-end-4`,
+        lgStyle: `lg:row-start-2 lg:row-end-3 lg:col-start-1 lg:col-end-4`,
+        mdStyle: `md:row-start-2 md:row-end-3 md:col-start-1 md:col-end-5 justify-center`,
+        smStyle: `sm:row-start-2 sm:row-end-3 sm:col-start-1 sm:col-end-5 justify-center`,
+    }
     return (
         <>
-        {modalOpen && <AddModal closeModal={closeAddModal} title={modalOpen} needsDate={true}/>}
+            {modalOpen && <AddModal closeModal={closeAddModal} title={modalOpen} needsDate={true} />}
             {/* {isAddBalanceModalOpen && <AddModal closeModal={closeAddBalanceModal} title='Balance' needsDate={true}/>}
             {isAddIncomeModalOpen && <AddIncomeModal closeModal={closeAddIncomeModal} />}
             {isAddSavingModalOpen && <AddSavingModal closeModal={closeAddSavingModal} />}
             {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />} */}
 
 
-            <div className="bg-neutral-900 w-full grid grid-rows-layout grid-cols-4">
+            <div className="bg-neutral-900 w-full md:grid md:grid-rows-layout md:grid-cols-4 ">
 
                 <Header />
 
-                <div className='flex flex-row  row-start-2 row-end-3 col-start-1 col-end-4 m-4'>
-                {miniCardsComponent}
+                <div className={`flex flex-row flex-wrap ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle} ${mediaQueriesStyle.smStyle} m-4`}>
+                    {miniCardsComponent}
                     {/* <MiniCard icon={faHandHoldingDollar}  active={false} name="Income" openModal={toggleAddIncomeModal} key="Income" />
                     <MiniCard icon={faCircleDollarToSlot}  active={false} name="Saving" openModal={toggleAddSavingModal} key="Saving" />
                     <MiniCard icon={faSackDollar}  active={false} name="Expenses" openModal={toggleAddExpensesModal} key="Expenses" /> */}

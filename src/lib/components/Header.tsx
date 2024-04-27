@@ -21,12 +21,12 @@ const Header: React.FC = () => {
     }
 
     return (
-        <header id="Header" className=" row-start-1 row-end-2 col-start-1 col-end-5 bg-neutral-950 h-32 w-full flex justify-between items-center p-3">
+        <header id="Header" className=" row-start-1 row-end-2 col-start-1 col-end-5 bg-neutral-950 md:h-32 w-full flex justify-between items-center p-3">
             <div>
-                <Link className='text-white text-2xl no-underline font-bold' href="/dashboard">Dashboard</Link>
+                <Link className='text-white md:text-lg lg:text-2xl no-underline font-bold' href="/dashboard">Dashboard</Link>
             </div>
 
-            <div>
+            <div className='hidden sm:block'>
                 <input type="search" className='bg-neutral-800 rounded-lg text-sm p-2' placeholder="Search for transaction, item, etc..." id="" />
             </div>
 

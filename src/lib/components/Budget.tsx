@@ -81,7 +81,7 @@ const Budget: React.FC = () => {
     }
     
     return (
-        <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}`}>
+        <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle}`}>
             <div className='relative flex justify-between'>
                 <p className='font-bold'>Budget</p>
                 <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>

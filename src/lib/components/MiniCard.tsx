@@ -130,17 +130,17 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
         xlStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 xl:text-base`,
         lgStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} lg:w-36 lg:h-36 lg:m-8 lg:p-3 lg:text-base`,
-        mdStyle:`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} md:w-28 md:h-28 md:m-6 md:p-2 md:text-xs`,
+        mdStyle:`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} md:w-36 md:h-36 md:m-8 md:p-3 md:text-base`,
         smStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
     }
 
     return (
-        <div className={`rounded-2xl text-white flex flex-col ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}  ${mediaQueriesStyle.mdStyle}`}>
+        <div className={`rounded-2xl text-white flex flex-col w-28 h-28 p-2 m-6 text-sm ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}  ${mediaQueriesStyle.mdStyle}`}>
             <div className='flex justify-end'>
                 <div className="relative inline-block text-left">
                     <div>
                         <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>
-                            <FontAwesomeIcon icon={faEllipsisVertical} className="inline-flex justify-center w-full rounded-md px-4 py-2 text-sm font-medium text-white cursor-pointer" />
+                            <FontAwesomeIcon icon={faEllipsisVertical} className="justify-center w-full rounded-md px-4 py-2 md:text-sm font-medium text-white cursor-pointer" />
                         </span>
                     </div>
 
@@ -154,7 +154,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 </div>
             </div>
             <div className="flex flex-1 flex-col justify-around">
-                <div className='bg-white-opacity rounded-full w-10 h-10 flex justify-center items-center p-2'>
+                <div className='bg-white-opacity rounded-full hidden md:flex md:w-10 md:h-10 justify-center items-center p-2'>
                     <span className='text-center w-full'>
                         <FontAwesomeIcon icon={icon} />
                     </span>
