@@ -72,8 +72,16 @@ const Budget: React.FC = () => {
         );
     });
 
+    const mediaQueriesStyle = {
+        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
+        xlStyle:"xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5  m-4 p-3 flex flex-col",
+        lgStyle:"lg:row-start-3 lg:row-end-4 lg:col-start-3 lg:col-end-5 m-4 p-3 flex flex-col",
+        mdStyle:"md:row-start-3 md:row-end-4 md:col-start-3 md:col-end-5 m-4 p-3 flex flex-col",
+        smStyle:"xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5 m-4 p-3 flex flex-col",
+    }
+    
     return (
-        <section id="Budget" className="row-start-2 row-end-4 col-start-4 col-end-5 bg-neutral-800 rounded-2xl m-4 text-white p-3 flex flex-col">
+        <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}`}>
             <div className='relative flex justify-between'>
                 <p className='font-bold'>Budget</p>
                 <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>

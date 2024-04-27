@@ -126,8 +126,16 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         setShowDropdown(!showDropdown)
     }
 
+    const mediaQueriesStyle = {
+        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
+        xlStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 xl:text-base`,
+        lgStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} lg:w-36 lg:h-36 lg:m-8 lg:p-3 lg:text-base`,
+        mdStyle:`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} md:w-28 md:h-28 md:m-6 md:p-2 md:text-xs`,
+        smStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
+    }
+
     return (
-        <div className={`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} w-40 h-40 m-8 p-3 rounded-2xl text-white flex flex-col`}>
+        <div className={`rounded-2xl text-white flex flex-col ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}  ${mediaQueriesStyle.mdStyle}`}>
             <div className='flex justify-end'>
                 <div className="relative inline-block text-left">
                     <div>

@@ -17,10 +17,6 @@ import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 // import getBalance from '@/lib/fetchRequest/getBalance';
 import { useState } from 'react';
 import AddModal from "../../lib/modals/AddModal";
-import AddBalanceModal from "../../lib/modals/AddBalanceModal";
-import AddIncomeModal from "../../lib/modals/AddIncomeModal";
-import AddSavingModal from '@/lib/modals/AddSavingModal';
-import AddExpensesModal from '@/lib/modals/AddExpensesModal';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 

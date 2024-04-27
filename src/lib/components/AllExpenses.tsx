@@ -3,8 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const AllExpenses: React.FC = () => {
+    const mediaQueriesStyle = {
+        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
+        
+        xlStyle:"xl:row-start-3 xl:row-end-4 xl:col-start-3 xl:col-end-4 m-4 p-3 m-4 p-3",
+        lgStyle:"lg:row-start-2 lg:row-end-3 lg:col-start-4 lg:col-end-5 m-4 p-3 flex flex-col",
+        mdStyle:"md:row-start-3 md:row-end-4 md:col-start-3 md:col-end-5 m-4 p-3 flex flex-col",
+        smStyle:"xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5 m-4 p-3 flex flex-col",
+    }
+
     return (
-        <div id="AllExpenses" className=" row-start-3 row-end-4 col-start-3 col-end-4 bg-neutral-800 rounded-2xl m-4 text-white p-3 flex flex-col">
+        <div id="AllExpenses" className={`${mediaQueriesStyle.xlStyle} bg-neutral-800 rounded-2xl  text-white flex flex-col`}>
             <div className='flex justify-between'>
                 <p className='font-bold'>All Expenses</p>
                 <p className='text-neutral-400'><span>Monthly</span> <span><FontAwesomeIcon icon={faChevronDown} /></span></p>

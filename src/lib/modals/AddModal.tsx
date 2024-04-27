@@ -105,6 +105,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	// Mettre un params date a true ou false (besoin de la date ou pas)
 	const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		// console.log(moment(e.target.value).toDate());
+		console.log('date : ', date)
 		setDate(e.target.value);
 	};
 
@@ -126,6 +127,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		// Remplacer responseAddBalance par responseAddX
 		// Remplacer setBalance par setX
 
+		console.log('add : ', date)
 		const responseAdd = await categories[title]['addFunction'](
 			user.token,
 			amount,

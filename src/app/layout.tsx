@@ -22,7 +22,7 @@ interface RootLayoutProps {
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
-      <body>
+      <body className=" overflow-x-hidden">
         <ReduxProvider>
           {children}
           <Toaster />
