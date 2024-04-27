@@ -11,6 +11,8 @@ import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { getSaving } from '../fetchRequest/saving';
 import { getExpenses } from '../fetchRequest/expenses';
+import { useRouter } from 'next/navigation';
+
 
 type MiniCardProps = {
     icon: IconProp;
@@ -26,10 +28,11 @@ type objectOption = {
 
 
 const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, openModal }) => {
+    const router = useRouter();
     let [money, setMoney] = useState<number | undefined>(0)
-    const token = useAppSelector(state => state.users.value).token; // Assurez-vous que le sélecteur correspond à la structure de votre store Redux
-    const moneys = useAppSelector(state => state.moneys.value); // Assurez-vous que le sélecteur correspond à la structure de votre store Redux
-    console.log(moneys)
+    const token = useAppSelector(state => state.users.value).token; 
+    const moneys = useAppSelector(state => state.moneys.value); 
+    // console.log(moneys)
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [option, setOption] = useState<objectOption[]>([]);
@@ -46,19 +49,19 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     break;
                 case 'Income':
                     const income = await getIncome(token)
-                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: null }]);
+                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push('/dashboard/income') }]);
                     dispatch(setIncomeToStore(income))
                     setMoney(moneys.income)
                     break;
                 case 'Saving':
                     const saving = await getSaving(token)
-                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: null }]);
+                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/saving')}]);
                     dispatch(setSavingToStore(saving))
                     setMoney(moneys.saving)
                     break;
                 case 'Expenses':
                     const expenses = await getExpenses(token)
-                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: null }]);
+                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push('/dashboard/expenses') }]);
                     dispatch(setExpensesToStore(expenses))
                     setMoney(moneys.expenses)
                     break;
@@ -137,14 +140,6 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                         <div className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                 {optionLink}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event) => {
-                                    event.stopPropagation(); // Empêche la propagation de l'événement de clic
-                                    if (event.action) {
-                                        console.log("ALED") // Exécute l'action si elle est définie
-                                    }
-                                }}>Ajouter un revenu</a> */}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem">Voir ses revenus</a> */}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem">Option 3</a> */}
                             </div>
                         </div>
                     )}
@@ -153,15 +148,13 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
             <div className="flex flex-1 flex-col justify-around">
                 <div className='bg-white-opacity rounded-full w-10 h-10 flex justify-center items-center p-2'>
                     <span className='text-center w-full'>
-
                         <FontAwesomeIcon icon={icon} />
                     </span>
                 </div>
 
-
                 <p>{name}</p>
 
-                <p className='font-bold'>{String(money)}€</p>
+                <p className='font-bold'>{money?.toFixed(2)}€</p>
             </div>
         </div>
     );

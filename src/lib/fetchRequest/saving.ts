@@ -21,7 +21,7 @@ export const getSaving = async (token: string): Promise<number | undefined> => {
 
         const getSavingData = await response.json();
 
-        console.log(getSavingData)
+        // console.log(getSavingData)
         if (getSavingData.result) {
             return getSavingData.saving
         }
@@ -63,7 +63,7 @@ export const addSaving = async (token: string, amount: number, date: Date): Prom
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
+        // console.log('data.result : ', data.result)
         return data
 
     }

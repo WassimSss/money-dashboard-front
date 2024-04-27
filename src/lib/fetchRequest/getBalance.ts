@@ -69,7 +69,7 @@ export const setBalance = async (token: string, amount: number, date: Date): Pro
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
+        // console.log('data.result : ', data.result)
         return data
 
     }

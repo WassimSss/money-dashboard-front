@@ -34,8 +34,8 @@ const Home: React.FC = () => {
     const [modalOpen, setModalOpen] = useState<string>("")
 
     const toggleAddModal = (modalName: string) => {
-        console.log('test')
-        console.log('modalName : ', modalName)
+        // console.log('test')
+        // console.log('modalName : ', modalName)
         setModalOpen(modalName)
         // setIsAddBalanceModalOpen(true);
     };
