@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getExpenses = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getExpenses', {
+        const response = await fetch('${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,13 +36,14 @@ export const getExpenses = async (token: string): Promise<number | undefined> =>
 
 type ObjectResponseGetAllExpenses = {
     result: boolean,
-    expenses: object[]
+    message: string,
+    expenses?: object[]
 }
 
 export const getAllExpenses  = async (token: string): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getAllExpenses', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllExpenses`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,13 +76,13 @@ export const getAllExpenses  = async (token: string): Promise<ObjectResponseGetA
 type ObjectResponseAddExpenses = {
     result: boolean,
     message: string,
-    expenses: number
+    expenses?: number
 }
 
 export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined ): Promise<ObjectResponseAddExpenses> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/addExpenses', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpenses`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,13 +119,13 @@ export const addExpenses = async (token: string, amount: number, type = undefine
 type ObjectResponseDeleteExpenses = {
     result: boolean,
     message: string,
-    expenses: number
+    expenses?: number
 }
 
 export const deleteExpenses = async (token: string, id: number): Promise<ObjectResponseDeleteExpenses> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/deleteExpenses', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/deleteExpenses`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -29,14 +29,16 @@ const Budget: React.FC = () => {
 
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: MouseEvent) => {
 
             // console.log(dropdownRef.current, event.target)
             // console.log(typeof event.target.className === "string");
 
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                if ((typeof event.target.className === "string")) {
-                    if (event.target.className.split(' ')[0] === "buttonAction") {
+            const dropdownRefCurrent = dropdownRef.current as HTMLDivElement | null;
+
+            if (dropdownRefCurrent && !dropdownRefCurrent.contains(event.target as Node)) {
+                if ((typeof (event.target as HTMLElement).className === "string")) {
+                    if ((event.target as HTMLElement).className.split(' ')[0] === "buttonAction") {
 
                     } else {
                         setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
@@ -58,9 +60,9 @@ const Budget: React.FC = () => {
         setShowDropdown(!showDropdown)
     }
 
-    const optionLink = option.map((e, i) => {
+    const optionLink: JSX.Element[] = option.map((e: objectOption, i: number) => {
         return (
-            <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event) => {
+            <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
                 event.preventDefault(); // Empêche le comportement par défaut de l'élément <a>
                 event.stopPropagation(); // Empêche la propagation de l'événement de clic
                 if (e.action) {

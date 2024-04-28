@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getSaving = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getSaving', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getSaving`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,14 +37,14 @@ export const getSaving = async (token: string): Promise<number | undefined> => {
 type ObjectResponseAddSaving = {
     result: boolean,
     message: string,
-    saving: number
+    saving?: object[]
 }
 
 // get all saving
 export const getAllSaving = async (token: string): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getAllSaving', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllSaving`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export const getAllSaving = async (token: string): Promise<ObjectResponseAddSavi
 export const deleteSaving = async (token: string, id: number): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/deleteSaving', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/deleteSaving`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const addSaving = async (token: string, amount: number, type = undefined,
         console.log('description : ', description)  
         console.log('category : ', category)
 
-        const response = await fetch('http://localhost:3001/users/addSaving', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addSaving`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

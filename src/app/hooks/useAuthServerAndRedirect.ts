@@ -17,24 +17,24 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 	const token = useAppSelector(state => state.users.value).token
 
 	console.log(useAppSelector(state => state.users.value));
-	
+
 	useEffect(
 		() => {
 			// Simulez une vérification d'authentification côté serveur
 			const checkAuth = async () => {
-				const response = await fetch('http://localhost:3001/api/check-auth  ', {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/check-auth  `, {
 					method: 'GET',
 					cache: 'no-store',
 					headers: {
 						Authorization: `Bearer ${token}`, // Ajoutez le token dans l'en-tête Authorization
-					  },
+					},
 				});
 				const data = await response.json();
 
-				if (requireAuth && !data.isAuthenticated ) {
+				if (requireAuth && !data.isAuthenticated) {
 					console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
 					router.push(redirect);
-				} else if(!requireAuth && data.isAuthenticated){
+				} else if (!requireAuth && data.isAuthenticated) {
 					console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
 
 					router.push(redirect);
@@ -43,7 +43,7 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 
 			checkAuth();
 		},
-		[ router ]
+		[router]
 	);
 };
 

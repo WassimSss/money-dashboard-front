@@ -3,10 +3,10 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface MoneyState {
     value: {
-        balance: number,
-        income: number,
-        saving: number,
-        expenses: number,
+        balance: number | undefined,
+        income: number | undefined,
+        saving: number | undefined,
+        expenses: number | undefined,
     };
 }
 

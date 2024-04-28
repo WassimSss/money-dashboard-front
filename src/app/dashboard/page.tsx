@@ -17,6 +17,7 @@ import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 // import getBalance from '@/lib/fetchRequest/getBalance';
 import { useState } from 'react';
 import AddModal from "../../lib/modals/AddModal";
+import { IconDefinition, IconProp } from '@fortawesome/fontawesome-svg-core';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
 
     const miniCards: string[] = ["Balance", "Income", "Saving", "Expenses"];
 
-    const miniCardsIcons = {
+    const miniCardsIcons: { [key: string]: IconDefinition } = {
         Balance: faWallet,
         Income: faHandHoldingDollar,
         Saving: faCircleDollarToSlot,
@@ -55,7 +56,7 @@ const Home: React.FC = () => {
         if (card === "Balance") {
             isActive = true
         }
-        return <MiniCard icon={miniCardsIcons[card]} name={card} active={isActive} openModal={toggleAddModal} key={card} />
+        return <MiniCard icon={miniCardsIcons[card] } name={card} active={isActive} openModal={toggleAddModal} key={card} />
     })
 
     const mediaQueriesStyle = {

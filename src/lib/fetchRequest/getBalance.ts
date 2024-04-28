@@ -9,7 +9,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getBalance = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getBalance', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getBalance`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,13 +43,13 @@ export const getBalance = async (token: string): Promise<number | undefined> => 
 type ObjectResponseAddBalance = {
     result: boolean,
     message: string,
-    balance: number
+    balance?: number
 }
 
 export const setBalance = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/setBalance', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/setBalance`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

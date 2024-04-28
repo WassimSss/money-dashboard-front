@@ -30,10 +30,7 @@ interface Category {
 }
 
 interface Categories {
-	Balance: Category;
-	Expenses: Category;
-	Income: Category;
-	Saving: Category;
+	[key : string]: Category;
 }
 const categories: Categories = {
 	Balance: {
@@ -236,7 +233,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 										<input
 											type="text"
 											onChange={(e) => handleChangeDescription(e)}
-											value={description === 0 ? '' : description}
+											value={description}
 											name="description"
 											id="description"
 											className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -250,7 +247,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 										<input
 											type="text"
 											onChange={(e) => handleChangeCategory(e)}
-											value={category === 0 ? '' : category}
+											value={category}
 											name="category"
 											id="category"
 											className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

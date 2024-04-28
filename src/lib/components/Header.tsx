@@ -5,7 +5,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAppDispatch } from '@/reducer/store';
 import { disconnect } from '@/reducer/slices/usersSlice';
-import { IconType } from "react-icons";
 const Header: React.FC = () => {
 
     const dispatch = useAppDispatch();

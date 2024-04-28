@@ -82,7 +82,7 @@ export default function Signup() {
 
     try {
 
-      const response = await fetch('http://localhost:3001/users/signup', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState, useRef } from 'react';
-import {getBalance} from '../fetchRequest/getBalance';
+import { getBalance } from '../fetchRequest/getBalance';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
@@ -30,8 +30,8 @@ type objectOption = {
 const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, openModal }) => {
     const router = useRouter();
     let [money, setMoney] = useState<number | undefined>(0)
-    const token = useAppSelector(state => state.users.value).token; 
-    const moneys = useAppSelector(state => state.moneys.value); 
+    const token = useAppSelector(state => state.users.value).token;
+    const moneys = useAppSelector(state => state.moneys.value);
     // console.log(moneys)
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -55,7 +55,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     break;
                 case 'Saving':
                     const saving = await getSaving(token)
-                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/saving')}]);
+                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/saving') }]);
                     dispatch(setSavingToStore(saving))
                     setMoney(moneys.saving)
                     break;
@@ -97,20 +97,19 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
     const dropdownRef = useRef(null);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: MouseEvent) => {
 
-            // console.log(dropdownRef.current, event.target)
-            // console.log(typeof event.target.className === "string");
-
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                if ((typeof event.target.className === "string")) {
-                    if (event.target.className.split(' ')[0] === "buttonAction") {
+            const dropdownRefType = dropdownRef.current as HTMLElement | null;
+            const target = event.target as HTMLElement;
+            if (dropdownRefType && !dropdownRefType?.contains(target)) {
+                if (typeof target.className === "string") {
+                    if (target.className.split(' ')[0] === "buttonAction") {
 
                     } else {
-                        setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
+                        setShowDropdown(false);
                     }
                 } else {
-                    setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
+                    setShowDropdown(false);
                 }
             }
         };
@@ -130,7 +129,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
         xlStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 xl:text-base`,
         lgStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} lg:w-36 lg:h-36 lg:m-8 lg:p-3 lg:text-base`,
-        mdStyle:`${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} md:w-36 md:h-36 md:m-8 md:p-3 md:text-base`,
+        mdStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} md:w-36 md:h-36 md:m-8 md:p-3 md:text-base`,
         smStyle: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
     }
 

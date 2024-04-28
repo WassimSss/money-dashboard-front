@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getIncome = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getIncome', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getIncome`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,13 +36,14 @@ export const getIncome = async (token: string): Promise<number | undefined> => {
 
 type ObjectResponsegetAllIncome = {
     result: boolean,
-    income: object[]
+    message: string
+    income?: object[]
 }
 
 export const getAllIncome  = async (token: string): Promise<ObjectResponsegetAllIncome> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/getAllIncome', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllIncome`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,12 +77,12 @@ export const getAllIncome  = async (token: string): Promise<ObjectResponsegetAll
 type ObjectResponseAddIncome = {
     result: boolean,
     message: string,
-    income: number
+    income?: number
 }
 export const addIncome = async (token: string, amount: number, type: string|undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined) : Promise<ObjectResponseAddIncome> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/addIncome', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addIncome`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ type ObjectResponseDeleteIncome = {
 export const deleteIncome = async (token: string, id: number): Promise<ObjectResponseDeleteIncome> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/deleteIncome', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/deleteIncome`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,7 +152,7 @@ export const deleteIncome = async (token: string, id: number): Promise<ObjectRes
 export const acceptIncome = async (token: string, id: number): Promise<ObjectResponseDeleteIncome> => {
     try {
 
-        const response = await fetch('http://localhost:3001/users/acceptIncome', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/acceptIncome`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
