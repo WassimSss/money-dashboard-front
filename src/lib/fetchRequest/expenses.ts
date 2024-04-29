@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getExpenses = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch('${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

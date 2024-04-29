@@ -11,6 +11,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-hot-toast';
 // import iconProp
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Oval } from 'react-loader-spinner';
+
 var moment = require('moment');
 
 export default function Expenses() {
@@ -30,7 +32,7 @@ export default function Expenses() {
     };
 
     const token = useAppSelector((state) => state.users.value).token;
-    const [expenses, setExpenses] = useState<expenseObject[]>([]);
+    const [expenses, setExpenses] = useState<expenseObject[] | undefined>(undefined);
 
     // handle delete expense
     const handleDeleteExpense = async (id: number) => {
@@ -53,13 +55,13 @@ export default function Expenses() {
         fetchData();
     }, []);
 
-    const allExpenses = expenses.map((expense) => {
+    const allExpenses = expenses?.map((expense) => {
         return (
             <div className='flex m-3 text-neutral-400'>
-                <p className='w-36 px-3 text-primary font-medium'>{expense.description}</p>
-                <p className='w-36 px-3'>{expense.category}</p>
-                <p className='w-36 px-3'>{moment(expense.date).format('DD/MM/YYYY')}</p>
-                <p className='w-36 px-3 text-primary font-medium'>{expense.amount}€</p>
+                {expense.description && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{expense.description}</p>}
+                {expense.category && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{expense.category}</p>}
+                <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{moment(expense.date).format('DD/MM/YYYY')}</p>
+                <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{expense.amount}€</p>
                 <button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleDeleteExpense(expense["_id"])}><FontAwesomeIcon icon={faTrash as IconProp} /></button>
             </div>
         );
@@ -68,11 +70,28 @@ export default function Expenses() {
         <div className="bg-neutral-900 w-full h-screen">
             <Header />
 
-            <div className='flex flex-col items-center justify-center'>
-                <p className=" font-bold text-primary text-3xl my-14">Expenses</p>
+            <div className='flex flex-col items-center justify-center my-14'>
+                {expenses !== undefined ? (
 
-                <div className=' bg-neutral-800 m-8 p-3 rounded-2xl'>{allExpenses}</div>
+                    allExpenses?.length ?? 0 > 0 ? (
+                        <>
+                            <p className=" font-bold text-primary text-3xl">Expenses</p>
+
+                            <div className=' bg-neutral-800 m-8 p-3 rounded-2xl'>{(allExpenses?.length ?? 0) > 0 && allExpenses}</div>
+                        </>
+                    ) : <p className='text-primary text-xl m-8'>Vous n'avez pas encore rentré de dépenses</p>
+                ) : (<Oval
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#4F72D8"
+                    secondaryColor="#ffffff"
+                    ariaLabel="oval-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />)}
             </div>
+
         </div>
     );
 }

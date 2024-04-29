@@ -12,7 +12,7 @@ import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToSto
 import { getSaving } from '../fetchRequest/saving';
 import { getExpenses } from '../fetchRequest/expenses';
 import { useRouter } from 'next/navigation';
-
+import ContentLoader from "react-content-loader"
 
 type MiniCardProps = {
     icon: IconProp;
@@ -29,7 +29,7 @@ type objectOption = {
 
 const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, openModal }) => {
     const router = useRouter();
-    let [money, setMoney] = useState<number | undefined>(0)
+    let [money, setMoney] = useState<number | undefined>(undefined)
     const token = useAppSelector(state => state.users.value).token;
     const moneys = useAppSelector(state => state.moneys.value);
     // console.log(moneys)
@@ -161,7 +161,20 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
 
                 <p>{name}</p>
 
-                <p className='font-bold'>{money?.toFixed(2)}€</p>
+                {money !== undefined ? (
+                    <p className='font-bold'>{money?.toFixed(2)}€</p>
+                ) : (
+                    <ContentLoader
+                        speed={2}
+                        width={400}
+                        height={160}
+                        viewBox="0 0 400 160"
+                        backgroundColor="#f3f3f3"
+                        foregroundColor="#999999"
+                    >
+                        <rect x="0" y="0" rx="3" ry="3" width="50" height="15" />
+                    </ContentLoader>
+                )}
             </div>
         </div>
     );

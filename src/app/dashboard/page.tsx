@@ -56,7 +56,7 @@ const Home: React.FC = () => {
         if (card === "Balance") {
             isActive = true
         }
-        return <MiniCard icon={miniCardsIcons[card] } name={card} active={isActive} openModal={toggleAddModal} key={card} />
+        return <MiniCard icon={miniCardsIcons[card]} name={card} active={isActive} openModal={toggleAddModal} key={card} />
     })
 
     const mediaQueriesStyle = {
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />} */}
 
 
-            <div className="bg-neutral-900 w-full md:grid md:grid-rows-layout md:grid-cols-4 ">
+            <div className="bg-neutral-900 w-screen overflow-x-hidden h-full md:grid md:grid-rows-layout md:grid-cols-4 ">
 
                 <Header />
 
