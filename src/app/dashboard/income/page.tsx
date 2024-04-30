@@ -66,11 +66,11 @@ export default function Income() {
 		fetchData();
 	}, []);
 
-	const allIncome = income?.map(oneIncome => {
+	const allIncome = income?.map((oneIncome, i) => {
 		const isVirement = oneIncome.type === "virement";
 		const style = isVirement ? 'text-green-600' : 'text-red-600';
 		return (
-			<div className={`flex m-3 text-neutral-400 `}>
+			<div className={`flex m-3 text-neutral-400 `} key={i}>
 				<p className={`w-3 md:w-3 ${isVirement ? 'text-green-600' : 'text-red-600'}`}>{isVirement ? '+' : '-'}</p>
 				{oneIncome.description && <p className={` text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium ${style}`}>{oneIncome.description}</p>}
 				{oneIncome.category && <p className={` text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 ${style}`}>{oneIncome.category}</p>}
@@ -82,7 +82,7 @@ export default function Income() {
 		);
 	});
 	return (
-		<div className="bg-neutral-900 w-full h-screen">
+		<div className="bg-neutral-900 w-full min-h-screen">
 			<Header />
 
 			<div className='flex flex-col items-center justify-center my-14'>
@@ -104,7 +104,7 @@ export default function Income() {
 					wrapperStyle={{}}
 					wrapperClass=""
 				/>)}
-				
+
 			</div>
 		</div >
 	);

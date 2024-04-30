@@ -55,9 +55,9 @@ export default function Expenses() {
         fetchData();
     }, []);
 
-    const allExpenses = expenses?.map((expense) => {
+    const allExpenses = expenses?.map((expense, i) => {
         return (
-            <div className='flex m-3 text-neutral-400'>
+            <div className='flex m-3 text-neutral-400' key={i}>
                 {expense.description && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{expense.description}</p>}
                 {expense.category && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{expense.category}</p>}
                 <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{moment(expense.date).format('DD/MM/YYYY')}</p>
@@ -67,7 +67,7 @@ export default function Expenses() {
         );
     });
     return (
-        <div className="bg-neutral-900 w-full h-screen">
+        <div className="bg-neutral-900 w-full min-h-screen">
             <Header />
 
             <div className='flex flex-col items-center justify-center my-14'>

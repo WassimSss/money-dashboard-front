@@ -55,9 +55,9 @@ export default function Saving() {
 		fetchData();
 	}, []);
 
-	const allSavings = saving?.map((saving) => {
+	const allSavings = saving?.map((saving, i) => {
 		return (
-			<div className='flex m-3 text-neutral-400'>
+			<div className='flex m-3 text-neutral-400' key={i}>
 				{saving.description && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{saving.description}</p>}
 				{saving.category && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{saving.category}</p>}
 				<p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3'>{moment(saving.date).format('DD/MM/YYYY')}</p>
@@ -67,7 +67,7 @@ export default function Saving() {
 		);
 	});
 	return (
-		<div className="bg-neutral-900 w-full h-screen">
+		<div className="bg-neutral-900 w-full min-h-screen">
 			<Header />
 
 

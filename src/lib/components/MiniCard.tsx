@@ -43,7 +43,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
             switch (name) {
                 case 'Balance':
                     const balance = await getBalance(token)
-                    setOption([{ option: "Modification de votre montant actuel", action: openModal }]);
+                    setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push('/dashboard/balance') }]);
                     dispatch(setBalanceToStore(balance))
                     setMoney(moneys.balance)
                     break;

@@ -43,8 +43,36 @@ export const getBalance = async (token: string): Promise<number | undefined> => 
 type ObjectResponseAddBalance = {
     result: boolean,
     message: string,
-    balance?: number
+    history?: object[]
 }
+
+export const getAllBalance = async (token: string): Promise<ObjectResponseAddBalance> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllBalance`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            return errorData
+        }
+
+        const getAllBalanceData = await response.json();
+
+        return getAllBalanceData;
+    }
+
+    catch (error) {
+        console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' };
+    }
+}
+
 
 export const setBalance = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddBalance> => {
     try {

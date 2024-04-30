@@ -21,7 +21,7 @@ export const getExpenses = async (token: string): Promise<number | undefined> =>
 
         const getExpensesData = await response.json();
 
-        console.log(getExpensesData)
+        // console.log(getExpensesData)
         if (getExpensesData.result) {
             return getExpensesData.expenses
         }
@@ -40,7 +40,110 @@ type ObjectResponseGetAllExpenses = {
     expenses?: object[]
 }
 
-export const getAllExpenses  = async (token: string): Promise<ObjectResponseGetAllExpenses> => {
+// Recuperer toutes les dépenses du jour avec un fetch sur /users/getAllExpenses
+export const getExpensesOfTheDay = async (token: string): Promise<number | undefined> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/day`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const getExpensesData = await response.json();
+
+        console.log(getExpensesData)
+        if (getExpensesData.result) {
+            return getExpensesData.expenses
+        }
+
+    }
+
+    catch (error) {
+        console.error(error)
+    }
+
+}
+
+// Recuperer toutes les dépenses de la semaine avec un fetch sur /users/getExpenses/week
+
+export const getExpensesOfTheWeek = async (token: string): Promise<number | undefined> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/week`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const getExpensesData = await response.json();
+
+        console.log(getExpensesData)
+        if (getExpensesData.result) {
+            return getExpensesData.expenses
+        }
+
+    }
+
+    catch (error) {
+        console.error(error)
+    }
+
+}
+
+// Recuperer toutes les dépenses du mois avec un fetch sur /users/getExpenses/month
+
+export const getExpensesOfTheMonth = async (token: string): Promise<number | undefined> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/month`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const getExpensesData = await response.json();
+
+        console.log(getExpensesData)
+        if (getExpensesData.result) {
+            return getExpensesData.expenses
+        }
+
+    }
+
+    catch (error) {
+        console.error(error)
+    }
+
+}
+
+
+
+export const getAllExpenses = async (token: string): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllExpenses`, {
@@ -79,7 +182,40 @@ type ObjectResponseAddExpenses = {
     expenses?: number
 }
 
-export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined ): Promise<ObjectResponseAddExpenses> => {
+// getExpensesCategories
+
+export const getExpensesCategories = async (token: string, period: string): Promise<ObjectResponseGetAllExpenses> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpensesByCategory/${period}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+
+
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            return errorData
+
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const data = await response.json();
+        console.log('data.result : ', data.result)
+        return data
+
+    }
+    catch (error) {
+        console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
+    }
+}
+export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddExpenses> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpenses`, {
@@ -131,7 +267,8 @@ export const deleteExpenses = async (token: string, id: number): Promise<ObjectR
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ idExpenses: id })    })
+            body: JSON.stringify({ idExpenses: id })
+        })
 
         if (!response.ok) {
             // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
@@ -145,7 +282,7 @@ export const deleteExpenses = async (token: string, id: number): Promise<ObjectR
         console.log('data.result : ', data.result)
         return data
 
-        } catch (error) {
+    } catch (error) {
         console.error(error)
         return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
     }
