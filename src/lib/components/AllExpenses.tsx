@@ -13,7 +13,7 @@ const AllExpenses: React.FC = () => {
     const [expensesWeek, setExpensesWeek] = useState<number | undefined>(undefined);
     const [expensesMonth, setExpensesMonth] = useState<number | undefined>(undefined);
     const [expensesCategories, setExpensesCategories] = useState<object[] | undefined>(undefined);
-    const [period, setPeriod] = useState<string>('month'); // 'day', 'week', 'month'
+    const [period, setPeriod] = useState<string>('day'); // 'day', 'week', 'month'
     const token = useAppSelector(state => state.users.value).token;
     const moneys = useAppSelector(state => state.moneys.value);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -69,7 +69,7 @@ const AllExpenses: React.FC = () => {
         if (ammount !== 0) {
             const formattedPeriod = "expensesofThe" + period[0].toLocaleUpperCase() + period.slice(1);
 
-            const percentage = Number(ammount) / moneys[formattedPeriod] * 100;
+            const percentage = Number(ammount) / moneys[formattedPeriod as keyof typeof moneys]! * 100;
 
             sumPercentage += percentage;
 
@@ -88,7 +88,7 @@ const AllExpenses: React.FC = () => {
         if (amount > 0) {
 
             return (
-                <p className='flex flex-row' key={i}><span className={`block size-3 rounded-full bg-[${camembertColors[i]}]`}></span><span className='text-neutral-400'>{titleCategory}</span></p>
+                <p className='flex flex-row ' key={i}><span className={`block size-3 rounded-full`} style={{backgroundColor : camembertColors[i]}}></span><span className='text-neutral-400'>{titleCategory}</span></p>
 
             )
         }
@@ -102,16 +102,17 @@ const AllExpenses: React.FC = () => {
         smStyle: "xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5 m-4 p-3 flex flex-col",
     }
 
-    const option = [{ option: "Mois", action: () => setPeriod('month') }, { option: "Semaine", action: () => setPeriod('week') }, { option: "Jour", action: () => setPeriod('day') }]
+    const test = () => {
+        console.log("test function")
+    }
+
+    const option = [{ option: "Mois", action: () => setPeriod("month") }, { option: "Semaine", action: () => setPeriod('week') }, { option: "Jour", action: () => setPeriod('day') }]
     const optionLink = option.map((e, i) => {
         console.log(period)
         return (
-            <a href="#" key={i} className="z-20 buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event) => {
-                event.preventDefault(); // Empêche le comportement par défaut de l'élément <a>
-                event.stopPropagation(); // Empêche la propagation de l'événement de clic
-                if (e.action) {
-                    e.action(name); // Exécute l'action si elle est définie
-                }
+            <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={() => {
+                e.action(); // Exécute l'action si elle est définie
+                setShowDropdown(false); // Ferme le menu déroulant
             }}>
                 {e.option}
             </a>
@@ -169,7 +170,7 @@ const AllExpenses: React.FC = () => {
             <div className='flex flex-col flex-1 justify-between my-2 '>
                 <div className='flex justify-between mt-8'>
                     <div className='relative -translate-y-4 '>
-                        {camambertData?.length == 0 ? <p className='text-neutral-400'>No expenses</p> : camambertData}
+                        {camambertData?.length == 0 ? <p className='text-neutral-400'>Pas encore de dépenses pour cette période.</p> : camambertData}
                         {/* <div style={{
                             background: 'radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, #FF0000 21%, transparent 0)', // 20% + 1 pour eviter les erreurs d'affichages
                         }} className='absolute w-24 h-24 rounded-full ' ></div>

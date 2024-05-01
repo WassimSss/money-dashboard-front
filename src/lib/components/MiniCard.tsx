@@ -83,6 +83,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 event.stopPropagation(); // Empêche la propagation de l'événement de clic
                 if (e.action) {
                     e.action(name); // Exécute l'action si elle est définie
+                    setShowDropdown(false); 
                 }
             }}>
                 {e.option}
@@ -144,7 +145,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     </div>
 
                     {showDropdown && (
-                        <div className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                 {optionLink}
                             </div>

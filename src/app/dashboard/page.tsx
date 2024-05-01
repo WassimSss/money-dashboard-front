@@ -39,7 +39,6 @@ const Home: React.FC = () => {
 
     const closeAddModal = () => {
         setModalOpen("")
-        // setIsAddBalanceModalOpen(false);
     };
 
     const miniCards: string[] = ["Balance", "Income", "Saving", "Expenses"];

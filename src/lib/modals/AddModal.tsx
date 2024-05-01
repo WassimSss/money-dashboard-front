@@ -30,7 +30,7 @@ interface Category {
 }
 
 interface Categories {
-	[key : string]: Category;
+	[key: string]: Category;
 }
 const categories: Categories = {
 	Balance: {
@@ -39,7 +39,7 @@ const categories: Categories = {
 		setToStore: setBalanceToStore,
 		form: {
 			title: 'Entrer votre montant actuel',
-			input: [ 'amount' ]
+			input: ['amount']
 		}
 	},
 	Expenses: {
@@ -48,7 +48,7 @@ const categories: Categories = {
 		setToStore: setExpensesToStore,
 		form: {
 			title: 'Entrer les détails de la dépense',
-			input: [ 'amount', 'date', 'description', 'category' ]
+			input: ['amount', 'date', 'description', 'category']
 		}
 	},
 	Income: {
@@ -57,7 +57,7 @@ const categories: Categories = {
 		setToStore: setIncomeToStore,
 		form: {
 			title: 'Entrer les détails de paiement',
-			input: [ 'amount', 'date', 'description', 'category' ]
+			input: ['amount', 'date', 'description', 'category']
 		}
 	},
 	Saving: {
@@ -66,7 +66,7 @@ const categories: Categories = {
 		setToStore: setSavingToStore,
 		form: {
 			title: "Entrer les détails de l'économie",
-			input: [ 'amount', 'date', 'description', 'category' ]
+			input: ['amount', 'date']
 		}
 	}
 };
@@ -77,26 +77,26 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 	const user = useAppSelector((state) => state.users.value);
 	const dispatch = useAppDispatch();
-	const [ amount, setAmount ] = useState<string>("");
-	const [ description, setDescription ] = useState<string>('');
-	const [ category, setCategory ] = useState<string>('');
-	const [ paymentType, setPaymentType ] = useState<string>('virement');
-	const [ date, setDate ] = useState<string>('');
+	const [amount, setAmount] = useState<string>("");
+	const [description, setDescription] = useState<string>('');
+	const [category, setCategory] = useState<string>('');
+	const [paymentType, setPaymentType] = useState<string>('virement');
+	const [date, setDate] = useState<string>('');
 
 	const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		// Permettre uniquement les nombres et un seul point
-        const str = e.target.value;
-        if (!isNaN(parseFloat(str))) {
-            const decimalIndex = str.indexOf(".");
-            if (decimalIndex !== -1 && str.length - decimalIndex > 3) {
-            const truncatedNumber = parseFloat(str).toFixed(2);
-            setAmount(truncatedNumber.toString());
-            } else {
-            setAmount(str);
-            }
-        } else if (str === "." && !amount.includes(".")) {
-            setAmount(amount + str);
-        }
+		const str = e.target.value;
+		if (!isNaN(parseFloat(str))) {
+			const decimalIndex = str.indexOf(".");
+			if (decimalIndex !== -1 && str.length - decimalIndex > 3) {
+				const truncatedNumber = parseFloat(str).toFixed(2);
+				setAmount(truncatedNumber.toString());
+			} else {
+				setAmount(str);
+			}
+		} else if (str === "." && !amount.includes(".")) {
+			setAmount(amount + str);
+		}
 	};
 
 	// Mettre un params date a true ou false (besoin de la date ou pas)
@@ -168,8 +168,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 										{categories[title].form.title}
 									</h3>
 									{/* Faire en sorte que je peux utiliser l'input pour entrer un nombre a virgule qui representera un montant */}
-
-									<div className="mt-2">
+									{categories[title].form.input.includes('amount') && (<div className="mt-2">
 										<label htmlFor="amount" className="block text-sm font-medium text-gray-700">
 											Montant
 										</label>
@@ -205,7 +204,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 												</div>
 											</div>
 										)}
-									</div>
+									</div>)}
+
 									{categories[title].form.input.includes('date') && (
 										<div className="mt-2">
 											<label
@@ -223,37 +223,41 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 											/>
 										</div>
 									)}
-									<div className="mt-2">
-										<label
-											htmlFor="description"
-											className="block text-sm font-medium text-gray-700"
-										>
-											Description
-										</label>
-										<input
-											type="text"
-											onChange={(e) => handleChangeDescription(e)}
-											value={description}
-											name="description"
-											id="description"
-											className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-											placeholder="Entrer la description"
-										/>
-									</div>
-									<div className="mt-2">
-										<label htmlFor="category" className="block text-sm font-medium text-gray-700">
-											Catégorie
-										</label>
-										<input
-											type="text"
-											onChange={(e) => handleChangeCategory(e)}
-											value={category}
-											name="category"
-											id="category"
-											className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-											placeholder="Entrer la catégorie"
-										/>
-									</div>
+									{categories[title].form.input.includes('description') && (
+										<div className="mt-2">
+											<label
+												htmlFor="description"
+												className="block text-sm font-medium text-gray-700"
+											>
+												Description
+											</label>
+											<input
+												type="text"
+												onChange={(e) => handleChangeDescription(e)}
+												value={description}
+												name="description"
+												id="description"
+												className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+												placeholder="Entrer la description"
+											/>
+										</div>
+									)}
+									{categories[title].form.input.includes('category') && (
+										<div className="mt-2">
+											<label htmlFor="category" className="block text-sm font-medium text-gray-700">
+												Catégorie
+											</label>
+											<input
+												type="text"
+												onChange={(e) => handleChangeCategory(e)}
+												value={category}
+												name="category"
+												id="category"
+												className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+												placeholder="Entrer la catégorie"
+											/>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
