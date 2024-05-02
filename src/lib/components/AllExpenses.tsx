@@ -52,12 +52,13 @@ const AllExpenses: React.FC = () => {
         const fetchExpensesCategories = await getExpensesCategories(token, period);
         setExpensesCategories(fetchExpensesCategories.expenses)
 
+        console.log(fetchExpensesCategories)
         // calculer pourcentage
 
     }
 
     useEffect(() => {
-        console.log(expensesCategories)
+        // console.log(expensesCategories)
         fetchData();
     }, [moneys, period])
 
@@ -88,7 +89,7 @@ const AllExpenses: React.FC = () => {
         if (amount > 0) {
 
             return (
-                <p className='flex flex-row ' key={i}><span className={`block size-3 rounded-full`} style={{backgroundColor : camembertColors[i]}}></span><span className='text-neutral-400'>{titleCategory}</span></p>
+                <p className='flex flex-row ' key={i}><span className={`block size-3 rounded-full`} style={{ backgroundColor: camembertColors[i] }}></span><span className='text-neutral-400'>{titleCategory}</span></p>
 
             )
         }
@@ -103,12 +104,12 @@ const AllExpenses: React.FC = () => {
     }
 
     const test = () => {
-        console.log("test function")
+        // console.log("test function")
     }
 
     const option = [{ option: "Mois", action: () => setPeriod("month") }, { option: "Semaine", action: () => setPeriod('week') }, { option: "Jour", action: () => setPeriod('day') }]
     const optionLink = option.map((e, i) => {
-        console.log(period)
+        // console.log(period)
         return (
             <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={() => {
                 e.action(); // Exécute l'action si elle est définie
@@ -147,7 +148,7 @@ const AllExpenses: React.FC = () => {
         setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
         setShowDropdown(!showDropdown)
     }
-    console.log(period)
+    // console.log(period)
 
     return (
         <div id="AllExpenses" className={`${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle} bg-neutral-800 rounded-2xl  text-white flex flex-col`}>

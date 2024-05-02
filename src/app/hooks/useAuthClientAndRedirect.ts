@@ -20,12 +20,12 @@ const useAuthClientAndRedirect = (requireAuth: boolean, redirect: string) => {
         // Si il a besoin d'être connecté
         if(requireAuth && !token){
             // Et il n'est pas connecté
-                console.log(`Client : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
+                // console.log(`Client : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
                 // Redirigez l'utilisateur vers la page de connexion si non authentifié
                 router.push(redirect);
             
         } else if(!requireAuth && token){
-                console.log(`Client : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
+                // console.log(`Client : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
                 // Redirigez l'utilisateur vers la page de connexion si non authentifié
                 router.push(redirect);
             

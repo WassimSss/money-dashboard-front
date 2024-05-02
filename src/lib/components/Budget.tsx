@@ -22,7 +22,7 @@ const Budget: React.FC = () => {
     const token = useAppSelector(state => state.users.value).token;
 
     // setOption([{ option: "Ajouter un revenu", action: null }, { option: "Voir ses revenus", action: null }]);
-    const option = [{ option: "Ajouter un budget par mois", action: null }, { option: "Ajouter un budget par catégorie de dépense", action: null }]
+    const option = [{ option: "Ajouter un budget par mois", action: null }, { option: "Ajouter un budget par catégorie de dépense", action: () => setModalOpen("Budget") }]
 
     // const toggleAddExpensesModal = () => {
     //     console.log('isAddExpensesModalOpen : ', isAddExpensesModalOpen)
@@ -46,10 +46,12 @@ const Budget: React.FC = () => {
     }, [])
 
     const categoriesWithAmount = monthBudget?.expensesByCategory.map((e: { category: string, amount: number }, i: number) => {
+        console.log("e :", e);
+
         return (
             <div className='flex justify-between'>
-                <p>{e.category}</p>
-                <p className='text-success'>{e.amount.toFixed(2)}/?€</p>
+                <p>{e.categoryName}</p>
+                <p className='text-success'>{e.categoryAmount.toFixed(2)}/{e.categoryBudget}€</p>
             </div>
 
         );
@@ -141,18 +143,6 @@ const Budget: React.FC = () => {
 
                     <div>
                         {categoriesWithAmount}
-                        {/* <div className='flex justify-between'>
-                        <p>Sorties</p>
-                        <p className='text-success'>25.74/100€</p>
-                    </div>
-                    <div className=' flex justify-between'>
-                        <p>Fast-food</p>
-                        <p className='text-error'>75.50/50€</p>
-                    </div>
-                    <div className='flex justify-between'>
-                        <p>Achat</p>
-                        <p className='text-success'>27/100€</p>
-                    </div> */}
                     </div>
 
                     <div className='flex justify-between'>

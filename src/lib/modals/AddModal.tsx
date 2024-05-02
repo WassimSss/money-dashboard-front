@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { toast } from 'react-hot-toast';
 import { setBalance, getBalance } from '../fetchRequest/getBalance';
 import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
-import { addExpenses, getExpenses } from '../fetchRequest/expenses';
+import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
 import { addIncome, getIncome } from '../fetchRequest/income';
 import { addSaving, getSaving } from '../fetchRequest/saving';
+import Autocomplete from '../components/Autocomplete';
 
 var moment = require('moment');
 moment().format();
@@ -68,6 +69,16 @@ const categories: Categories = {
 			title: "Entrer les détails de l'économie",
 			input: ['amount', 'date']
 		}
+	},
+	Budget: {
+		// addFunction: addBudgetOfExpensesCategory,
+		// getFunction: getExpenses,
+		// setToStore: setExpensesToStore,
+		form: {
+			title: 'Entrer votre budget pour chaque catégorie de dépenses',
+			input: ['amount', 'category']
+		}
+
 	}
 };
 
@@ -80,8 +91,21 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	const [amount, setAmount] = useState<string>("");
 	const [description, setDescription] = useState<string>('');
 	const [category, setCategory] = useState<string>('');
+	const [newCategory, setNewCategory] = useState<string>('');
+	const [expensesCategories, setExpensesCategories] = useState<string[]>([]);
 	const [paymentType, setPaymentType] = useState<string>('virement');
 	const [date, setDate] = useState<string>('');
+
+	const fetchExpensesCategories = async () => {
+		const response = await getExpensesCategoriesLabel(user.token, 'month');
+		console.log(response)
+		setExpensesCategories(response.expensesCategories);
+	}
+
+	useEffect(() => {
+		fetchExpensesCategories()
+
+	}, [])
 
 	const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		// Permettre uniquement les nombres et un seul point
@@ -111,8 +135,14 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	};
 
 	const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		//setCategory(e.target.value);
+		console.log(e.target.value, category)
 		setCategory(e.target.value);
 	};
+
+	const handleChangeNewCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		setNewCategory(e.target.value);
+	}
 
 	const handlePaymentType = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		console.log(e.target.value);
@@ -120,11 +150,44 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	};
 
 
+	const handleAddCategory = async () => {
+
+		const responseAddCategory = await addExpensesCategoriesLabel(user.token, newCategory);
+		console.log(responseAddCategory);
+		if (responseAddCategory.result) {
+			toast.success(responseAddCategory.message);
+		} else {
+			toast.error(responseAddCategory.message);
+		}
+		console.log("newCategory : ", newCategory)
+		setCategory(newCategory);
+		fetchExpensesCategories()
+
+	}
+
+	const handleAddBudgetCategory = async () => {
+		console.log('user.token : ', user.token)
+		console.log('amount : ', amount)
+		console.log('category : ', category)
+		const responseAdd = await addBudgetOfExpensesCategory(user.token, category, amount);
+
+		if (responseAdd.result) {
+			toast.success('Budget ajouté avec succès');
+			closeModal();
+		} else {
+			toast.error(responseAdd.message);
+		}
+	}
+
 	const handleSubmit = async () => {
 		// Remplacer responseAddBalance par responseAddX
 		// Remplacer setBalance par setX
 
-		console.log('add : ', date)
+		console.log('title : ', title)
+		if (title === "Budget") {
+			handleAddBudgetCategory();
+			return;
+		}
 		const responseAdd = await categories[title]['addFunction'](
 			user.token,
 			amount,
@@ -133,6 +196,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 			description,
 			category
 		);
+
+
 		// console.log(responseAdd);
 
 		// Remplacer setBalanceToStore par setXToStore
@@ -149,6 +214,9 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		}
 	};
 
+
+
+
 	return (
 		<div>
 			<div
@@ -160,8 +228,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 				<div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 					<div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" />
 
-					<div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-						<div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+					<div className="inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+						<div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
 							<div className="sm:flex sm:items-start">
 								<div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
 									<h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
@@ -243,20 +311,53 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 										</div>
 									)}
 									{categories[title].form.input.includes('category') && (
-										<div className="mt-2">
-											<label htmlFor="category" className="block text-sm font-medium text-gray-700">
-												Catégorie
-											</label>
-											<input
-												type="text"
-												onChange={(e) => handleChangeCategory(e)}
-												value={category}
-												name="category"
-												id="category"
-												className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-												placeholder="Entrer la catégorie"
-											/>
-										</div>
+										<>
+											<div className="mt-2">
+												{/* <Autocomplete suggestions={expensesCategories} /> */}
+												<label className="block text-sm font-medium text-gray-700"
+												>
+													Categorie
+													<select
+														onChange={(e) => handleChangeCategory(e)}
+														name="category" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+													>
+														{expensesCategories.map((category) => {
+															return <option value={category.id}>{category.name}</option>
+														})}
+													</select>
+												</label>
+											</div>
+
+											{categories[title] === "Expense" && (
+												<>
+													<div style={{ height: "2px" }} className="w-full bg-black my-5" />
+
+													<div className='mt-2'>
+														<label
+															htmlFor="description"
+															className="block text-sm font-medium text-gray-700"
+														>
+															Ajouter une catégorie
+														</label>
+														<div className='flex'>
+															<input
+																type="text"
+																onChange={(e) => handleChangeNewCategory(e)}
+																value={newCategory}
+																name="description"
+																id="description"
+																className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+																placeholder="Nouvelle catégorie"
+															/>
+															<button className='bg-green-600 p-2 ml-3 rounded-xl text-white' onClick={handleAddCategory}>
+																Ajouter
+															</button>
+														</div>
+													</div>
+												</>
+											)}
+
+										</>
 									)}
 								</div>
 							</div>

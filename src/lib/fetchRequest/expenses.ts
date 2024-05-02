@@ -183,6 +183,115 @@ type ObjectResponseAddExpenses = {
 }
 
 // getExpensesCategories
+type ObjectResponseExpensesCategories = {
+    result: boolean,
+    expensesCategories: string[],
+    message: string,
+
+}
+
+export const getExpensesCategoriesLabel = async (token: string, period: string): Promise<ObjectResponseExpensesCategories> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpensesCategories`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+
+
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            return errorData
+
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const data = await response.json();
+        // console.log('data.result : ', data.result)  
+        return data
+
+    }
+
+    catch (error) {
+        console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
+    }
+}
+
+// addExpensesCategoriesLabel
+export const addExpensesCategoriesLabel = async (token: string, category: string): Promise<ObjectResponseExpensesCategories> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpensesCategory`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ category })
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            return errorData
+
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const data = await response.json();
+        // console.log('data.result : ', data.result)  
+        return data
+
+    }
+
+    catch (error) {
+        console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
+    }
+
+
+}
+
+// addBudgetOfExpensesCategory
+export const addBudgetOfExpensesCategory = async (token: string, category: string, budget: number): Promise<ObjectResponseExpensesCategories> => {
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addBudgetOfExpensesCategory`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ category, budget })
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            return errorData
+
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const data = await response.json();
+        // console.log('data.result : ', data.result)  
+        return data
+
+    }
+
+    catch (error) {
+        console.error(error)
+        return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
+    }
+
+}
+
 
 export const getExpensesCategories = async (token: string, period: string): Promise<ObjectResponseGetAllExpenses> => {
     try {
@@ -218,6 +327,7 @@ export const getExpensesCategories = async (token: string, period: string): Prom
 export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddExpenses> => {
     try {
 
+        console.log('front : ', category)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpenses`, {
             method: 'POST',
             headers: {

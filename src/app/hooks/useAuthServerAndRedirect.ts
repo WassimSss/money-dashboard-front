@@ -16,7 +16,7 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 	const router = useRouter();
 	const token = useAppSelector(state => state.users.value).token
 
-	console.log(useAppSelector(state => state.users.value));
+	// console.log(useAppSelector(state => state.users.value));
 
 	useEffect(
 		() => {
@@ -32,10 +32,10 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 				const data = await response.json();
 
 				if (requireAuth && !data.isAuthenticated) {
-					console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
+					// console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
 					router.push(redirect);
 				} else if (!requireAuth && data.isAuthenticated) {
-					console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
+					// console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
 
 					router.push(redirect);
 				}
