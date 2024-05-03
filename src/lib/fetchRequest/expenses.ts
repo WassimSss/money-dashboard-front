@@ -109,10 +109,10 @@ export const getExpensesOfTheWeek = async (token: string): Promise<number | unde
 
 // Recuperer toutes les dépenses du mois avec un fetch sur /users/getExpenses/month
 
-export const getExpensesOfTheMonth = async (token: string): Promise<number | undefined> => {
+export const getExpensesOfTheMonth = async (token: string, monthNumber: number): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/month`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/month/${monthNumber}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export const getExpensesOfTheMonth = async (token: string): Promise<number | und
 
         console.log(getExpensesData)
         if (getExpensesData.result) {
-            return getExpensesData.expenses
+            return getExpensesData
         }
 
     }
@@ -327,7 +327,8 @@ export const getExpensesCategories = async (token: string, period: string): Prom
 export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddExpenses> => {
     try {
 
-        console.log('front : ', category)
+        console.log({ amount, expensesDate: date, description, category })
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpenses`, {
             method: 'POST',
             headers: {

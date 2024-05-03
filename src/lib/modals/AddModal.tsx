@@ -100,6 +100,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		const response = await getExpensesCategoriesLabel(user.token, 'month');
 		console.log(response)
 		setExpensesCategories(response.expensesCategories);
+		setCategory(response.expensesCategories[0].id);
 	}
 
 	useEffect(() => {
@@ -188,6 +189,10 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 			handleAddBudgetCategory();
 			return;
 		}
+
+
+
+
 		const responseAdd = await categories[title]['addFunction'](
 			user.token,
 			amount,
@@ -328,7 +333,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 												</label>
 											</div>
 
-											{categories[title] === "Expense" && (
+											{title === "Expenses" && (
 												<>
 													<div style={{ height: "2px" }} className="w-full bg-black my-5" />
 

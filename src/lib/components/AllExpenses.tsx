@@ -34,8 +34,12 @@ const AllExpenses: React.FC = () => {
     }
 
     const fetchExpensesOfTheMonth = async () => {
-        const expensesOfTheMonth = await getExpensesOfTheMonth(token);
-        dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth))
+
+        // get number of the month with the date
+        const currentDate = new Date();
+        const monthNumber = currentDate.getMonth() + 1;
+        const expensesOfTheMonth = await getExpensesOfTheMonth(token, monthNumber);
+        dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth.expenses))
         setExpensesMonth(moneys.expensesofTheMonth)
     }
 
