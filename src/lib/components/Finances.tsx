@@ -51,6 +51,12 @@ const Finances = () => {
             }
         }
 
+        const resizeHandler = () => {
+            // Code for handling resize event
+        };
+
+        window.addEventListener('resize', resizeHandler);
+
         new Chart(ctx, { // Use the Chart class to create a new instance of the chart
             type: 'bar',
             data: {
@@ -71,6 +77,8 @@ const Finances = () => {
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: true,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -83,8 +91,8 @@ const Finances = () => {
                 },
                 plugins: {
                     title: {
-                        display: true,
-                        text: '2024 Monthly Finances', // Change the title here
+                        // display: true,
+                        // text: '2024 Monthly Finances', // Change the title here
                         font: {
                             size: 16
                         },
@@ -93,17 +101,23 @@ const Finances = () => {
                 }
             }
         });
+
+        return () => {
+            window.removeEventListener('resize', resizeHandler);
+        };
     }, [monthsExpenses, monthsVirements]);
 
 
 
     return (
-        <div id="Finances" className={/*row-start-3 row-end-4 col-start-1 col-end-3*/" bg-neutral-800 rounded-2xl text-white w-1/2 p-8 h-full flex flex-col"}>
+        <div id="Finances" className={/*row-start-3 row-end-4 col-start-1 col-end-3 flex flex-col*/" bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 h-full"}>
             <div className='flex justify-between'>
                 <p className='font-bold'>Finances</p>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
+                {/* <FontAwesomeIcon icon={faEllipsisVertical} /> */}
             </div>
-            <div className='flex justify-center items-end h-full'>
+            
+            
+            <div className='flex justify-center items-end relative h-full w-full'>
                 <canvas ref={chartRef}></canvas>
             </div>
         </div>

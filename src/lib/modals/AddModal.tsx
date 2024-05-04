@@ -70,8 +70,8 @@ const categories: Categories = {
 			input: ['amount', 'date']
 		}
 	},
-	Budget: {
-		// addFunction: addBudgetOfExpensesCategory,
+	setBudget: {
+		addFunction: addBudgetOfExpensesCategory,
 		// getFunction: getExpenses,
 		// setToStore: setExpensesToStore,
 		form: {
@@ -185,7 +185,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		// Remplacer setBalance par setX
 
 		console.log('title : ', title)
-		if (title === "Budget") {
+		if (title === "setBudget") {
 			handleAddBudgetCategory();
 			return;
 		}
@@ -202,6 +202,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 			category
 		);
 
+		console.log("category : ", category);
+		
 
 		// console.log(responseAdd);
 
@@ -210,10 +212,12 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 		// Remplacer responseAddBalance.balance par responseAddX.x
 
-		dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
+		if(categories[title]['setToStore']){
+			dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
+		}
 		if (responseAdd.result) {
 			toast.success('Revenu ajouté avec succès');
-			closeModal();
+			// closeModal();
 		} else {
 			toast.error(responseAdd.message);
 		}
@@ -326,8 +330,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 														onChange={(e) => handleChangeCategory(e)}
 														name="category" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 													>
-														{expensesCategories.map((category) => {
-															return <option value={category.id}>{category.name}</option>
+														{expensesCategories.map((category, i) => {
+															return <option key={i} value={category.id}>{category.name}</option>
 														})}
 													</select>
 												</label>

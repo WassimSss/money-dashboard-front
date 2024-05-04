@@ -130,8 +130,8 @@ export default function Signup() {
     <main className="bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
 
       <div className="flex justify-center items-center flex-col">
-        <p className=" font-bold text-primary text-3xl">Start taking control of your finances today! </p>
-        <button className="font-bold text-white text-3xl">Signup</button>
+        <p className=" font-bold text-primary text-3xl text-center">Start taking control of your finances today! </p>
+        <button className="font-bold text-white text-3xl text-center">Signup</button>
 
         <p className="font-bold text-white text-3xl">{users.token !== "" ? 'You have a token' : "You don't have a token"}</p>
       </div>

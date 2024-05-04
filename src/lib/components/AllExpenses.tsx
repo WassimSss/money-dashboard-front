@@ -6,8 +6,12 @@ import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { useEffect, useRef, useState } from 'react';
 import { setExpensesOfTheDayToStore, setExpensesOfTheMonthToStore, setExpensesOfTheWeekToStore } from '@/reducer/slices/moneySlice';
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
+import Chart from 'chart.js/auto';
+import ContentLoader from 'react-content-loader';
+import { Oval } from 'react-loader-spinner';
 
 const AllExpenses: React.FC = () => {
+    const chartRef = useRef(null);
 
     const [expensesDay, setExpensesDay] = useState<number | undefined>(undefined);
     const [expensesWeek, setExpensesWeek] = useState<number | undefined>(undefined);
@@ -65,6 +69,69 @@ const AllExpenses: React.FC = () => {
         // console.log(expensesCategories)
         fetchData();
     }, [moneys, period])
+
+    const labelDougnut = expensesCategories?.map(expense => {
+        return expense[0]
+    })
+
+    const colorDougnut = ["#2C4487", "#3F61C2", "#8CA0D9", "#C4CFED"].slice(0, labelDougnut?.length)
+
+    const dataDougnut = expensesCategories?.map(expense => {
+        return expense[1]
+    })
+
+    
+
+    console.log(labelDougnut, dataDougnut, colorDougnut);
+    
+    useEffect(() => {
+        const ctx = chartRef.current.getContext('2d');
+        if (chartRef.current) {
+            const chartInstance = Chart.getChart(chartRef.current);
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            const chartInstance = Chart.getChart(chartRef.current);
+            if (chartInstance) {
+                chartInstance.resize();
+            }
+        });
+
+        resizeObserver.observe(chartRef.current);
+
+        new Chart(ctx, { // Use the Chart class to create a new instance of the chart
+            type: 'doughnut',
+            data: {
+                labels: labelDougnut,
+                datasets: [{
+                    data: dataDougnut,
+                    backgroundColor: colorDougnut,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        font: {
+                            size: 16
+                        },
+                        color: '#fff'
+                    }
+                }
+            }
+        });
+
+        return () => {
+            if (chartRef.current) {
+            resizeObserver.unobserve(chartRef.current);
+            }
+        };
+    }, [dataDougnut]);
 
     let sumPercentage = 0;
     const camembertColors = ["#2C4487", "#3F61C2", "#8CA0D9", "#C4CFED"]
@@ -155,7 +222,7 @@ const AllExpenses: React.FC = () => {
     // console.log(period)
 
     return (
-        <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-1/2 m-4 p-8 h-full flex flex-col`}>
+        <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 my-4 lg:mx-4 p-3 h-full flex flex-col`}>
             <div className="relative inline-block text-left">
 
                 <div className='flex justify-between'>
@@ -173,51 +240,73 @@ const AllExpenses: React.FC = () => {
                 )}
             </div>
             <div className='flex flex-col flex-1 justify-between my-2 '>
-                <div className='flex justify-between mt-8'>
-                    <div className='relative -translate-y-4 '>
-                        {camambertData?.length == 0 ? <p className='text-neutral-400'>Pas encore de dépenses pour cette période.</p> : camambertData}
-                        {/* <div style={{
-                            background: 'radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, #FF0000 21%, transparent 0)', // 20% + 1 pour eviter les erreurs d'affichages
-                        }} className='absolute w-24 h-24 rounded-full ' ></div>
-
-                        <div style={{
-                            background: 'radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, #8CA0D9 16%, transparent 0)',
-                            transform: `rotate(${360 * 0.2}deg)`
-                        }} className='absolute w-24 h-24 rounded-full ' ></div>
-
-                        <div style={{
-                            background: 'radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, #C4CFED 31%, transparent 0)',
-                            transform: `rotate(${360 * 0.35}deg)`
-
-                        }} className='absolute w-24 h-24 rounded-full ' ></div>
-
-                        <div style={{
-                            background: 'radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, #2C4487 36%, transparent 0)',
-                            transform: `rotate(${360 * 0.65}deg)`
-                        }} className='absolute w-24 h-24 rounded-full ' ></div> */}
-                    </div>
-                    <div className='flex flex-col justify-around'>
-                        {camambertCategories}
-                        {/* <p className='flex flex-row'><span className='block size-3 rounded-full bg-primary'></span><span className='text-neutral-400'>Shopping</span></p>
-                        <p className='flex flex-row'><span className='block size-3 rounded-full bg-primary'></span><span className='text-neutral-400'>Food</span></p>
-                        <p className='flex flex-row'><span className='block size-3 rounded-full bg-primary'></span><span className='text-neutral-400'>Workout</span></p> */}
-                        {/* <p className='flex flex-row'><span className='block size-3 rounded-full bg-[#2C4487]'></span><span className='text-neutral-400'>Workin</span></p> */}
-                    </div>
+                <div className='flex justify-center mt-8 w-full'>
+                 {expensesCategories === undefined && (<Oval
+                    visible={true}
+                    height="80%"
+                    width="80%"
+                    color="#4F72D8"
+                    secondaryColor="#ffffff"
+                    ariaLabel="oval-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />)}
+                <div className={`flex justify-center items-center h-5/6 w-5/6 lg:h-1/2 lg:w-1/2 p-5`}>
+                    <canvas className={`${ expensesCategories === undefined || expensesCategories.length === 0 && "!hidden "}`}ref={chartRef}></canvas>
+                    {expensesCategories && expensesCategories.length === 0 && <p className='text-primary text-2xl'>No expenses for this period</p>}
+                </div>
                 </div>
 
                 <div className='flex flex-row  justify-around'>
                     <div className='flex flex-col'>
                         <p className='text-neutral-400'>Daily</p>
+                        {expensesDay !== undefined ? (
                         <p className='font-bold'>{expensesDay?.toFixed(2)}€</p>
+                        ) : (
+                            <ContentLoader
+                                speed={2}
+                                width={50}
+                                height={15}
+                                viewBox="0 0 50 15"
+                                backgroundColor="#f3f3f3"
+                                foregroundColor="#999999"
+                            >
+                                <rect x="0" y="0" rx="3" ry="3" width="50" height="15" />
+                            </ContentLoader>
+                        )}
                     </div>
                     <div>
                         <p className='text-neutral-400'>Weekly</p>
+                        {expensesWeek !== undefined ? (
                         <p className='font-bold'>{expensesWeek?.toFixed(2)}€</p>
-                    </div>
+                        ) : (
+                            <ContentLoader
+                                speed={2}
+                                width={50}
+                                height={15}
+                                viewBox="0 0 50 15"
+                                backgroundColor="#f3f3f3"
+                                foregroundColor="#999999"
+                            >
+                                <rect x="0" y="0" rx="3" ry="3" width="50" height="15" />
+                            </ContentLoader>
+                        )}                    </div>
                     <div>
                         <p className='text-neutral-400'>Monthly</p>
+                        {expensesMonth !== undefined ? (
                         <p className='font-bold'>{expensesMonth?.toFixed(2)}€</p>
-                    </div>
+                        ) : (
+                            <ContentLoader
+                                speed={2}
+                                width={50}
+                                height={15}
+                                viewBox="0 0 50 15"
+                                backgroundColor="#f3f3f3"
+                                foregroundColor="#999999"
+                            >
+                                <rect x="0" y="0" rx="3" ry="3" width="50" height="15" />
+                            </ContentLoader>
+                        )}                    </div>
                 </div>
             </div>
         </div >

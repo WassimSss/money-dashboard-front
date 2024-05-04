@@ -90,8 +90,8 @@ export default function Signin() {
     <main className="bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
 
       <div className="flex justify-center items-center flex-col">
-        <p className=" font-bold text-primary text-3xl">Unlock the door to your financial journey. Log in now!</p>
-        <p className="font-bold text-white text-3xl">Signin</p>
+        <p className=" font-bold text-primary text-3xl text-center">Unlock the door to your financial journey. Log in now!</p>
+        <p className="font-bold text-white text-3xl text-center">Signin</p>
       </div>
 
       <div className="bg-white rounded-2xl p-5 w-1/2">

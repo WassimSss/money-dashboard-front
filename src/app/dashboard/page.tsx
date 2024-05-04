@@ -18,6 +18,7 @@ import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
 import { useState } from 'react';
 import AddModal from "../../lib/modals/AddModal";
 import { IconDefinition, IconProp } from '@fortawesome/fontawesome-svg-core';
+import Footer from '@/lib/components/Footer';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
@@ -50,13 +51,31 @@ const Home: React.FC = () => {
         Expenses: faSackDollar,
     }
 
-    const miniCardsComponent = miniCards.map(card => {
-        let isActive = false
+    const miniCardsComponent = miniCards.map((card, index) => {
+        let isActive = false;
         if (card === "Balance") {
-            isActive = true
+            isActive = true;
         }
-        return <MiniCard icon={miniCardsIcons[card]} name={card} active={isActive} openModal={toggleAddModal} key={card} />
-    })
+        return (
+            <MiniCard
+                icon={miniCardsIcons[card]}
+                name={card}
+                active={isActive}
+                openModal={toggleAddModal}
+                key={card}
+            />
+        );
+    });
+
+    const miniCardGroups = [];
+    for (let i = 0; i < miniCardsComponent.length; i += 2) {
+        miniCardGroups.push(
+            <div className="flex flex-row justify-center items-center" key={i}>
+                {miniCardsComponent[i]}
+                {miniCardsComponent[i + 1]}
+            </div>
+        );
+    }
 
     const mediaQueriesStyle = {
         // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
@@ -81,21 +100,22 @@ const Home: React.FC = () => {
                 <div className='flex flex-col w-full justify-center items-center'>
 
 
-                    <div className=' w-full flex flex-row justify-center items-center p-8'>
-                        <div className={`flex flex-row flex-wrap w-1/2 justify-center items-center `}>
-                            {miniCardsComponent}
+                    <div className=' w-full flex flex-col lg:flex-row lg:px-8 justify-center items-center lg:items-stretch xl:items-start'>
+                        <div className={`flex flex-column flex-wrap w-3/4 sm:w-1/2 justify-center items-center my-4`}>
+                            {miniCardGroups}
                         </div>
                         <Budget />
                     </div>
 
 
 
-                    <div className='w-full flex flex-row justify-center items-center p-8'>
+                    <div className='w-full flex flex-col lg:flex-row lg:px-8 justify-center items-center lg:items-end'>
                         <Finances />
                         <AllExpenses />
                     </div>
                 </div>
 
+                <Footer />
                 {/* <Transactions /> */}
                 {/* <IDontKnow /> */}
             </div>

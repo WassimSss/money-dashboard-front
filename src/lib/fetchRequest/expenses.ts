@@ -165,7 +165,7 @@ export const getAllExpenses = async (token: string): Promise<ObjectResponseGetAl
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
+        console.log('data.result : ', data)
         return data
 
     }

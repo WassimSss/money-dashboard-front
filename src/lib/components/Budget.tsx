@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { getBudget } from '../fetchRequest/budget';
 import { useAppSelector } from '@/reducer/store';
 import AddModal from '../modals/AddModal';
+import ContentLoader from 'react-content-loader';
+import { Oval } from 'react-loader-spinner';
 
 const Budget: React.FC = () => {
 
@@ -22,7 +24,7 @@ const Budget: React.FC = () => {
     const token = useAppSelector(state => state.users.value).token;
 
     // setOption([{ option: "Ajouter un revenu", action: null }, { option: "Voir ses revenus", action: null }]);
-    const option = [{ option: "Ajouter un budget par mois", action: null }, { option: "Ajouter un budget par catégorie de dépense", action: () => setModalOpen("Budget") }]
+    const option = [{ option: "Ajouter un budget par mois", action: null }, { option: "Ajouter un budget par catégorie de dépense", action: () => setModalOpen("setBudget") }]
 
     // const toggleAddExpensesModal = () => {
     //     console.log('isAddExpensesModalOpen : ', isAddExpensesModalOpen)
@@ -46,12 +48,12 @@ const Budget: React.FC = () => {
     }, [])
 
     const categoriesWithAmount = monthBudget?.expensesByCategory.map((e: { category: string, amount: number }, i: number) => {
-        console.log("e :", e);
+        console.log("e :", e.categoryBudget);
 
         return (
             <div className='flex justify-between'>
                 <p>{e.categoryName}</p>
-                <p className='text-success'>{e.categoryAmount.toFixed(2)}/{e.categoryBudget}€</p>
+                <p className={`${e.categoryBudget ? (e.categoryAmount < e.categoryBudget ? "text-success" : "text-error") : "text-primary"}  `}>{e.categoryAmount.toFixed(2)}{e.categoryBudget && <span>/{e.categoryBudget}€</span>}</p>
             </div>
 
         );
@@ -116,7 +118,7 @@ const Budget: React.FC = () => {
         <>
             {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} />}
 
-            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-1/2 p-3 flex flex-col h-full`}>
+            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
                 <div className='relative flex justify-between'>
                     <p className='font-bold'>Budget</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>
@@ -138,10 +140,10 @@ const Budget: React.FC = () => {
                         </div>
                     )}
                 </div>
-                {monthBudget && <div className='flex flex-col flex-1 justify-between my-2 '>
+                {monthBudget !== undefined? ( <div className='flex flex-col flex-1 justify-between my-2 '>
                     <p className='text-3xl font-bold'>{monthBudget.budgetAmount}€<span className="text-primary">/mois</span></p>
 
-                    <div>
+                    <div className='my-4'>
                         {categoriesWithAmount}
                     </div>
 
@@ -149,7 +151,16 @@ const Budget: React.FC = () => {
                         <p>Total</p>
                         <p className='text-success'>{`${monthBudget.expensesAmount && monthBudget.expensesAmount.toFixed(2)}/${monthBudget.budgetAmount}€`}</p>
                     </div>
-                </div>}
+                </div>) : (<Oval
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#4F72D8"
+                    secondaryColor="#ffffff"
+                    ariaLabel="oval-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />)}
 
                 <div></div>
             </section >

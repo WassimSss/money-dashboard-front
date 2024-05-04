@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/reducer/store';
+import { log } from 'console';
 
 /**
  * Récupère le solde de l'utilisateur à partir de l'API.
@@ -27,7 +28,7 @@ export const getBalance = async (token: string): Promise<number | undefined> => 
 
         const getBalanceData = await response.json();
 
-
+        
         if (getBalanceData.result) {
             return getBalanceData.balance
         }
@@ -64,6 +65,7 @@ export const getAllBalance = async (token: string): Promise<ObjectResponseAddBal
 
         const getAllBalanceData = await response.json();
 
+        console.log('getAllBalanceData : ', getAllBalanceData)
         return getAllBalanceData;
     }
 

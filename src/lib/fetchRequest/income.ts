@@ -62,7 +62,7 @@ export const getAllIncome = async (token: string): Promise<ObjectResponsegetAllI
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
+        console.log('data.result : ', data)
         return data
 
     }

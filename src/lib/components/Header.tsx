@@ -20,7 +20,7 @@ const Header: React.FC = () => {
     }
 
     return (
-        <header id="Header" className=" row-start-1 row-end-2 col-start-1 col-end-5 bg-neutral-950 md:h-32 w-full flex justify-between items-center p-3">
+        <header id="Header" className="bg-neutral-950 md:h-32 w-full flex justify-between items-center p-3">
             <div>
                 <Link className='text-white md:text-lg lg:text-2xl no-underline font-bold' href="/dashboard">Dashboard</Link>
             </div>
