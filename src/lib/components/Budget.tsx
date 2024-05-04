@@ -116,7 +116,7 @@ const Budget: React.FC = () => {
         <>
             {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} />}
 
-            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle}`}>
+            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-1/2 p-3 flex flex-col h-full`}>
                 <div className='relative flex justify-between'>
                     <p className='font-bold'>Budget</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>

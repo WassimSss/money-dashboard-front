@@ -155,7 +155,7 @@ const AllExpenses: React.FC = () => {
     // console.log(period)
 
     return (
-        <div id="AllExpenses" className={`${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle} bg-neutral-800 rounded-2xl  text-white flex flex-col`}>
+        <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-1/2 m-4 p-8 h-full flex flex-col`}>
             <div className="relative inline-block text-left">
 
                 <div className='flex justify-between'>

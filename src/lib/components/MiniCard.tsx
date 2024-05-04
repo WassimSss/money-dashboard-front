@@ -83,7 +83,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 event.stopPropagation(); // Empêche la propagation de l'événement de clic
                 if (e.action) {
                     e.action(name); // Exécute l'action si elle est définie
-                    setShowDropdown(false); 
+                    setShowDropdown(false);
                 }
             }}>
                 {e.option}

@@ -12,7 +12,7 @@ const Finances = () => {
     const [monthsExpenses, setMonthsExpenses] = useState<object[] | undefined>(undefined);
     const [monthsVirements, setMonthsVirements] = useState<object[] | undefined>(undefined);
     const token = useAppSelector(state => state.users.value).token;
-
+    console.log("token : ", token)
     const fetchMonthsExpenses = async () => {
         const arrayOfMonthExpenses = []
         for (let i = 1; i < 13; i++) {
@@ -98,7 +98,7 @@ const Finances = () => {
 
 
     return (
-        <div id="Finances" className="row-start-3 row-end-4 col-start-1 col-end-3 bg-neutral-800 rounded-2xl m-4 text-white p-3 flex flex-col">
+        <div id="Finances" className={/*row-start-3 row-end-4 col-start-1 col-end-3*/" bg-neutral-800 rounded-2xl text-white w-1/2 p-8 h-full flex flex-col"}>
             <div className='flex justify-between'>
                 <p className='font-bold'>Finances</p>
                 <FontAwesomeIcon icon={faEllipsisVertical} />

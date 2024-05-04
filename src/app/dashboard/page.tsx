@@ -74,22 +74,30 @@ const Home: React.FC = () => {
             {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />} */}
 
 
-            <div className="bg-neutral-900 w-screen overflow-x-hidden h-full md:grid md:grid-rows-layout md:grid-cols-4 ">
+            <div className="bg-neutral-900  h-full ">
 
                 <Header />
 
-                <div className={`flex flex-row flex-wrap ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle} ${mediaQueriesStyle.mdStyle} ${mediaQueriesStyle.smStyle} m-4`}>
-                    {miniCardsComponent}
-                    {/* <MiniCard icon={faHandHoldingDollar}  active={false} name="Income" openModal={toggleAddIncomeModal} key="Income" />
-                    <MiniCard icon={faCircleDollarToSlot}  active={false} name="Saving" openModal={toggleAddSavingModal} key="Saving" />
-                    <MiniCard icon={faSackDollar}  active={false} name="Expenses" openModal={toggleAddExpensesModal} key="Expenses" /> */}
+                <div className='flex flex-col w-full justify-center items-center'>
+
+
+                    <div className=' w-full flex flex-row justify-center items-center p-8'>
+                        <div className={`flex flex-row flex-wrap w-1/2 justify-center items-center `}>
+                            {miniCardsComponent}
+                        </div>
+                        <Budget />
+                    </div>
+
+
+
+                    <div className='w-full flex flex-row justify-center items-center p-8'>
+                        <Finances />
+                        <AllExpenses />
+                    </div>
                 </div>
 
-                <Budget />
-                <Finances />
-                <AllExpenses />
-                <Transactions />
-                <IDontKnow />
+                {/* <Transactions /> */}
+                {/* <IDontKnow /> */}
             </div>
         </>
 
