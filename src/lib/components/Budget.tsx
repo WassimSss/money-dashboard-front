@@ -1,12 +1,13 @@
 import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import { getBudget } from '../fetchRequest/budget';
 import { useAppSelector } from '@/reducer/store';
 import AddModal from '../modals/AddModal';
 import ContentLoader from 'react-content-loader';
 import { Oval } from 'react-loader-spinner';
+const moment = require('moment');
 
 const Budget: React.FC = () => {
 
@@ -18,6 +19,12 @@ const Budget: React.FC = () => {
     const dropdownRef = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [modalOpen, setModalOpen] = useState<string>("")
+    const [month, setMonth] = useState<number>(moment().month());
+    const [year, setYear] = useState<number>(moment().year());
+
+    var fr = moment().locale('fr');
+
+
 
     // const [option, setOption] = useState<objectOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -35,30 +42,39 @@ const Budget: React.FC = () => {
     //     setIsAddExpensesModalOpen(false);
     // };
 
-    const [monthBudget, setMonthBudget] = useState<object | undefined>(undefined);
+    type monthBudgetObject = {
+        result: boolean,
+        budgetAmount: number,
+        expensesAmount: number,
+        expensesByCategory: Array<{
+            categoryName: string,
+            categoryAmount: number,
+            categoryBudget: number
+        }>
+    }
+    const [monthBudget, setMonthBudget] = useState<monthBudgetObject | undefined>(undefined);
 
-    const fetchBudget = async (token: string, period: string) => {
-        const budget = await getBudget(token, period);
+    const fetchBudget = async (token: string, period: string, month : number) => {
+        const budget = await getBudget(token, period, month + 1);
         console.log("budget : ", budget)
         setMonthBudget(budget)
     };
 
     useEffect(() => {
-        fetchBudget(token, "month");
-    }, [])
+        fetchBudget(token, "month", month);
+    }, [month])
 
-    const categoriesWithAmount = monthBudget?.expensesByCategory.map((e: { category: string, amount: number }, i: number) => {
-        console.log("e :", e.categoryBudget);
 
+    console.log("monthBudget : ", monthBudget);
+
+    const categoriesWithAmount = monthBudget?.expensesByCategory.map((e: { categoryName: string, categoryAmount: number, categoryBudget: number }, i: number) => {
         return (
-            <div className='flex justify-between'>
+            <div key={e.categoryName} className='flex justify-between'>
                 <p>{e.categoryName}</p>
                 <p className={`${e.categoryBudget ? (e.categoryAmount < e.categoryBudget ? "text-success" : "text-error") : "text-primary"}  `}>{e.categoryAmount.toFixed(2)}{e.categoryBudget && <span>/{e.categoryBudget}€</span>}</p>
             </div>
-
         );
-    }
-    )
+    });
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -92,6 +108,24 @@ const Budget: React.FC = () => {
         setShowDropdown(!showDropdown)
     }
 
+    const handleDecrementMonth= () => {
+        if(month > 0){
+            setMonth(month - 1);
+        } else {
+            setMonth(11);
+            setYear(year - 1);
+        }
+    }
+
+    const handleIncrementMonth= () => {
+        if(month < 11){
+            setMonth(month + 1);
+        } else {
+            setMonth(0);
+            setYear(year + 1);
+        }
+    }
+
     const optionLink: JSX.Element[] = option.map((e: objectOption, i: number) => {
         return (
             <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -120,10 +154,11 @@ const Budget: React.FC = () => {
 
             <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
                 <div className='relative flex justify-between'>
-                    <p className='font-bold'>Budget</p>
+                    <p className='font-bold'>Budget - {fr.localeData().months(moment([2024, month]))} {year}</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>
                         <FontAwesomeIcon icon={faEllipsisVertical} className="inline-flex justify-center w-full rounded-md px-4 py-2 text-sm font-medium text-white cursor-pointer" />
                     </span>
+                    
                     {showDropdown && (
                         <div className="origin-top-right absolute right-0 top-8 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
@@ -141,6 +176,10 @@ const Budget: React.FC = () => {
                     )}
                 </div>
                 {monthBudget !== undefined? ( <div className='flex flex-col flex-1 justify-between my-2 '>
+                <div className="flex justify-between m-4">
+                    <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+                    <FontAwesomeIcon icon={faArrowRight}onClick={() => handleIncrementMonth()}  className="text-white cursor-pointer hover:text-primary transition-all" />
+                </div>
                     <p className='text-3xl font-bold'>{monthBudget.budgetAmount}€<span className="text-primary">/mois</span></p>
 
                     <div className='my-4'>
@@ -162,7 +201,7 @@ const Budget: React.FC = () => {
                     wrapperClass=""
                 />)}
 
-                <div></div>
+
             </section >
         </>
     );

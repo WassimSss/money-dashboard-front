@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getSaving = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getSaving`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ type ObjectResponseAddSaving = {
 export const getAllSaving = async (token: string): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllSaving`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export const getAllSaving = async (token: string): Promise<ObjectResponseAddSavi
 export const deleteSaving = async (token: string, id: number): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/deleteSaving`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const addSaving = async (token: string, amount: number, type = undefined,
         console.log('description : ', description)  
         console.log('category : ', category)
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addSaving`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

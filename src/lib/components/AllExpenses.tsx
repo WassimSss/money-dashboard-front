@@ -1,7 +1,7 @@
 import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { getExpensesOfTheDay, getExpensesOfTheMonth, getExpensesOfTheWeek, getExpensesCategories } from '../fetchRequest/expenses';
+import { getExpensesOfThePeriod, getExpensesCategories } from '../fetchRequest/expenses';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { useEffect, useRef, useState } from 'react';
 import { setExpensesOfTheDayToStore, setExpensesOfTheMonthToStore, setExpensesOfTheWeekToStore } from '@/reducer/slices/moneySlice';
@@ -13,10 +13,15 @@ import { Oval } from 'react-loader-spinner';
 const AllExpenses: React.FC = () => {
     const chartRef = useRef(null);
 
+    type expensesCategoriesType = {
+        expenses: Array<[string, number]>;
+        [index: number]: [string, number]; // Add index signature
+    };
+    
     const [expensesDay, setExpensesDay] = useState<number | undefined>(undefined);
     const [expensesWeek, setExpensesWeek] = useState<number | undefined>(undefined);
     const [expensesMonth, setExpensesMonth] = useState<number | undefined>(undefined);
-    const [expensesCategories, setExpensesCategories] = useState<object[] | undefined>(undefined);
+    const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesType[] | undefined>(undefined);
     const [period, setPeriod] = useState<string>('day'); // 'day', 'week', 'month'
     const token = useAppSelector(state => state.users.value).token;
     const moneys = useAppSelector(state => state.moneys.value);
@@ -26,14 +31,16 @@ const AllExpenses: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const fetchExpensesofTheDay = async () => {
-        const expensesofTheDay = await getExpensesOfTheDay(token);
-        dispatch(setExpensesOfTheDayToStore(expensesofTheDay))
+        const expensesofTheDay = await getExpensesOfThePeriod(token, 'day');
+        console.log(" expensesofTheDay : ",expensesofTheDay);
+        
+        dispatch(setExpensesOfTheDayToStore(expensesofTheDay?.amount))
         setExpensesDay(moneys.expensesofTheDay)
     }
 
     const fetchExpensesOfTheWeek = async () => {
-        const expensesOfTheWeek = await getExpensesOfTheWeek(token);
-        dispatch(setExpensesOfTheWeekToStore(expensesOfTheWeek))
+        const expensesOfTheWeek = await getExpensesOfThePeriod(token, 'week');
+        dispatch(setExpensesOfTheWeekToStore(expensesOfTheWeek?.amount))
         setExpensesWeek(moneys.expensesofTheWeek)
     }
 
@@ -42,8 +49,8 @@ const AllExpenses: React.FC = () => {
         // get number of the month with the date
         const currentDate = new Date();
         const monthNumber = currentDate.getMonth() + 1;
-        const expensesOfTheMonth = await getExpensesOfTheMonth(token, monthNumber);
-        dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth.expenses))
+        const expensesOfTheMonth = await getExpensesOfThePeriod(token, "month");
+        dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth?.amount))
         setExpensesMonth(moneys.expensesofTheMonth)
     }
 
@@ -57,13 +64,13 @@ const AllExpenses: React.FC = () => {
     const fetchData = async () => {
 
 
-        const fetchExpensesCategories = await getExpensesCategories(token, period);
+        const fetchExpensesCategories = await getExpensesOfThePeriod(token, period);
         setExpensesCategories(fetchExpensesCategories.expenses)
-
-        console.log(fetchExpensesCategories)
         // calculer pourcentage
 
     }
+
+
 
     useEffect(() => {
         // console.log(expensesCategories)
@@ -85,46 +92,49 @@ const AllExpenses: React.FC = () => {
     console.log(labelDougnut, dataDougnut, colorDougnut);
     
     useEffect(() => {
-        const ctx = chartRef.current.getContext('2d');
-        if (chartRef.current) {
-            const chartInstance = Chart.getChart(chartRef.current);
+        const chartRefType = chartRef.current as HTMLCanvasElement | null;
+        const ctx = chartRefType?.getContext('2d');
+        if (chartRefType && ctx) {
+            const chartInstance = Chart.getChart(chartRefType);
             if (chartInstance) {
                 chartInstance.destroy();
             }
+
+            new Chart(ctx, { // Use the Chart class to create a new instance of the chart
+                type: 'doughnut',
+                data: {
+                    labels: labelDougnut,
+                    datasets: [{
+                        data: dataDougnut,
+                        backgroundColor: colorDougnut,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            font: {
+                                size: 16
+                            },
+                            color: '#fff'
+                        }
+                    }
+                }
+            });
         }
 
         const resizeObserver = new ResizeObserver(() => {
-            const chartInstance = Chart.getChart(chartRef.current);
+            const chartInstance = chartRefType ? Chart.getChart(chartRefType) : null;
             if (chartInstance) {
                 chartInstance.resize();
             }
         });
 
-        resizeObserver.observe(chartRef.current);
-
-        new Chart(ctx, { // Use the Chart class to create a new instance of the chart
-            type: 'doughnut',
-            data: {
-                labels: labelDougnut,
-                datasets: [{
-                    data: dataDougnut,
-                    backgroundColor: colorDougnut,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        font: {
-                            size: 16
-                        },
-                        color: '#fff'
-                    }
-                }
-            }
-        });
+        if (chartRefType) {
+            resizeObserver.observe(chartRefType);
+        }
 
         return () => {
             if (chartRef.current) {

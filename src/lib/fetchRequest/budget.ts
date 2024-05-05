@@ -1,10 +1,19 @@
 // recuperer le budget du mois en cours depuis la route /getBudget/:period
+type monthBudgetObject = {
+    result: boolean,
+    budgetAmount: number,
+    expensesAmount: number,
+    expensesByCategory: Array<{
+        categoryName: string,
+        categoryAmount: number,
+        categoryBudget: number
+    }>
+}
 
-export const getBudget = async (token: string, period: string): Promise<object | undefined> => {
-
+export const getBudget = async (token: string, period: string, monthNumber : number | null = null): Promise<monthBudgetObject | undefined> => {
+ 
     try {
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getBudget/${period}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getBudget/${period}${monthNumber ? "/" + monthNumber : ""}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

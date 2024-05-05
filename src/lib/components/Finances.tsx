@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
-import { getExpensesOfTheMonth } from '../fetchRequest/expenses';
+import { getExpensesOfThePeriod } from '../fetchRequest/expenses';
 import { useAppSelector } from '@/reducer/store';
 import { getVirementOfMonth } from '../fetchRequest/income';
 
@@ -16,10 +16,15 @@ const Finances = () => {
     const fetchMonthsExpenses = async () => {
         const arrayOfMonthExpenses = []
         for (let i = 1; i < 13; i++) {
-            let monthExpenses = await getExpensesOfTheMonth(token, i);
+            let monthExpenses = await getExpensesOfThePeriod(token, "month", i);
+            console.log("monthExpenses : ", monthExpenses);
+            
             // console.log("monthExpenses : ", monthExpenses);
-            arrayOfMonthExpenses.push(monthExpenses.expensesAmountTotal)
+            arrayOfMonthExpenses.push(monthExpenses?.amount)
         }
+        console.log("arrayOfMonthExpenses : ", arrayOfMonthExpenses)
+        console.log(monthsExpenses)
+        // @ts-ignore
         setMonthsExpenses(arrayOfMonthExpenses);
         // console.log("arrayOfMonthExpenses : ", arrayOfMonthExpenses);
 
@@ -32,6 +37,7 @@ const Finances = () => {
             console.log("monthIncomes : ", monthIncomes);
             arrayOfMonthVirements.push(monthIncomes)
         }
+        // @ts-ignore
         setMonthsVirements(arrayOfMonthVirements);
         console.log("arrayOfMonthIncomes : ", arrayOfMonthVirements);
 
@@ -43,6 +49,7 @@ const Finances = () => {
     }, [])
 
     useEffect(() => {
+        // @ts-ignore
         const ctx = chartRef.current.getContext('2d');
         if (chartRef.current) {
             const chartInstance = Chart.getChart(chartRef.current);

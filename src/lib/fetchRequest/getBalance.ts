@@ -10,7 +10,7 @@ import { log } from 'console';
 export const getBalance = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getBalance`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ type ObjectResponseAddBalance = {
 export const getAllBalance = async (token: string): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllBalance`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const getAllBalance = async (token: string): Promise<ObjectResponseAddBal
 export const setBalance = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/setBalance`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/set`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

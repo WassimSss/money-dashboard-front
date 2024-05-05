@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
@@ -8,10 +8,12 @@ import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToSto
 import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
 import { addIncome, getIncome } from '../fetchRequest/income';
 import { addSaving, getSaving } from '../fetchRequest/saving';
-import Autocomplete from '../components/Autocomplete';
 
 var moment = require('moment');
 moment().format();
+
+console.log("moment : ", moment().format());
+
 
 // Remplacer AddBalanceModalProps par AddXModalProps
 interface ModalProps {
@@ -22,8 +24,8 @@ interface ModalProps {
 
 interface Category {
 	addFunction: Function; // Remplacez 'Function' par le type de la fonction addFunction
-	getFunction: Function; // Remplacez 'Function' par le type de la fonction getFunction
-	setToStore: Function; // Remplacez 'Function' par le type de la fonction setToStore
+	getFunction?: Function; // Remplacez 'Function' par le type de la fonction getFunction
+	setToStore?: Function; // Remplacez 'Function' par le type de la fonction setToStore
 	form: {
 		title: string;
 		input: string[];
@@ -83,30 +85,34 @@ const categories: Categories = {
 };
 
 const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
-	// console.log('AddModal : ', title);
-	// console.log('addFunctions[title] : ', categories[title]['addFunction']);
-
+	
+	type expensesCategoriesObject = {
+		id: string,
+		category: string,
+		name?: string 
+	}
 	const user = useAppSelector((state) => state.users.value);
 	const dispatch = useAppDispatch();
 	const [amount, setAmount] = useState<string>("");
 	const [description, setDescription] = useState<string>('');
-	const [category, setCategory] = useState<string>('');
+	const [category, setCategory] = useState<string  | undefined>('');
 	const [newCategory, setNewCategory] = useState<string>('');
-	const [expensesCategories, setExpensesCategories] = useState<string[]>([]);
+	const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesObject[] | undefined>([]);
 	const [paymentType, setPaymentType] = useState<string>('virement');
 	const [date, setDate] = useState<string>('');
+	const [closeModalAfterAdding, setCloseModalAfterAdding] = useState<boolean>(true);
+	// const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesObject[] | undefined>([]);
 
 	const fetchExpensesCategories = async () => {
 		const response = await getExpensesCategoriesLabel(user.token, 'month');
 		console.log(response)
 		setExpensesCategories(response.expensesCategories);
-		setCategory(response.expensesCategories[0].id);
+		setCategory(response.expensesCategories?.[0]?.id);
 	}
 
 	useEffect(() => {
-		fetchExpensesCategories()
-
-	}, [])
+		fetchExpensesCategories();
+	}, []);
 
 	const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		// Permettre uniquement les nombres et un seul point
@@ -141,6 +147,10 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		setCategory(e.target.value);
 	};
 
+	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		// console.log(e.target.checked);
+		setCloseModalAfterAdding(!closeModalAfterAdding);
+	};
 	const handleChangeNewCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setNewCategory(e.target.value);
 	}
@@ -174,7 +184,11 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 		if (responseAdd.result) {
 			toast.success('Budget ajouté avec succès');
-			closeModal();
+			console.log('closeModalAfterAdding : ', closeModalAfterAdding);
+
+			if(closeModalAfterAdding){
+				closeModal();
+			}
 		} else {
 			toast.error(responseAdd.message);
 		}
@@ -197,7 +211,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 			user.token,
 			amount,
 			title === "Income" ? paymentType : undefined,
-			moment(date),
+			moment(date).format(),
 			description,
 			category
 		);
@@ -213,18 +227,20 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		// Remplacer responseAddBalance.balance par responseAddX.x
 
 		if(categories[title]['setToStore']){
+			// @ts-ignore
 			dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
 		}
 		if (responseAdd.result) {
 			toast.success('Revenu ajouté avec succès');
-			// closeModal();
+			console.log('closeModalAfterAdding : ', closeModalAfterAdding);
+			
+			if(closeModalAfterAdding){
+				closeModal();
+			}
 		} else {
 			toast.error(responseAdd.message);
 		}
 	};
-
-
-
 
 	return (
 		<div>
@@ -327,14 +343,29 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 												>
 													Categorie
 													<select
-														onChange={(e) => handleChangeCategory(e)}
+													// @ts-ignore
+														onChange={(e: ChangeEvent<HTMLSelectElement >) => handleChangeCategory(e)}
 														name="category" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 													>
-														{expensesCategories.map((category, i) => {
+														{expensesCategories?.map((category, i) => {
 															return <option key={i} value={category.id}>{category.name}</option>
 														})}
 													</select>
 												</label>
+
+												<div className="mt-2">
+													<label className="flex items-center">
+														<input
+															type="checkbox"
+															className="form-checkbox"
+															checked={closeModalAfterAdding}
+															onChange={(e) => handleCheckboxChange(e)}
+														/>
+														<span className="ml-2">
+															Fermer la modal après l'ajout
+														</span>
+													</label>
+												</div>
 											</div>
 
 											{title === "Expenses" && (

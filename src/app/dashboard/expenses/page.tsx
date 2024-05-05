@@ -48,7 +48,7 @@ export default function Expenses() {
     };
 
     const fetchData = async () => {
-        const expensesData = await getAllExpenses(token);
+        const expensesData = await getAllExpenses(token, "month", 5);
 
         setExpenses(expensesData.expenses as expenseObject[]);
     };

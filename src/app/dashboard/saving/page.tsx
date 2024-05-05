@@ -57,9 +57,6 @@ export default function Saving() {
 
 		fetchData();
 	}, []);
-
-
-	console.log(saving?.description);
 	
 	const allSavings = saving?.map((saving, i) => {
 		return (

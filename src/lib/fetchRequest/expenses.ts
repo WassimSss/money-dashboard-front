@@ -3,7 +3,7 @@ import { useAppSelector } from '@/reducer/store';
 export const getExpenses = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,81 +38,14 @@ type ObjectResponseGetAllExpenses = {
     result: boolean,
     message: string,
     expenses?: object[]
+    amount?: number
 }
 
 // Recuperer toutes les dépenses du jour avec un fetch sur /users/getAllExpenses
-export const getExpensesOfTheDay = async (token: string): Promise<number | undefined> => {
+export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/day`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': `Bearer ${token}`
-            },
-        })
-
-        if (!response.ok) {
-            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
-            const errorData = await response.json();
-            console.error('Erreur lors de l\'envoi des données:', errorData);
-        }
-
-        const getExpensesData = await response.json();
-
-        console.log(getExpensesData)
-        if (getExpensesData.result) {
-            return getExpensesData.expenses
-        }
-
-    }
-
-    catch (error) {
-        console.error(error)
-    }
-
-}
-
-// Recuperer toutes les dépenses de la semaine avec un fetch sur /users/getExpenses/week
-
-export const getExpensesOfTheWeek = async (token: string): Promise<number | undefined> => {
-    try {
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/week`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': `Bearer ${token}`
-            },
-        })
-
-        if (!response.ok) {
-            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
-            const errorData = await response.json();
-            console.error('Erreur lors de l\'envoi des données:', errorData);
-        }
-
-        const getExpensesData = await response.json();
-
-        console.log(getExpensesData)
-        if (getExpensesData.result) {
-            return getExpensesData.expenses
-        }
-
-    }
-
-    catch (error) {
-        console.error(error)
-    }
-
-}
-
-// Recuperer toutes les dépenses du mois avec un fetch sur /users/getExpenses/month
-
-export const getExpensesOfTheMonth = async (token: string, monthNumber: number): Promise<number | undefined> => {
-    try {
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/month/${monthNumber}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : ''), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -141,12 +74,91 @@ export const getExpensesOfTheMonth = async (token: string, monthNumber: number):
 
 }
 
+// Recuperer toutes les dépenses de la semaine avec un fetch sur /users/getExpenses/week
+
+// export const getExpensesOfTheWeek = async (token: string): Promise<number | undefined> => {
+//     try {
+
+//         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/week`, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'authorization': `Bearer ${token}`
+//             },
+//         })
+
+//         if (!response.ok) {
+//             // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+//             const errorData = await response.json();
+//             console.error('Erreur lors de l\'envoi des données:', errorData);
+//         }
+
+//         const getExpensesData = await response.json();
+
+//         console.log(getExpensesData)
+//         if (getExpensesData.result) {
+//             return getExpensesData.expenses
+//         }
+
+//     }
+
+//     catch (error) {
+//         console.error(error)
+//     }
+
+// }
+
+// // Recuperer toutes les dépenses du mois avec un fetch sur /users/getExpenses/month
+
+type expensesObject = {
+    expenses?: number,
+    expensesAmountTotal?: number,
+    incomesPrelevementAmount?: number,
+    result: boolean,
+    message?: string,
+
+};
+
+// export const getExpensesOfTheMonth = async (token: string, monthNumber: number): Promise<expensesObject | undefined> => {
+//     try {
+
+//         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpenses/month/${monthNumber}`, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'authorization': `Bearer ${token}`
+//             },
+//         })
+
+//         if (!response.ok) {
+//             // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+//             const errorData = await response.json();
+//             console.error('Erreur lors de l\'envoi des données:', errorData);
+//         }
+
+//         const getExpensesData = await response.json();
+
+//         console.log("getExpensesOfTheMonth : ", getExpensesData)
+//         if (getExpensesData.result) {
+//             return getExpensesData
+//         }
+
+//     }
+
+//     catch (error) {
+//         console.error(error)
+//         return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
+//     }
+
+// }
 
 
-export const getAllExpenses = async (token: string): Promise<ObjectResponseGetAllExpenses> => {
+
+export const getAllExpenses = async (token: string, period: string, periodNumber : number | null = null): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getAllExpenses`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : ''), {
+            
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -183,9 +195,14 @@ type ObjectResponseAddExpenses = {
 }
 
 // getExpensesCategories
+
+type expensesCategoriesObject = {
+    id: string,
+    category: string,
+}
 type ObjectResponseExpensesCategories = {
     result: boolean,
-    expensesCategories: string[],
+    expensesCategories?: expensesCategoriesObject[],
     message: string,
 
 }
@@ -193,7 +210,7 @@ type ObjectResponseExpensesCategories = {
 export const getExpensesCategoriesLabel = async (token: string, period: string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpensesCategories`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses-category/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -227,7 +244,7 @@ export const getExpensesCategoriesLabel = async (token: string, period: string):
 export const addExpensesCategoriesLabel = async (token: string, category: string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpensesCategory`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses-category/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -259,10 +276,10 @@ export const addExpensesCategoriesLabel = async (token: string, category: string
 }
 
 // addBudgetOfExpensesCategory
-export const addBudgetOfExpensesCategory = async (token: string, category: string, budget: number): Promise<ObjectResponseExpensesCategories> => {
+export const addBudgetOfExpensesCategory = async (token: string, category: string | undefined, budget: number | string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addBudgetOfExpensesCategory`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses-category/add-budget`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -292,11 +309,21 @@ export const addBudgetOfExpensesCategory = async (token: string, category: strin
 
 }
 
+type expensesCategoriesType = {
+    expenses: Array<[string, number]>
 
-export const getExpensesCategories = async (token: string, period: string): Promise<ObjectResponseGetAllExpenses> => {
+};
+
+type ObjectResponseGetAllExpensesCategories = {
+    result: boolean,
+    message: string,
+    expenses?: expensesCategoriesType[]
+}
+
+export const getExpensesCategories = async (token: string, period: string): Promise<ObjectResponseGetAllExpensesCategories> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getExpensesByCategory/${period}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/month/${period}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -329,7 +356,7 @@ export const addExpenses = async (token: string, amount: number, type = undefine
 
         console.log({ amount, expensesDate: date, description, category })
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/addExpenses`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -372,7 +399,7 @@ type ObjectResponseDeleteExpenses = {
 export const deleteExpenses = async (token: string, id: number): Promise<ObjectResponseDeleteExpenses> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/deleteExpenses`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
