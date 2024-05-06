@@ -49,7 +49,6 @@ export default function Balance() {
 
     const allBalances = balance?.map((oneBalance, i) => {
         const oneBalanceType = oneBalance.type;
-        console.log(oneBalanceType)
         // const style = oneBalanceType ? 'text-green-600' : 'text-red-600';
         return (
             <div className='flex my-3 text-neutral-400 justify-around items-center w-full' key={i}>

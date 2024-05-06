@@ -77,7 +77,6 @@ export default function Signup() {
   }
 
   const handleSubmitFormData = async () => {
-    console.log('user : ', users);
 
 
     try {
@@ -107,9 +106,7 @@ export default function Signup() {
       }
 
       const data = await response.json();
-      console.log(data);
       dispatch(addTokenToUser(data.token));
-      console.log('users after register : ', users);
 
 
 
@@ -123,7 +120,6 @@ export default function Signup() {
   }
 
   const test = () => {
-    console.log('test')
   }
 
   return (

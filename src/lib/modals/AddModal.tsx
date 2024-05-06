@@ -3,6 +3,7 @@ import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { toast } from 'react-hot-toast';
+import { addBudgetOfMonth } from '../fetchRequest/budget';
 import { setBalance, getBalance } from '../fetchRequest/getBalance';
 import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
@@ -12,7 +13,6 @@ import { addSaving, getSaving } from '../fetchRequest/saving';
 var moment = require('moment');
 moment().format();
 
-console.log("moment : ", moment().format());
 
 
 // Remplacer AddBalanceModalProps par AddXModalProps
@@ -80,22 +80,30 @@ const categories: Categories = {
 			title: 'Entrer votre budget pour chaque catégorie de dépenses',
 			input: ['amount', 'category']
 		}
-
+	},
+	setMonthBudget: {
+		addFunction: addBudgetOfMonth,
+		// getFunction: getExpenses,
+		// setToStore: setExpensesToStore,
+		form: {
+			title: 'Entrer votre budget pour ce mois',
+			input: ['amount']
+		}
 	}
 };
 
-const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
-	
+const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshData = null, monthChoose = null, yearChoose = null }) => {
+
 	type expensesCategoriesObject = {
 		id: string,
 		category: string,
-		name?: string 
+		name?: string
 	}
 	const user = useAppSelector((state) => state.users.value);
 	const dispatch = useAppDispatch();
 	const [amount, setAmount] = useState<string>("");
 	const [description, setDescription] = useState<string>('');
-	const [category, setCategory] = useState<string  | undefined>('');
+	const [category, setCategory] = useState<string | undefined>('');
 	const [newCategory, setNewCategory] = useState<string>('');
 	const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesObject[] | undefined>([]);
 	const [paymentType, setPaymentType] = useState<string>('virement');
@@ -105,7 +113,6 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 	const fetchExpensesCategories = async () => {
 		const response = await getExpensesCategoriesLabel(user.token, 'month');
-		console.log(response)
 		setExpensesCategories(response.expensesCategories);
 		setCategory(response.expensesCategories?.[0]?.id);
 	}
@@ -132,8 +139,6 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 	// Mettre un params date a true ou false (besoin de la date ou pas)
 	const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		// console.log(moment(e.target.value).toDate());
-		console.log('date : ', date)
 		setDate(e.target.value);
 	};
 
@@ -143,12 +148,10 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 
 	const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		//setCategory(e.target.value);
-		console.log(e.target.value, category)
 		setCategory(e.target.value);
 	};
 
 	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		// console.log(e.target.checked);
 		setCloseModalAfterAdding(!closeModalAfterAdding);
 	};
 	const handleChangeNewCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -156,7 +159,6 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	}
 
 	const handlePaymentType = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		console.log(e.target.value);
 		setPaymentType(e.target.value);
 	};
 
@@ -164,29 +166,23 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 	const handleAddCategory = async () => {
 
 		const responseAddCategory = await addExpensesCategoriesLabel(user.token, newCategory);
-		console.log(responseAddCategory);
 		if (responseAddCategory.result) {
 			toast.success(responseAddCategory.message);
 		} else {
 			toast.error(responseAddCategory.message);
 		}
-		console.log("newCategory : ", newCategory)
 		setCategory(newCategory);
 		fetchExpensesCategories()
 
 	}
 
 	const handleAddBudgetCategory = async () => {
-		console.log('user.token : ', user.token)
-		console.log('amount : ', amount)
-		console.log('category : ', category)
 		const responseAdd = await addBudgetOfExpensesCategory(user.token, category, amount);
 
 		if (responseAdd.result) {
 			toast.success('Budget ajouté avec succès');
-			console.log('closeModalAfterAdding : ', closeModalAfterAdding);
 
-			if(closeModalAfterAdding){
+			if (closeModalAfterAdding) {
 				closeModal();
 			}
 		} else {
@@ -198,9 +194,22 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 		// Remplacer responseAddBalance par responseAddX
 		// Remplacer setBalance par setX
 
-		console.log('title : ', title)
 		if (title === "setBudget") {
 			handleAddBudgetCategory();
+			return;
+		}
+
+		if (title === "setMonthBudget") {
+			const addBudgetOfMonthResponse = await addBudgetOfMonth(user.token, monthChoose, yearChoose, amount);
+			if (addBudgetOfMonthResponse) {
+				toast.success('Budget ajouté avec succès');
+				if (closeModalAfterAdding) {
+					refreshData();
+					closeModal();
+				}
+			} else {
+				toast.error('Erreur lors de l\'ajout du budget');
+			}
 			return;
 		}
 
@@ -216,25 +225,22 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 			category
 		);
 
-		console.log("category : ", category);
-		
 
-		// console.log(responseAdd);
+
 
 		// Remplacer setBalanceToStore par setXToStore
 		// Remplacer setBalanceToStore par setXToStore
 
 		// Remplacer responseAddBalance.balance par responseAddX.x
 
-		if(categories[title]['setToStore']){
+		if (categories[title]['setToStore']) {
 			// @ts-ignore
 			dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
 		}
 		if (responseAdd.result) {
 			toast.success('Revenu ajouté avec succès');
-			console.log('closeModalAfterAdding : ', closeModalAfterAdding);
-			
-			if(closeModalAfterAdding){
+
+			if (closeModalAfterAdding) {
 				closeModal();
 			}
 		} else {
@@ -343,8 +349,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate }) => {
 												>
 													Categorie
 													<select
-													// @ts-ignore
-														onChange={(e: ChangeEvent<HTMLSelectElement >) => handleChangeCategory(e)}
+														// @ts-ignore
+														onChange={(e: ChangeEvent<HTMLSelectElement>) => handleChangeCategory(e)}
 														name="category" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 													>
 														{expensesCategories?.map((category, i) => {

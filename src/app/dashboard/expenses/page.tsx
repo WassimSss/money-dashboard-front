@@ -37,10 +37,8 @@ export default function Expenses() {
 
     // handle delete expense
     const handleDeleteExpense = async (id: number) => {
-        console.log(id)
         const deleteExpenseData = await deleteExpenses(token, id);
         fetchData();
-        console.log(deleteExpenseData);
 
         if (deleteExpenseData.result) {
             toast.success(deleteExpenseData.message);
@@ -58,7 +56,6 @@ export default function Expenses() {
     }, []);
 
     const allExpenses = expenses?.map((expense, i) => {
-        console.log(expense)
         return (
             <div className='flex my-3 text-neutral-400 justify-around items-center w-full' key={i}>
                 {expense.description && <p className='text-xs w-16 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{expense.description}</p>}

@@ -2,7 +2,7 @@ import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
-import { getBudget } from '../fetchRequest/budget';
+import { getBudget, getMonthBudget } from '../fetchRequest/budget';
 import { useAppSelector } from '@/reducer/store';
 import AddModal from '../modals/AddModal';
 import ContentLoader from 'react-content-loader';
@@ -17,30 +17,22 @@ const Budget: React.FC = () => {
     }
 
     const dropdownRef = useRef(null);
+    var fr = moment().locale('fr');
     const [showDropdown, setShowDropdown] = useState(false);
     const [modalOpen, setModalOpen] = useState<string>("")
     const [month, setMonth] = useState<number>(moment().month());
     const [year, setYear] = useState<number>(moment().year());
-
-    var fr = moment().locale('fr');
-
-
-
-    // const [option, setOption] = useState<objectOption[]>([]);
+    const [monthExpensesAmount, setMonthExpensesAmount] = useState<number | undefined>(undefined);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const token = useAppSelector(state => state.users.value).token;
+    // console.log('token : ', token);
+    const [monthBudget, setMonthBudget] = useState<monthBudgetObject | undefined>(undefined);
+    const [allMonthsBudget, setAllMonthsBudget] = useState<{ [key: string]: monthBudgetObject } | undefined>({});
+    const [monthAmount, setMonthAmount] = useState<number | undefined>(undefined);
+    const [monthBudgetAmount, setMonthBudgetAmount] = useState<number | undefined>(undefined);
 
-    // setOption([{ option: "Ajouter un revenu", action: null }, { option: "Voir ses revenus", action: null }]);
-    const option = [{ option: "Ajouter un budget par mois", action: null }, { option: "Ajouter un budget par catégorie de dépense", action: () => setModalOpen("setBudget") }]
 
-    // const toggleAddExpensesModal = () => {
-    //     console.log('isAddExpensesModalOpen : ', isAddExpensesModalOpen)
-    //     setIsAddExpensesModalOpen(true);
-    // };
-
-    // const closeAddExpensesModal = () => {
-    //     setIsAddExpensesModalOpen(false);
-    // };
+    const option = [{ option: "Ajouter un budget par mois", action: () => setModalOpen("setMonthBudget") }, { option: "Ajouter un budget par catégorie de dépense", action: () => setModalOpen("setBudget") }]
 
     type monthBudgetObject = {
         result: boolean,
@@ -52,22 +44,35 @@ const Budget: React.FC = () => {
             categoryBudget: number
         }>
     }
-    const [monthBudget, setMonthBudget] = useState<monthBudgetObject | undefined>(undefined);
 
-    const fetchBudget = async (token: string, period: string, month : number) => {
-        const budget = await getBudget(token, period, month + 1);
+
+    const fetchBudget = async (token: string, period: string, month: number) => {
+        const budget = await getMonthBudget(token, period, month + 1, year);
+        // const budgetTest = await getMonthBudget(token, period, month + 1, year);
+        const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
         console.log("budget : ", budget)
         setMonthBudget(budget)
+        setMonthExpensesAmount(budget?.expensesAmount);
+        setMonthBudgetAmount(budget?.budgetAmount);
+        setAllMonthsBudget({ ...allMonthsBudget, [monthAndYear]: budget });
     };
 
     useEffect(() => {
-        fetchBudget(token, "month", month);
+        const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
+        if (monthAndYear in allMonthsBudget) {
+            setMonthExpensesAmount(allMonthsBudget[monthAndYear]?.expensesAmount);
+            setMonthBudgetAmount(allMonthsBudget[monthAndYear]?.budgetAmount);
+
+
+        } else {
+            fetchBudget(token, "month", month);
+
+        }
     }, [month])
 
 
-    console.log("monthBudget : ", monthBudget);
 
-    const categoriesWithAmount = monthBudget?.expensesByCategory.map((e: { categoryName: string, categoryAmount: number, categoryBudget: number }, i: number) => {
+    const categoriesWithAmount = allMonthsBudget[`${fr.localeData().months(moment([year, month]))}_${year}`]?.expensesByCategory.map((e: { categoryName: string, categoryAmount: number, categoryBudget: number }, i: number) => {
         return (
             <div key={e.categoryName} className='flex justify-between'>
                 <p>{e.categoryName}</p>
@@ -78,9 +83,6 @@ const Budget: React.FC = () => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-
-            // console.log(dropdownRef.current, event.target)
-            // console.log(typeof event.target.className === "string");
 
             const dropdownRefCurrent = dropdownRef.current as HTMLDivElement | null;
 
@@ -108,8 +110,8 @@ const Budget: React.FC = () => {
         setShowDropdown(!showDropdown)
     }
 
-    const handleDecrementMonth= () => {
-        if(month > 0){
+    const handleDecrementMonth = () => {
+        if (month > 0) {
             setMonth(month - 1);
         } else {
             setMonth(11);
@@ -117,8 +119,9 @@ const Budget: React.FC = () => {
         }
     }
 
-    const handleIncrementMonth= () => {
-        if(month < 11){
+    const handleIncrementMonth = () => {
+
+        if (month < 11) {
             setMonth(month + 1);
         } else {
             setMonth(0);
@@ -140,47 +143,33 @@ const Budget: React.FC = () => {
         );
     });
 
-    const mediaQueriesStyle = {
-        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
-        xlStyle: "xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5  m-4 p-3 flex flex-col",
-        lgStyle: "lg:row-start-3 lg:row-end-4 lg:col-start-3 lg:col-end-5 m-4 p-3 flex flex-col",
-        mdStyle: "md:row-start-3 md:row-end-4 md:col-start-3 md:col-end-5 m-4 p-3 flex flex-col",
-        smStyle: "xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5 m-4 p-3 flex flex-col",
-    }
+    let allBudgetWithDate = allMonthsBudget[`${fr.localeData().months(moment([year, month]))}_${year}`]
 
     return (
         <>
-            {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} />}
+            {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} refreshData={() => fetchBudget(token, "month", month)} monthChoose={month + 1} yearChoose={year}/>}
 
             <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
                 <div className='relative flex justify-between'>
-                    <p className='font-bold'>Budget - {fr.localeData().months(moment([2024, month]))} {year}</p>
+                    <p className='font-bold'>Budget - {fr.localeData().months(moment([year, month]))} {year}</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>
                         <FontAwesomeIcon icon={faEllipsisVertical} className="inline-flex justify-center w-full rounded-md px-4 py-2 text-sm font-medium text-white cursor-pointer" />
                     </span>
-                    
+
                     {showDropdown && (
                         <div className="origin-top-right absolute right-0 top-8 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                 {optionLink}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={(event) => {
-                                    event.stopPropagation(); // Empêche la propagation de l'événement de clic
-                                    if (event.action) {
-                                        console.log("ALED") // Exécute l'action si elle est définie
-                                    }
-                                }}>Ajouter un revenu</a> */}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem">Voir ses revenus</a> */}
-                                {/* <a href="#" className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem">Option 3</a> */}
                             </div>
                         </div>
                     )}
                 </div>
-                {monthBudget !== undefined? ( <div className='flex flex-col flex-1 justify-between my-2 '>
-                <div className="flex justify-between m-4">
-                    <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
-                    <FontAwesomeIcon icon={faArrowRight}onClick={() => handleIncrementMonth()}  className="text-white cursor-pointer hover:text-primary transition-all" />
-                </div>
-                    <p className='text-3xl font-bold'>{monthBudget.budgetAmount}€<span className="text-primary">/mois</span></p>
+                {monthBudget !== undefined ? (<div className='flex flex-col flex-1 justify-between my-2 '>
+                    <div className="flex justify-between m-4">
+                        <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+                        <FontAwesomeIcon icon={faArrowRight} onClick={() => handleIncrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+                    </div>
+                    <p className='text-3xl font-bold'>{allBudgetWithDate?.budgetAmount ? allBudgetWithDate.budgetAmount + '€' : "Pas encore de budget par mois entré"}<span className="text-primary">{allBudgetWithDate?.budgetAmount && '/mois'}</span></p>
 
                     <div className='my-4'>
                         {categoriesWithAmount}
@@ -188,7 +177,7 @@ const Budget: React.FC = () => {
 
                     <div className='flex justify-between'>
                         <p>Total</p>
-                        <p className='text-success'>{`${monthBudget.expensesAmount && monthBudget.expensesAmount.toFixed(2)}/${monthBudget.budgetAmount}€`}</p>
+                        <p className={`${monthExpensesAmount < allBudgetWithDate?.budgetAmount ? 'text-success' : 'text-error'} ${allBudgetWithDate?.budgetAmount === null ? 'text-primary' : ''}`}>{`${monthExpensesAmount && monthExpensesAmount.toFixed(2)}${allBudgetWithDate?.budgetAmount ? '/' + allBudgetWithDate?.budgetAmount + '€' : ""}`}</p>
                     </div>
                 </div>) : (<Oval
                     visible={true}

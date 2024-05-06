@@ -47,7 +47,6 @@ export default function Signin() {
   }
 
   const handleSubmitFormData = async () => {
-    console.log('aled');
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -58,7 +57,6 @@ export default function Signin() {
     if (!response.ok) {
       // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
 
-      // console.error('Erreur lors de l\'envoi des données:', errorData);
 
       if (data.errors && data.errors.length > 0) {
         const errors = data.errors.map((error: ErrorItem) => {
@@ -81,7 +79,6 @@ export default function Signin() {
     }
 
     if (data.result) {
-      console.log('data : ', data);
       dispatch(addTokenToUser(data.token));
     }
   }

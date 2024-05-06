@@ -21,7 +21,6 @@ export const getSaving = async (token: string): Promise<number | undefined> => {
 
         const getSavingData = await response.json();
 
-        // console.log(getSavingData)
         if (getSavingData.result) {
             return getSavingData.saving
         }
@@ -110,10 +109,6 @@ export const deleteSaving = async (token: string, id: number): Promise<ObjectRes
 export const addSaving = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined ): Promise<ObjectResponseAddSaving> => {
     try {
 
-        console.log('date : ',  date)
-        console.log('description : ', description)  
-        console.log('category : ', category)
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/add`, {
             method: 'POST',
             headers: {
@@ -134,7 +129,6 @@ export const addSaving = async (token: string, amount: number, type = undefined,
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)
         return data
 
     }

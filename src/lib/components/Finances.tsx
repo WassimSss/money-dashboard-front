@@ -12,18 +12,15 @@ const Finances = () => {
     const [monthsExpenses, setMonthsExpenses] = useState<object[] | undefined>(undefined);
     const [monthsVirements, setMonthsVirements] = useState<object[] | undefined>(undefined);
     const token = useAppSelector(state => state.users.value).token;
-    console.log("token : ", token)
     const fetchMonthsExpenses = async () => {
         const arrayOfMonthExpenses = []
         for (let i = 1; i < 13; i++) {
             let monthExpenses = await getExpensesOfThePeriod(token, "month", i);
-            console.log("monthExpenses : ", monthExpenses);
             
             // console.log("monthExpenses : ", monthExpenses);
             arrayOfMonthExpenses.push(monthExpenses?.amount)
         }
-        console.log("arrayOfMonthExpenses : ", arrayOfMonthExpenses)
-        console.log(monthsExpenses)
+
         // @ts-ignore
         setMonthsExpenses(arrayOfMonthExpenses);
         // console.log("arrayOfMonthExpenses : ", arrayOfMonthExpenses);
@@ -34,12 +31,10 @@ const Finances = () => {
         const arrayOfMonthVirements = []
         for (let i = 1; i < 13; i++) {
             let monthIncomes = await getVirementOfMonth(token, i);
-            console.log("monthIncomes : ", monthIncomes);
             arrayOfMonthVirements.push(monthIncomes)
         }
         // @ts-ignore
         setMonthsVirements(arrayOfMonthVirements);
-        console.log("arrayOfMonthIncomes : ", arrayOfMonthVirements);
 
     }
 

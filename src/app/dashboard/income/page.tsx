@@ -37,7 +37,6 @@ export default function Income() {
 	const handleAcceptIncome = async (id: number) => {
 		const acceptIncomeData = await acceptIncome(token, id);
 		fetchData();
-		console.log(acceptIncomeData);
 
 		if (acceptIncomeData.result) {
 			toast.success(acceptIncomeData.message);
@@ -48,7 +47,6 @@ export default function Income() {
 	const handleDeleteIncome = async (id: number) => {
 		const deleteIncomeData = await deleteIncome(token, id);
 		fetchData();
-		console.log(deleteIncomeData);
 
 		if (deleteIncomeData.result) {
 			toast.success(deleteIncomeData.message);
@@ -57,7 +55,6 @@ export default function Income() {
 
 	const fetchData = async () => {
 		const incomeData = await getAllIncome(token);
-		console.log(incomeData);
 		setIncome(incomeData.income as incomeObject[]);
 	};
 

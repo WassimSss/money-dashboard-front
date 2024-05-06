@@ -21,7 +21,6 @@ export const getIncome = async (token: string): Promise<number | undefined> => {
 
         const getIncomeData = await response.json();
 
-        // console.log(getIncomeData)
         if (getIncomeData.result) {
             return getIncomeData.income
         }
@@ -62,7 +61,6 @@ export const getAllIncome = async (token: string): Promise<ObjectResponsegetAllI
         }
 
         const data = await response.json();
-        console.log('data.result : ', data)
         return data
 
     }
@@ -94,7 +92,6 @@ export const getVirementOfMonth = async (token: string, month: number): Promise<
 
         const getIncomeData = await response.json();
 
-        console.log(getIncomeData)
         if (getIncomeData.result) {
             return getIncomeData.income
         }
@@ -135,7 +132,6 @@ export const addIncome = async (token: string, amount: number, type: string | un
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)
         return data
 
     }

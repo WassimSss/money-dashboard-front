@@ -37,7 +37,6 @@ export default function Saving() {
 	const handleDeleteSaving = async (id: number) => {
 		const deleteSavingData = await deleteSaving(token, id);
 		fetchData();
-		console.log(deleteSavingData);
 
 		if (deleteSavingData.result) {
 			toast.success(deleteSavingData.message);
@@ -47,7 +46,6 @@ export default function Saving() {
 	const fetchData = async () => {
 		const savingData = await getAllSaving(token);
 
-		console.log(savingData);
 		
 		setSaving(savingData.saving as savingObject[]);
 	};

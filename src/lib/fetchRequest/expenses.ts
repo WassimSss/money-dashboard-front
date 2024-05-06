@@ -61,7 +61,6 @@ export const getExpensesOfThePeriod = async (token: string, period: string, peri
 
         const getExpensesData = await response.json();
 
-        console.log(getExpensesData)
         if (getExpensesData.result) {
             return getExpensesData
         }
@@ -177,7 +176,6 @@ export const getAllExpenses = async (token: string, period: string, periodNumber
         }
 
         const data = await response.json();
-        console.log('data.result : ', data)
         return data
 
     }
@@ -342,7 +340,6 @@ export const getExpensesCategories = async (token: string, period: string): Prom
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
         return data
 
     }
@@ -354,7 +351,6 @@ export const getExpensesCategories = async (token: string, period: string): Prom
 export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddExpenses> => {
     try {
 
-        console.log({ amount, expensesDate: date, description, category })
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/add`, {
             method: 'POST',
@@ -376,7 +372,6 @@ export const addExpenses = async (token: string, amount: number, type = undefine
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
         return data
 
     }
@@ -417,7 +412,6 @@ export const deleteExpenses = async (token: string, id: number): Promise<ObjectR
         }
 
         const data = await response.json();
-        console.log('data.result : ', data.result)
         return data
 
     } catch (error) {

@@ -65,7 +65,6 @@ export const getAllBalance = async (token: string): Promise<ObjectResponseAddBal
 
         const getAllBalanceData = await response.json();
 
-        console.log('getAllBalanceData : ', getAllBalanceData)
         return getAllBalanceData;
     }
 

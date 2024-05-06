@@ -32,7 +32,6 @@ const AllExpenses: React.FC = () => {
 
     const fetchExpensesofTheDay = async () => {
         const expensesofTheDay = await getExpensesOfThePeriod(token, 'day');
-        console.log(" expensesofTheDay : ",expensesofTheDay);
         
         dispatch(setExpensesOfTheDayToStore(expensesofTheDay?.amount))
         setExpensesDay(moneys.expensesofTheDay)
@@ -73,7 +72,6 @@ const AllExpenses: React.FC = () => {
 
 
     useEffect(() => {
-        // console.log(expensesCategories)
         fetchData();
     }, [moneys, period])
 
@@ -86,10 +84,6 @@ const AllExpenses: React.FC = () => {
     const dataDougnut = expensesCategories?.map(expense => {
         return expense[1]
     })
-
-    
-
-    console.log(labelDougnut, dataDougnut, colorDougnut);
     
     useEffect(() => {
         const chartRefType = chartRef.current as HTMLCanvasElement | null;
@@ -163,7 +157,6 @@ const AllExpenses: React.FC = () => {
             )
         }
     })
-    // console.log("expensesCategories : ", expensesCategories, expensesDay, expensesWeek, expensesMonth)
     const camambertCategories = expensesCategories?.map((category: any, i: number) => {
         const titleCategory = category[0]
         const amount = category[1];
