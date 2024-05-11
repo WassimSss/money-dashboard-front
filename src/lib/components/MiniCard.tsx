@@ -8,11 +8,12 @@ import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
-import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
+import { setBalanceToStore, setDebtsToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { getSaving } from '../fetchRequest/saving';
 import { getExpenses } from '../fetchRequest/expenses';
 import { useRouter } from 'next/navigation';
 import ContentLoader from "react-content-loader"
+import { getDebts } from '../fetchRequest/debts';
 
 type MiniCardProps = {
     icon: IconProp;
@@ -65,7 +66,15 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     dispatch(setExpensesToStore(expenses))
                     setMoney(moneys.expenses)
                     break;
+                case 'Debts':
+                    const debts = await getDebts(token);
+                    setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push('/dashboard/debts') }]);
+                    console.log("debts : ", debts);
+                    dispatch(setDebtsToStore(debts))
+                    setMoney(moneys.debts)
 
+
+                    break;
 
                 default:
                     break;

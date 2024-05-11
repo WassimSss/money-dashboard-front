@@ -1,6 +1,6 @@
 import '../../app/globals.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faChevronDown, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { getExpensesOfThePeriod, getExpensesCategories } from '../fetchRequest/expenses';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import Chart from 'chart.js/auto';
 import ContentLoader from 'react-content-loader';
 import { Oval } from 'react-loader-spinner';
+const moment = require("moment");
 
 const AllExpenses: React.FC = () => {
     const chartRef = useRef(null);
@@ -17,22 +18,27 @@ const AllExpenses: React.FC = () => {
         expenses: Array<[string, number]>;
         [index: number]: [string, number]; // Add index signature
     };
-    
+
+    var fr = moment().locale('fr');
     const [expensesDay, setExpensesDay] = useState<number | undefined>(undefined);
     const [expensesWeek, setExpensesWeek] = useState<number | undefined>(undefined);
     const [expensesMonth, setExpensesMonth] = useState<number | undefined>(undefined);
     const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesType[] | undefined>(undefined);
     const [period, setPeriod] = useState<string>('day'); // 'day', 'week', 'month'
+    const [month, setMonth] = useState<number>(moment().month());
+    const [year, setYear] = useState<number>(moment().year());
     const token = useAppSelector(state => state.users.value).token;
     const moneys = useAppSelector(state => state.moneys.value);
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
+    const [allMonthsExpenses, setAllMonthsExpenses] = useState<{ [key: string]: monthExpensesObject } | undefined>({});
+
 
     const dispatch = useAppDispatch();
 
     const fetchExpensesofTheDay = async () => {
         const expensesofTheDay = await getExpensesOfThePeriod(token, 'day');
-        
+
         dispatch(setExpensesOfTheDayToStore(expensesofTheDay?.amount))
         setExpensesDay(moneys.expensesofTheDay)
     }
@@ -44,11 +50,9 @@ const AllExpenses: React.FC = () => {
     }
 
     const fetchExpensesOfTheMonth = async () => {
-
         // get number of the month with the date
-        const currentDate = new Date();
-        const monthNumber = currentDate.getMonth() + 1;
-        const expensesOfTheMonth = await getExpensesOfThePeriod(token, "month");
+        const expensesOfTheMonth = await getExpensesOfThePeriod(token, "month", month + 1, year);
+        console.log("expensesOfTheMonth : ", expensesOfTheMonth);
         dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth?.amount))
         setExpensesMonth(moneys.expensesofTheMonth)
     }
@@ -62,8 +66,7 @@ const AllExpenses: React.FC = () => {
 
     const fetchData = async () => {
 
-
-        const fetchExpensesCategories = await getExpensesOfThePeriod(token, period);
+        const fetchExpensesCategories = await getExpensesOfThePeriod(token, "month", month + 1, year);
         setExpensesCategories(fetchExpensesCategories.expenses)
         // calculer pourcentage
 
@@ -73,7 +76,7 @@ const AllExpenses: React.FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, [moneys, period])
+    }, [moneys, period, month])
 
     const labelDougnut = expensesCategories?.map(expense => {
         return expense[0]
@@ -84,7 +87,7 @@ const AllExpenses: React.FC = () => {
     const dataDougnut = expensesCategories?.map(expense => {
         return expense[1]
     })
-    
+
     useEffect(() => {
         const chartRefType = chartRef.current as HTMLCanvasElement | null;
         const ctx = chartRefType?.getContext('2d');
@@ -132,7 +135,7 @@ const AllExpenses: React.FC = () => {
 
         return () => {
             if (chartRef.current) {
-            resizeObserver.unobserve(chartRef.current);
+                resizeObserver.unobserve(chartRef.current);
             }
         };
     }, [dataDougnut]);
@@ -222,7 +225,32 @@ const AllExpenses: React.FC = () => {
         setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
         setShowDropdown(!showDropdown)
     }
-    // console.log(period)
+
+    const handleDecrementMonth = () => {
+        // a terme ne pas faire de fetch si les données sont déjà en cache
+        console.log("expensesCategories : ", expensesCategories)
+        // fetchData();
+        if (month > 0) {
+            setMonth(month - 1);
+        } else {
+            setMonth(11);
+            setYear(year - 1);
+        }
+    }
+
+    const handleIncrementMonth = () => {
+        // a terme ne pas faire de fetch si les données sont déjà en cache
+        console.log("expensesCategories : ", expensesCategories)
+
+        // fetchData();
+
+        if (month < 11) {
+            setMonth(month + 1);
+        } else {
+            setMonth(0);
+            setYear(year + 1);
+        }
+    }
 
     return (
         <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 my-4 lg:mx-4 p-3 h-full flex flex-col`}>
@@ -242,29 +270,34 @@ const AllExpenses: React.FC = () => {
                     </div>
                 )}
             </div>
+            <div className="flex justify-between m-4">
+                <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+                <p className=' font-bold'>{fr.localeData().months(moment([year, month]))} {year}</p>
+                <FontAwesomeIcon icon={faArrowRight} onClick={() => handleIncrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+            </div>
             <div className='flex flex-col flex-1 justify-between my-2 '>
                 <div className='flex justify-center mt-8 w-full'>
-                 {expensesCategories === undefined && (<Oval
-                    visible={true}
-                    height="80%"
-                    width="80%"
-                    color="#4F72D8"
-                    secondaryColor="#ffffff"
-                    ariaLabel="oval-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                />)}
-                <div className={`flex justify-center items-center h-5/6 w-5/6 lg:h-1/2 lg:w-1/2 p-5`}>
-                    <canvas className={`${ expensesCategories === undefined || expensesCategories.length === 0 && "!hidden "}`}ref={chartRef}></canvas>
-                    {expensesCategories && expensesCategories.length === 0 && <p className='text-primary text-2xl'>No expenses for this period</p>}
-                </div>
+                    {expensesCategories === undefined && (<Oval
+                        visible={true}
+                        height="80%"
+                        width="80%"
+                        color="#4F72D8"
+                        secondaryColor="#ffffff"
+                        ariaLabel="oval-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                    />)}
+                    <div className={`flex justify-center items-center h-5/6 w-5/6 lg:h-1/2 lg:w-1/2 p-5`}>
+                        <canvas className={`${expensesCategories === undefined || expensesCategories.length === 0 && "!hidden "}`} ref={chartRef}></canvas>
+                        {expensesCategories && expensesCategories.length === 0 && <p className='text-primary text-2xl'>No expenses for this period</p>}
+                    </div>
                 </div>
 
                 <div className='flex flex-row  justify-around'>
                     <div className='flex flex-col'>
                         <p className='text-neutral-400'>Daily</p>
                         {expensesDay !== undefined ? (
-                        <p className='font-bold'>{expensesDay?.toFixed(2)}€</p>
+                            <p className='font-bold'>{expensesDay?.toFixed(2)}€</p>
                         ) : (
                             <ContentLoader
                                 speed={2}
@@ -281,7 +314,7 @@ const AllExpenses: React.FC = () => {
                     <div>
                         <p className='text-neutral-400'>Weekly</p>
                         {expensesWeek !== undefined ? (
-                        <p className='font-bold'>{expensesWeek?.toFixed(2)}€</p>
+                            <p className='font-bold'>{expensesWeek?.toFixed(2)}€</p>
                         ) : (
                             <ContentLoader
                                 speed={2}
@@ -297,7 +330,7 @@ const AllExpenses: React.FC = () => {
                     <div>
                         <p className='text-neutral-400'>Monthly</p>
                         {expensesMonth !== undefined ? (
-                        <p className='font-bold'>{expensesMonth?.toFixed(2)}€</p>
+                            <p className='font-bold'>{expensesMonth?.toFixed(2)}€</p>
                         ) : (
                             <ContentLoader
                                 speed={2}

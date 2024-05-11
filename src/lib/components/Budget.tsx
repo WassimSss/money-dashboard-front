@@ -66,7 +66,6 @@ const Budget: React.FC = () => {
 
         } else {
             fetchBudget(token, "month", month);
-
         }
     }, [month])
 
@@ -147,11 +146,11 @@ const Budget: React.FC = () => {
 
     return (
         <>
-            {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} refreshData={() => fetchBudget(token, "month", month)} monthChoose={month + 1} yearChoose={year}/>}
+            {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} refreshData={() => fetchBudget(token, "month", month)} monthChoose={month + 1} yearChoose={year} />}
 
             <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
                 <div className='relative flex justify-between'>
-                    <p className='font-bold'>Budget - {fr.localeData().months(moment([year, month]))} {year}</p>
+                    <p className='font-bold'>Budget</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>
                         <FontAwesomeIcon icon={faEllipsisVertical} className="inline-flex justify-center w-full rounded-md px-4 py-2 text-sm font-medium text-white cursor-pointer" />
                     </span>
@@ -167,6 +166,7 @@ const Budget: React.FC = () => {
                 {monthBudget !== undefined ? (<div className='flex flex-col flex-1 justify-between my-2 '>
                     <div className="flex justify-between m-4">
                         <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+                        <p className=' font-bold'>{fr.localeData().months(moment([year, month]))} {year}</p>
                         <FontAwesomeIcon icon={faArrowRight} onClick={() => handleIncrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
                     </div>
                     <p className='text-3xl font-bold'>{allBudgetWithDate?.budgetAmount ? allBudgetWithDate.budgetAmount + '€' : "Pas encore de budget par mois entré"}<span className="text-primary">{allBudgetWithDate?.budgetAmount && '/mois'}</span></p>

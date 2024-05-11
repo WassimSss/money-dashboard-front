@@ -9,6 +9,7 @@ import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToSto
 import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
 import { addIncome, getIncome } from '../fetchRequest/income';
 import { addSaving, getSaving } from '../fetchRequest/saving';
+import { addDebts } from '../fetchRequest/debts';
 
 var moment = require('moment');
 moment().format();
@@ -72,6 +73,15 @@ const categories: Categories = {
 			input: ['amount', 'date']
 		}
 	},
+	Debts: {
+		addFunction: addDebts,
+		// getFunction: getSaving,
+		setToStore: setSavingToStore,
+		form: {
+			title: "Entrer les détails de l'économie",
+			input: ['amount', 'debtor', 'whoIsDebtor']
+		}
+	},
 	setBudget: {
 		addFunction: addBudgetOfExpensesCategory,
 		// getFunction: getExpenses,
@@ -109,6 +119,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 	const [paymentType, setPaymentType] = useState<string>('virement');
 	const [date, setDate] = useState<string>('');
 	const [closeModalAfterAdding, setCloseModalAfterAdding] = useState<boolean>(true);
+	const [whoIsDebtor, setWhoIsDebtor] = useState<string>('me');
+	const [debtor, setDebtor] = useState<string>('');
 	// const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesObject[] | undefined>([]);
 
 	const fetchExpensesCategories = async () => {
@@ -196,6 +208,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 		if (title === "setBudget") {
 			handleAddBudgetCategory();
+			refreshData();
 			return;
 		}
 
@@ -209,6 +222,20 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 				}
 			} else {
 				toast.error('Erreur lors de l\'ajout du budget');
+			}
+			return;
+		}
+
+		if (title === "Debts") {
+			console.log(user.token, amount, debtor, whoIsDebtor === "me")
+			const addDebtsRequest = await addDebts(user.token, amount, debtor, whoIsDebtor !== "me");
+			if (addDebtsRequest.result) {
+				toast.success('Dette ajoutée avec succès');
+				if (closeModalAfterAdding) {
+					closeModal();
+				}
+			} else {
+				toast.error('Erreur lors de l\'ajout de la dette');
 			}
 			return;
 		}
@@ -248,6 +275,11 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 		}
 	};
 
+	const test = (e) => {
+		console.log(e.target.value)
+		setWhoIsDebtor(e.target.value)
+		console.log("state : ", whoIsDebtor)
+	}
 	return (
 		<div>
 			<div
@@ -302,6 +334,44 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 													</label>
 												</div>
 											</div>
+										)}
+										{title === "Debts" && (
+											<>
+												<div className="mt-2">
+													<label htmlFor="whoIsDebtor" className="block text-sm font-medium text-gray-700">
+														Qui attend la dette ?
+													</label>
+													<div className="mt-1">
+														<label className="inline-flex items-center">
+															<input
+																type="radio"
+																className="form-radio"
+																name="whoIsDebtor"
+																value="me"
+																onChange={(e) => test(e)}
+																checked={whoIsDebtor === "me"}
+															/>
+															<span className="ml-2">Moi</span>
+														</label>
+														<label className="inline-flex items-center ml-6">
+															<input
+																type="radio"
+																className="form-radio"
+																name="whoIsDebtor"
+																value="he"
+																onChange={(e) => test(e)}
+																checked={whoIsDebtor === "he"}
+															/>
+															<span className="ml-2">Lui</span>
+														</label>
+													</div>
+												</div>
+												<label htmlFor="debtor" className="block text-sm font-medium text-gray-700">
+													{whoIsDebtor === "me" ? "Personne qui doit vous rembourser" : "Personne que vous devez rembourser"}
+												</label>
+												<input type="text" onChange={(e) => setDebtor(e.target.value)} value={debtor} name="debtor" id="debtor" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+													placeholder="Nom de la personne" />
+											</>
 										)}
 									</div>)}
 
@@ -359,19 +429,6 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 													</select>
 												</label>
 
-												<div className="mt-2">
-													<label className="flex items-center">
-														<input
-															type="checkbox"
-															className="form-checkbox"
-															checked={closeModalAfterAdding}
-															onChange={(e) => handleCheckboxChange(e)}
-														/>
-														<span className="ml-2">
-															Fermer la modal après l'ajout
-														</span>
-													</label>
-												</div>
 											</div>
 
 											{title === "Expenses" && (
@@ -405,9 +462,23 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 										</>
 									)}
+						<div className="mt-2">
+							<label className="flex items-center">
+								<input
+									type="checkbox"
+									className="form-checkbox"
+									checked={closeModalAfterAdding}
+									onChange={(e) => handleCheckboxChange(e)}
+								/>
+								<span className="ml-2">
+									Fermer la modal après l'ajout
+								</span>
+							</label>
+						</div>
 								</div>
 							</div>
 						</div>
+
 						<div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
 							<button
 								type="button"

@@ -5,7 +5,7 @@ import '../globals.css';
 // import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../lib/components/Header';
 import MiniCard from '../../lib/components/MiniCard';
-import { faWallet, faHandHoldingDollar, faCircleDollarToSlot, faSackDollar } from '@fortawesome/free-solid-svg-icons';
+import { faWallet, faHandHoldingDollar, faCircleDollarToSlot, faSackDollar, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 import Budget from '../../lib/components/Budget';
 import Finances from '../../lib/components/Finances';
 import AllExpenses from '../../lib/components/AllExpenses';
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
 
     const toggleAddModal = (modalName: string) => {
         // console.log('test')
-        // console.log('modalName : ', modalName)
+        console.log('modalName : ', modalName)
         setModalOpen(modalName)
         // setIsAddBalanceModalOpen(true);
     };
@@ -42,13 +42,14 @@ const Home: React.FC = () => {
         setModalOpen("")
     };
 
-    const miniCards: string[] = ["Balance", "Income", "Saving", "Expenses"];
+    const miniCards: string[] = ["Balance", "Income", "Saving", "Expenses", "Debts"];
 
     const miniCardsIcons: { [key: string]: IconDefinition } = {
         Balance: faWallet,
         Income: faHandHoldingDollar,
         Saving: faCircleDollarToSlot,
         Expenses: faSackDollar,
+        Debts: faAddressBook
     }
 
     const miniCardsComponent = miniCards.map((card, index) => {

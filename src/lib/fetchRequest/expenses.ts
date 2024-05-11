@@ -42,10 +42,10 @@ type ObjectResponseGetAllExpenses = {
 }
 
 // Recuperer toutes les dépenses du jour avec un fetch sur /users/getAllExpenses
-export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
+export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber : number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : ''), {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (yearNumber !== null ? `/${yearNumber}` : ''), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
