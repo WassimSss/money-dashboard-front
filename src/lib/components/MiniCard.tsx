@@ -44,31 +44,31 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
             switch (name) {
                 case 'Balance':
                     const balance = await getBalance(token)
-                    setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push('/dashboard/balance') }]);
+                    setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push('/dashboard/data/balance') }]);
                     dispatch(setBalanceToStore(balance))
                     setMoney(moneys.balance)
                     break;
                 case 'Income':
                     const income = await getIncome(token)
-                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push('/dashboard/income') }]);
+                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push('/dashboard/data/income') }]);
                     dispatch(setIncomeToStore(income))
                     setMoney(moneys.income)
                     break;
                 case 'Saving':
                     const saving = await getSaving(token)
-                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/saving') }]);
+                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/data/saving') }]);
                     dispatch(setSavingToStore(saving))
                     setMoney(moneys.saving)
                     break;
                 case 'Expenses':
                     const expenses = await getExpenses(token)
-                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push('/dashboard/expenses') }]);
+                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push('/dashboard/data/expenses') }]);
                     dispatch(setExpensesToStore(expenses))
                     setMoney(moneys.expenses)
                     break;
                 case 'Debts':
                     const debts = await getDebts(token);
-                    setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push('/dashboard/debts') }]);
+                    setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push('/dashboard/data/debts') }]);
                     console.log("debts : ", debts);
                     dispatch(setDebtsToStore(debts))
                     setMoney(moneys.debts)

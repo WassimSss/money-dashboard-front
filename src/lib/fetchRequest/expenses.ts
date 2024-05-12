@@ -153,10 +153,10 @@ type expensesObject = {
 
 
 
-export const getAllExpenses = async (token: string, period: string, periodNumber : number | null = null): Promise<ObjectResponseGetAllExpenses> => {
+export const getAllExpenses = async (token: string, period: string, periodNumber : number | null = null, year : number | null = null): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : ''), {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
             
             method: 'GET',
             headers: {
