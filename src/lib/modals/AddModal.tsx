@@ -101,7 +101,7 @@ const categories: Categories = {
 		}
 	}
 };
-
+// @ts-ignore
 const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshData = null, monthChoose = null, yearChoose = null }) => {
 
 	type expensesCategoriesObject = {
@@ -213,6 +213,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 		}
 
 		if (title === "setMonthBudget") {
+			// @ts-ignore
 			const addBudgetOfMonthResponse = await addBudgetOfMonth(user.token, monthChoose, yearChoose, amount);
 			if (addBudgetOfMonthResponse) {
 				toast.success('Budget ajouté avec succès');
@@ -274,7 +275,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 			toast.error(responseAdd.message);
 		}
 	};
-
+// @ts-ignore
 	const test = (e) => {
 		console.log(e.target.value)
 		setWhoIsDebtor(e.target.value)

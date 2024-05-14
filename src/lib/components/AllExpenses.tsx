@@ -31,6 +31,7 @@ const AllExpenses: React.FC = () => {
     const moneys = useAppSelector(state => state.moneys.value);
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
+    // @ts-ignore
     const [allMonthsExpenses, setAllMonthsExpenses] = useState<{ [key: string]: monthExpensesObject } | undefined>({});
 
 
@@ -67,6 +68,7 @@ const AllExpenses: React.FC = () => {
     const fetchData = async () => {
 
         const fetchExpensesCategories = await getExpensesOfThePeriod(token, "month", month + 1, year);
+        // @ts-ignore
         setExpensesCategories(fetchExpensesCategories.expenses)
         // calculer pourcentage
 

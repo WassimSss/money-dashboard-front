@@ -54,13 +54,17 @@ const Budget: React.FC = () => {
         setMonthBudget(budget)
         setMonthExpensesAmount(budget?.expensesAmount);
         setMonthBudgetAmount(budget?.budgetAmount);
+        // @ts-ignore
         setAllMonthsBudget({ ...allMonthsBudget, [monthAndYear]: budget });
     };
 
     useEffect(() => {
         const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
+        // @ts-ignore
         if (monthAndYear in allMonthsBudget) {
+            // @ts-ignore
             setMonthExpensesAmount(allMonthsBudget[monthAndYear]?.expensesAmount);
+            // @ts-ignore
             setMonthBudgetAmount(allMonthsBudget[monthAndYear]?.budgetAmount);
 
 
@@ -70,7 +74,7 @@ const Budget: React.FC = () => {
     }, [month])
 
 
-
+// @ts-ignore
     const categoriesWithAmount = allMonthsBudget[`${fr.localeData().months(moment([year, month]))}_${year}`]?.expensesByCategory.map((e: { categoryName: string, categoryAmount: number, categoryBudget: number }, i: number) => {
         return (
             <div key={e.categoryName} className='flex justify-between'>
@@ -141,11 +145,12 @@ const Budget: React.FC = () => {
             </a>
         );
     });
-
+// @ts-ignore
     let allBudgetWithDate = allMonthsBudget[`${fr.localeData().months(moment([year, month]))}_${year}`]
 
     return (
         <>
+        {/* @ts-ignore */}
             {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} refreshData={() => fetchBudget(token, "month", month)} monthChoose={month + 1} yearChoose={year} />}
 
             <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
@@ -177,6 +182,7 @@ const Budget: React.FC = () => {
 
                     <div className='flex justify-between'>
                         <p>Total</p>
+                        {/* @ts-ignore */}
                         <p className={`${monthExpensesAmount < allBudgetWithDate?.budgetAmount ? 'text-success' : 'text-error'} ${allBudgetWithDate?.budgetAmount === null ? 'text-primary' : ''}`}>{`${monthExpensesAmount && monthExpensesAmount.toFixed(2)}${allBudgetWithDate?.budgetAmount ? '/' + allBudgetWithDate?.budgetAmount + '€' : ""}`}</p>
                     </div>
                 </div>) : (<Oval

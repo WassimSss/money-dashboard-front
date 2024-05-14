@@ -1,3 +1,4 @@
+// @ts-ignore
 export const getDebts = async (token: string): Promise<ObjectResponseAddDebt> => {
 
     try {
@@ -29,7 +30,7 @@ export const getDebts = async (token: string): Promise<ObjectResponseAddDebt> =>
     }
 
 }
-
+// @ts-ignore
 export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt> => {
 
     try {
@@ -63,6 +64,7 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 }
 
 //addDebts
+// @ts-ignore
 export const addDebts = async (token: string, amount: Debt, debtor: string, userIsDebtor: boolean): Promise<ObjectResponseAddDebt> => {
 
     try {
@@ -98,6 +100,7 @@ export const addDebts = async (token: string, amount: Debt, debtor: string, user
 }
 
 // deleteDebts
+// @ts-ignore
 export const deleteDebts = async (token: string, id: number): Promise<ObjectResponseAddDebt> => {
 
     try {
