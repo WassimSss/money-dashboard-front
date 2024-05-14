@@ -51,8 +51,10 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 
         const getDebtsData = await response.json();
 
+        console.log(getDebtsData);
+        
         if (getDebtsData.result) {
-            return getDebtsData.debts
+            return getDebtsData
         }
 
     }

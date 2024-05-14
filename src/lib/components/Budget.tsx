@@ -168,7 +168,8 @@ const Budget: React.FC = () => {
                         </div>
                     )}
                 </div>
-                {monthBudget !== undefined ? (<div className='flex flex-col flex-1 justify-between my-2 '>
+                {monthBudget !== undefined ? (
+                <div className='flex flex-col flex-1 justify-between my-2 '>
                     <div className="flex justify-between m-4">
                         <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
                         <p className=' font-bold'>{fr.localeData().months(moment([year, month]))} {year}</p>
