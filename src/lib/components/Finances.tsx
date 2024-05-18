@@ -16,7 +16,7 @@ const Finances = () => {
         const arrayOfMonthExpenses = []
         for (let i = 1; i < 13; i++) {
             let monthExpenses = await getExpensesOfThePeriod(token, "month", i);
-            
+
             // console.log("monthExpenses : ", monthExpenses);
             arrayOfMonthExpenses.push(monthExpenses?.amount)
         }
@@ -112,13 +112,13 @@ const Finances = () => {
 
 
     return (
-        <div id="Finances" className={/*row-start-3 row-end-4 col-start-1 col-end-3 flex flex-col*/" bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 h-full"}>
+        <div id="Finances" className={/*row-start-3 row-end-4 col-start-1 col-end-3 flex flex-col*/" bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 h-full animate-fade-right animate-duration-750"}>
             <div className='flex justify-between'>
                 <p className='font-bold'>Finances</p>
                 {/* <FontAwesomeIcon icon={faEllipsisVertical} /> */}
             </div>
-            
-            
+
+
             <div className='flex justify-center items-end relative h-full w-full'>
                 <canvas ref={chartRef}></canvas>
             </div>

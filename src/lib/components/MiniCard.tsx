@@ -19,7 +19,8 @@ type MiniCardProps = {
     icon: IconProp;
     name: string;
     active: boolean;
-    openModal: (modalName: string) => void
+    openModal: (modalName: string) => void,
+    animationDelay: number
 };
 
 type objectOption = {
@@ -144,7 +145,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
     }
 
     return (
-        <div className={/*p-2 m-6 text-sm ${mediaQueriesStyle.xlStyle} ${mediaQueriesStyle.lgStyle}  ${mediaQueriesStyle.mdStyle}*/ `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} p-3 m-3 rounded-2xl text-white flex flex-col w-28 h-28 md:h-36 md:w-36`}>
+        <div className={` ${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} p-3 m-3 rounded-2xl text-white flex flex-col w-28 h-28 md:h-36 md:w-36`}>
             <div className='flex justify-end'>
                 <div className="relative inline-block text-left">
                     <div>

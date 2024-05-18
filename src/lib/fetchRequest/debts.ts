@@ -136,3 +136,37 @@ export const deleteDebts = async (token: string, id: number): Promise<ObjectResp
     }
 
 }
+
+export const acceptDebts = async (token: string, id: number): Promise<ObjectResponseAddDebt> => {
+
+    try {
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/debts/accept`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
+
+            body: JSON.stringify({ id })
+        })
+
+        if (!response.ok) {
+            // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+            const errorData = await response.json();
+            console.error('Erreur lors de l\'envoi des données:', errorData);
+        }
+
+        const acceptDebtsData = await response.json();
+
+        if (acceptDebtsData.result) {
+            return acceptDebtsData
+        }
+
+    }
+
+    catch (error) {
+        console.error(error)
+    }
+
+}

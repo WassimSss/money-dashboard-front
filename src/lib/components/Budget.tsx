@@ -153,7 +153,7 @@ const Budget: React.FC = () => {
         {/* @ts-ignore */}
             {modalOpen && <AddModal closeModal={() => setModalOpen("")} title={modalOpen} needsDate={false} refreshData={() => fetchBudget(token, "month", month)} monthChoose={month + 1} yearChoose={year} />}
 
-            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col`}>
+            <section id="Budget" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 p-3 my-4 lg:mx-4 flex flex-col animate-fade-left animate-duration-600`}>
                 <div className='relative flex justify-between'>
                     <p className='font-bold'>Budget</p>
                     <span className="rounded-md shadow-sm" ref={dropdownRef} onClick={() => handleDropDown()}>

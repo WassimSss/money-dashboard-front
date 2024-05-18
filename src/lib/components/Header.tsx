@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const [chevronDownActive, setChevronDownActive] = useState<boolean>(false)
-    
+
     const handleOpenMenuHeader = (): void => {
         setChevronDownActive(!chevronDownActive);
     }
@@ -21,20 +21,20 @@ const Header: React.FC = () => {
 
     return (
         <header id="Header" className="bg-neutral-950 md:h-32 w-full flex justify-between items-center p-3">
-            <div>
+            <div className=' animate-fade'>
                 <Link className='text-white md:text-lg lg:text-2xl no-underline font-bold' href="/dashboard">Dashboard</Link>
             </div>
 
-            <div className='hidden sm:block'>
+            <div className='hidden sm:block animate-fade'>
                 <input type="search" className='bg-neutral-800 rounded-lg text-sm p-2' placeholder="Search for transaction, item, etc..." id="" />
             </div>
 
-            <div className='flex flex-row'>
+            <div className='flex flex-row animate-fade'>
                 <span className='text-white px-2'>
                     <FontAwesomeIcon icon={faBell} />
                 </span>
 
-                <span className='text-white px-2'>
+                <span className='text-white px-2 animate-fade'>
                     <FontAwesomeIcon icon={faMessage} />
                 </span>
 

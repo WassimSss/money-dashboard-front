@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import useAuthClientAndRedirect from '@/app/hooks/useAuthClientAndRedirect';
 import useAuthServerAndRedirect from '@/app/hooks/useAuthServerAndRedirect';
 import MonthPicker from '@/lib/components/MonthPicker';
@@ -11,12 +11,13 @@ import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
 import { getBalance, getAllBalance } from '@/lib/fetchRequest/getBalance';
-import { deleteDebts, getAllDebts } from '@/lib/fetchRequest/debts';
+import { acceptDebts, deleteDebts, getAllDebts } from '@/lib/fetchRequest/debts';
 import { deleteExpenses, getAllExpenses } from '@/lib/fetchRequest/expenses';
 import { getAllIncome, acceptIncome, deleteIncome } from '@/lib/fetchRequest/income';
 import { getAllSaving, deleteSaving } from '@/lib/fetchRequest/saving';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { getAll } from '@/lib/fetchRequest/get/getAll';
+import ConfirmationModal from '@/lib/modals/ConfirmationModal';
 
 var moment = require('moment');
 
@@ -36,7 +37,7 @@ const dataFunctions = {
         getAll: getAll,
         type: 'debtObject',
         delete: deleteDebts,
-        accept: null
+        accept: acceptDebts
     },
     income: {
         title: 'Income',
@@ -146,9 +147,11 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [year, setYear] = useState<number>(moment().year());
     const [allMonthsData, setAllMonthsData] = useState<{ [key: string]: monthDataObject } | {}>({});
     const [monthAndYearString, setMonthAndYearString] = useState<string>(`${fr.localeData().months(moment([year, month]))}_${year}`)
-
+    const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
     const fetchData = async (monthNumber: number = month, yearNumber: number = year, hardRefresh: boolean = false) => {
-        const monthAndYear = `${fr.localeData().months(moment([yearNumber, monthNumber]))}_${year}`
+    const monthAndYear = `${fr.localeData().months(moment([yearNumber, monthNumber]))}_${year}`;
+    const idData = useRef<number | null>(null); // Add this line
+
         // console.log(monthAndYearString, allMonthsData);
         setMonthAndYearString(monthAndYear);
         setMonth(monthNumber);
@@ -171,18 +174,27 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
     };
 
-    const handleAccept = async (id: number) => {
-        console.log("accpted", id);
+    const closeConfirmatinModal = () => {
+        console.log("cloose", openConfirmationModal);
 
-        if (dataFunctionOfParams.accept === null) return;
+        setOpenConfirmationModal(false);
+    }
 
-        const acceptData = await dataFunctionOfParams.accept(token, id);
-        fetchData(month, year, true);
+    const handleAccept = async (id: number, accept : boolean = false) => {
+        setOpenConfirmationModal(true);
+        idData = id;
+        if (accept) {
+            if (dataFunctionOfParams.accept === null) return;
+
+            const acceptData = await dataFunctionOfParams.accept(token, id);
+            fetchData(month, year, true);
 
 
-        if (acceptData.result) {
-            toast.success(acceptData.message);
+            if (acceptData.result) {
+                toast.success(acceptData.message);
+            }
         }
+
     }
 
     const handleDelete = async (id: number) => {
@@ -229,9 +241,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                         <p className='text-xs w-24 sm:w-36 w- md:w-44 md:text-base px-3'>
                             {oneData.userIsDebtor ? `Je dois ${oneData.amount}€ à ${oneData.debtor}` : `${oneData.debtor} me doit ${oneData.amount}€`}
                         </p>
-                        <button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleDelete(oneData["id"])}>
-                            <FontAwesomeIcon icon={faTrash as IconProp} />
-                        </button>
+                        <div>
+                            <button className={`m-1 hover:text-green-600 transition-colors`} onClick={() => handleAccept(oneData["id"])}>
+                                <FontAwesomeIcon icon={faCheck as IconProp} />
+                            </button>
+                            <button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleDelete(oneData["id"])}>
+                                <FontAwesomeIcon icon={faTrash as IconProp} />
+                            </button>
+                        </div>
                     </div>
                 );
             }
@@ -283,41 +300,46 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
 
     return (
-        <div className="bg-neutral-900 w-full min-h-screen">
-            <div className='flex flex-col items-center my-14 min-h-screen'>
-                <div className=" mt-8">{linkAllValidSlugs}</div>
-                {params.slug !== 'debts' && (<div className='mt-8  w-1/2'>
-                    <MonthPicker fetchData={fetchData} monthGived={month} yearGived={year} />
-                </div>)}
+        <>
+            {openConfirmationModal && <ConfirmationModal closeConfirmatinModal={closeConfirmatinModal} text={"Accepter ?"} action={handleAccept} />}
 
-                <p className="font-bold text-primary text-3xl mt-8">{title}</p>
+            <div className="bg-neutral-900 w-full min-h-screen">
+                <div className='flex flex-col items-center my-14 min-h-screen'>
+                    <div className=" mt-8 animate-fade-down animate-duration-300">{linkAllValidSlugs}</div>
+                    {params.slug !== 'debts' && (<div className='mt-8  w-1/2'>
+                        <MonthPicker fetchData={fetchData} monthGived={month} yearGived={year} animationDelay={500} />
+                    </div>)}
 
-                {allMonthsData[monthAndYearString] !== undefined ? (
-                    allMonthsData[monthAndYearString].length ?? 0 > 0 ? (
-                        <>
+                    <p className="font-bold text-primary text-3xl mt-8">{title}</p>
+
+                    {allMonthsData[monthAndYearString] !== undefined ? (
+                        allMonthsData[monthAndYearString].length ?? 0 > 0 ? (
+                            <>
 
 
-                            <div className=' bg-neutral-800 m-8 rounded-2xl w-full md:w-3/4 flex flex-col justify-around items-center'>
-                                {/* {amount && <div className='bg-primary rounded-tl-2xl rounded-tr-2xl w-full h-10 sm:h-14 flex items-center pl-5'>
+                                <div className=' bg-neutral-800 m-8 rounded-2xl w-full md:w-3/4 flex flex-col justify-around items-center animate-duration-750'>
+                                    {/* {amount && <div className='bg-primary rounded-tl-2xl rounded-tr-2xl w-full h-10 sm:h-14 flex items-center pl-5'>
                                     <p className='text-white font-bold text-l sm:text-2xl'>Solde : {amount?.toFixed(2)}€</p>
                                 </div>} */}
-                                {(allMonthsData[monthAndYearString]?.length ?? 0) > 0 && (
-                                    <div className='flex flex-col justify-center items-center  w-full'>{allData}</div>
-                                )}
-                            </div>
-                        </>
-                    ) : (<p className='text-primary text-xl m-8'>Vous n'avez pas encore rentré de dépenses</p>)
-                ) : (<Oval
-                    visible={true}
-                    height="80"
-                    width="80"
-                    color="#4F72D8"
-                    secondaryColor="#ffffff"
-                    ariaLabel="oval-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                />)}
+                                    {(allMonthsData[monthAndYearString]?.length ?? 0) > 0 && (
+                                        <div className='flex flex-col justify-center items-center  w-full'>{allData}</div>
+                                    )}
+                                </div>
+                            </>
+                        ) : (<p className='text-primary text-xl m-8'>Vous n'avez pas encore rentré de dépenses</p>)
+                    ) : (<Oval
+                        visible={true}
+                        height="80"
+                        width="80"
+                        color="#4F72D8"
+                        secondaryColor="#ffffff"
+                        ariaLabel="oval-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                    />)}
+                </div>
             </div>
-        </div>
+
+        </>
     )
 }

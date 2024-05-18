@@ -42,7 +42,7 @@ type ObjectResponseGetAllExpenses = {
 }
 
 // Recuperer toutes les dépenses du jour avec un fetch sur /users/getAllExpenses
-export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber : number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
+export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber: number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (yearNumber !== null ? `/${yearNumber}` : ''), {
@@ -153,11 +153,11 @@ type expensesObject = {
 
 
 
-export const getAllExpenses = async (token: string, period: string, periodNumber : number | null = null, year : number | null = null): Promise<ObjectResponseGetAllExpenses> => {
+export const getAllExpenses = async (token: string, period: string, periodNumber: number | null = null, year: number | null = null): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
-            
+
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -348,7 +348,7 @@ export const getExpensesCategories = async (token: string, period: string): Prom
         return { result: false, message: 'Une erreur inattendue est survenue' }; // Retourne un objet avec un message d'erreur
     }
 }
-export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddExpenses> => {
+export const addExpenses = async (token: string, amount: number, type = undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined, changeBalanceAmount: boolean | null = null): Promise<ObjectResponseAddExpenses> => {
     try {
 
 
@@ -358,7 +358,7 @@ export const addExpenses = async (token: string, amount: number, type = undefine
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ amount, expensesDate: date, description, category })
+            body: JSON.stringify({ amount, expensesDate: date, description, category, changeBalanceAmount })
 
 
         })

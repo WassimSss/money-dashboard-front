@@ -106,7 +106,7 @@ export const deleteSaving = async (token: string, id: number): Promise<ObjectRes
 
 }
 
-export const addSaving = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined ): Promise<ObjectResponseAddSaving> => {
+export const addSaving = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined, changeBalanceAmount  : boolean | null = null ): Promise<ObjectResponseAddSaving> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/saving/add`, {
@@ -115,7 +115,7 @@ export const addSaving = async (token: string, amount: number, type = undefined,
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ amount, savingDate: date, description, category })
+            body: JSON.stringify({ amount, savingDate: date, description, category, changeBalanceAmount })
 
 
         })

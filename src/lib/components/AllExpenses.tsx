@@ -32,7 +32,7 @@ const AllExpenses: React.FC = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
     // @ts-ignore
-    const [allMonthsExpenses, setAllMonthsExpenses] = useState<{ [key: string]: monthExpensesObject } | undefined>({});
+    const [allMonthsData, setAllMonthsData,] = useState<{ [key: string]: monthExpensesObject } | undefined>({});
 
 
     const dispatch = useAppDispatch();
@@ -53,15 +53,22 @@ const AllExpenses: React.FC = () => {
     const fetchExpensesOfTheMonth = async () => {
         // get number of the month with the date
         const expensesOfTheMonth = await getExpensesOfThePeriod(token, "month", month + 1, year);
+        const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
         console.log("expensesOfTheMonth : ", expensesOfTheMonth);
         dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth?.amount))
         setExpensesMonth(moneys.expensesofTheMonth)
+        setAllMonthsData({ ...allMonthsData, [monthAndYear]: expensesOfTheMonth });
     }
 
     useEffect(() => {
-        fetchExpensesofTheDay()
-        fetchExpensesOfTheWeek()
+        if (period === 'day') {
+            fetchExpensesofTheDay()
+        }
+        if (period === 'week') {
+            fetchExpensesOfTheWeek()
+        }
         fetchExpensesOfTheMonth()
+
 
     }, [moneys])
 
@@ -91,6 +98,8 @@ const AllExpenses: React.FC = () => {
     })
 
     useEffect(() => {
+        console.log("hello");
+
         const chartRefType = chartRef.current as HTMLCanvasElement | null;
         const ctx = chartRefType?.getContext('2d');
         if (chartRefType && ctx) {
@@ -142,49 +151,13 @@ const AllExpenses: React.FC = () => {
         };
     }, [dataDougnut]);
 
-    let sumPercentage = 0;
+    useEffect(() => {
+        console.log('test')
+        console.log(setAllMonthsData);
+
+    }, [month])
+
     const camembertColors = ["#2C4487", "#3F61C2", "#8CA0D9", "#C4CFED"]
-
-    const camambertData = expensesCategories?.map((category: any, i: number) => {
-        const ammount = category[1];
-        if (ammount !== 0) {
-            const formattedPeriod = "expensesofThe" + period[0].toLocaleUpperCase() + period.slice(1);
-
-            const percentage = Number(ammount) / moneys[formattedPeriod as keyof typeof moneys]! * 100;
-
-            sumPercentage += percentage;
-
-            return (
-                <div key={i} style={{
-                    background: `radial-gradient(closest-side, #262626 79%, transparent 80% 100%), conic-gradient(from 0deg, ${camembertColors[i]} ${(percentage + 1)}%, transparent 0)`, // 20% + 1 pour eviter les erreurs d'affichages
-                    transform: `${i !== 0 && `rotate(${360 * ((sumPercentage - percentage) / 100)}deg)`}`
-                }} className='absolute w-24 h-24 rounded-full ' ></div>
-            )
-        }
-    })
-    const camambertCategories = expensesCategories?.map((category: any, i: number) => {
-        const titleCategory = category[0]
-        const amount = category[1];
-        if (amount > 0) {
-
-            return (
-                <p className='flex flex-row ' key={i}><span className={`block size-3 rounded-full`} style={{ backgroundColor: camembertColors[i] }}></span><span className='text-neutral-400'>{titleCategory}</span></p>
-
-            )
-        }
-    })
-    const mediaQueriesStyle = {
-        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
-
-        xlStyle: "xl:row-start-3 xl:row-end-4 xl:col-start-3 xl:col-end-4 m-4 p-3 m-4 p-3",
-        lgStyle: "lg:row-start-2 lg:row-end-3 lg:col-start-4 lg:col-end-5 m-4 p-3 flex flex-col",
-        mdStyle: "md:row-start-4 md:row-end-5 md:col-start-3 md:col-end-4 m-4 p-3 flex flex-col",
-        smStyle: "xl:row-start-2 xl:row-end-4 xl:col-start-4 xl:col-end-5 m-4 p-3 flex flex-col",
-    }
-
-    const test = () => {
-        // console.log("test function")
-    }
 
     const option = [{ option: "Mois", action: () => setPeriod("month") }, { option: "Semaine", action: () => setPeriod('week') }, { option: "Jour", action: () => setPeriod('day') }]
     const optionLink = option.map((e, i) => {
@@ -255,7 +228,7 @@ const AllExpenses: React.FC = () => {
     }
 
     return (
-        <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 my-4 lg:mx-4 p-3 h-full flex flex-col`}>
+        <div id="AllExpenses" className={`bg-neutral-800 rounded-2xl text-white w-3/4 sm:w-1/2 my-4 lg:mx-4 p-3 h-full flex flex-col animate-fade-left animate-duration-750`}>
             <div className="relative inline-block text-left">
 
                 <div className='flex justify-between'>

@@ -57,6 +57,7 @@ const Home: React.FC = () => {
         if (card === "Balance") {
             isActive = true;
         }
+        let delay = ["100", "150", "200", "300", "500", "700"]
         return (
             <MiniCard
                 icon={miniCardsIcons[card]}
@@ -102,7 +103,7 @@ const Home: React.FC = () => {
 
 
                     <div className=' w-full flex flex-col lg:flex-row lg:px-8 justify-center items-center lg:items-stretch xl:items-start'>
-                        <div className={`flex flex-column flex-wrap w-3/4 sm:w-1/2 justify-center items-center my-4`}>
+                        <div className={`flex flex-column flex-wrap w-3/4 sm:w-1/2 justify-center items-center my-4 animate-fade-right animate-delay-600 animate-duration-600`}>
                             {miniCardGroups}
                         </div>
                         <Budget />

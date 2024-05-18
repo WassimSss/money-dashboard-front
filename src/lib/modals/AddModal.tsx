@@ -119,6 +119,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 	const [paymentType, setPaymentType] = useState<string>('virement');
 	const [date, setDate] = useState<string>('');
 	const [closeModalAfterAdding, setCloseModalAfterAdding] = useState<boolean>(true);
+	const [changeBalanceAmount, setChangeBalanceAmount] = useState<boolean>(true);
 	const [whoIsDebtor, setWhoIsDebtor] = useState<string>('me');
 	const [debtor, setDebtor] = useState<string>('');
 	// const [expensesCategories, setExpensesCategories] = useState<expensesCategoriesObject[] | undefined>([]);
@@ -165,6 +166,9 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setCloseModalAfterAdding(!closeModalAfterAdding);
+	};
+	const handleCheckboxChangeBalance = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		setChangeBalanceAmount(!changeBalanceAmount);
 	};
 	const handleChangeNewCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setNewCategory(e.target.value);
@@ -250,7 +254,8 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 			title === "Income" ? paymentType : undefined,
 			moment(date).format(),
 			description,
-			category
+			category,
+			changeBalanceAmount
 		);
 
 
@@ -275,7 +280,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 			toast.error(responseAdd.message);
 		}
 	};
-// @ts-ignore
+	// @ts-ignore
 	const test = (e) => {
 		console.log(e.target.value)
 		setWhoIsDebtor(e.target.value)
@@ -463,19 +468,33 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 										</>
 									)}
-						<div className="mt-2">
-							<label className="flex items-center">
-								<input
-									type="checkbox"
-									className="form-checkbox"
-									checked={closeModalAfterAdding}
-									onChange={(e) => handleCheckboxChange(e)}
-								/>
-								<span className="ml-2">
-									Fermer la modal après l'ajout
-								</span>
-							</label>
-						</div>
+									<div className="mt-2">
+										<label className="flex items-center">
+											<input
+												type="checkbox"
+												className="form-checkbox"
+												checked={closeModalAfterAdding}
+												onChange={(e) => handleCheckboxChange(e)}
+											/>
+											<span className="ml-2">
+												Fermer la modal après l'ajout 
+											</span>
+										</label>
+										{(title === "Saving" || title === "Expenses") && (
+											
+											<label className="flex items-center">
+												<input
+													type="checkbox"
+													className="form-checkbox"
+													checked={changeBalanceAmount}
+													onChange={(e) => handleCheckboxChangeBalance(e)}
+												/>
+												<span className="ml-2">
+													Affecter votre solde actuel
+												</span>
+											</label>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
