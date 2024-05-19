@@ -1,23 +1,22 @@
 'use client';
 
-import React, { useRef } from 'react';
 import useAuthClientAndRedirect from '@/app/hooks/useAuthClientAndRedirect';
 import useAuthServerAndRedirect from '@/app/hooks/useAuthServerAndRedirect';
 import MonthPicker from '@/lib/components/MonthPicker';
+import { acceptDebts, deleteDebts } from '@/lib/fetchRequest/debts';
+import { deleteExpenses } from '@/lib/fetchRequest/expenses';
+import { getAll } from '@/lib/fetchRequest/get/getAll';
+import { getBalance } from '@/lib/fetchRequest/getBalance';
+import { acceptIncome, deleteIncome } from '@/lib/fetchRequest/income';
+import { deleteSaving } from '@/lib/fetchRequest/saving';
+import ConfirmationModal from '@/lib/modals/ConfirmationModal';
 import { useAppSelector } from '@/reducer/store';
-import { isValidElement, useEffect, useState } from 'react';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
-import { getBalance, getAllBalance } from '@/lib/fetchRequest/getBalance';
-import { acceptDebts, deleteDebts, getAllDebts } from '@/lib/fetchRequest/debts';
-import { deleteExpenses, getAllExpenses } from '@/lib/fetchRequest/expenses';
-import { getAllIncome, acceptIncome, deleteIncome } from '@/lib/fetchRequest/income';
-import { getAllSaving, deleteSaving } from '@/lib/fetchRequest/saving';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { getAll } from '@/lib/fetchRequest/get/getAll';
-import ConfirmationModal from '@/lib/modals/ConfirmationModal';
 
 var moment = require('moment');
 
@@ -148,21 +147,23 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [allMonthsData, setAllMonthsData] = useState<{ [key: string]: monthDataObject } | {}>({});
     const [monthAndYearString, setMonthAndYearString] = useState<string>(`${fr.localeData().months(moment([year, month]))}_${year}`)
     const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
+    const idElement = useRef<number | null>(null);
+    const actionElement = useRef<string | null>(null);
+
+
     const fetchData = async (monthNumber: number = month, yearNumber: number = year, hardRefresh: boolean = false) => {
     const monthAndYear = `${fr.localeData().months(moment([yearNumber, monthNumber]))}_${year}`;
-    const idData = useRef<number | null>(null); // Add this line
+        
 
-        // console.log(monthAndYearString, allMonthsData);
         setMonthAndYearString(monthAndYear);
         setMonth(monthNumber);
         setYear(yearNumber);
 
+
         if (monthAndYear in allMonthsData && hardRefresh === false) {
-            console.log("il est deja la");
 
 
         } else {
-            console.log("il est pas la");
             const data = await dataFunctionOfParams.getAll(token, "month", monthNumber + 1, yearNumber, params.slug);
             setAllMonthsData({ ...allMonthsData, [monthAndYear]: data.data });
             setData(data.data as any[]);
@@ -174,39 +175,31 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
     };
 
-    const closeConfirmatinModal = () => {
-        console.log("cloose", openConfirmationModal);
 
+    const closeConfirmationModal = () => {
         setOpenConfirmationModal(false);
     }
 
-    const handleAccept = async (id: number, accept : boolean = false) => {
-        setOpenConfirmationModal(true);
-        idData = id;
-        if (accept) {
-            if (dataFunctionOfParams.accept === null) return;
+    const launchAction = async () => {
 
-            const acceptData = await dataFunctionOfParams.accept(token, id);
+            const acceptData = await dataFunctionOfParams[actionElement.current as keyof dataFunctionOfParams](token, idElement.current);
             fetchData(month, year, true);
 
 
             if (acceptData.result) {
                 toast.success(acceptData.message);
-            }
         }
-
+        setOpenConfirmationModal(false);
     }
+    
+    const handleAction = async (id: number, action: string) => {
+        if (dataFunctionOfParams[action as keyof dataFunctionOfParams] === null) return;
 
-    const handleDelete = async (id: number) => {
-        if (dataFunctionOfParams.delete === null) return;
+        setOpenConfirmationModal(true);
 
-        const deleteData = await dataFunctionOfParams.delete(token, id);
-        fetchData(month, year, true);
-
-
-        if (deleteData.result) {
-            toast.success(deleteData.message);
-        }
+            idElement.current = id;
+            actionElement.current = action;
+        
     }
 
     useEffect(() => {
@@ -229,7 +222,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 {oneData.description && <p className={`text-xs w-24 sm:w-24 md:w-36 md:text-base px-3 ${oneBalanceType ? "text-primary" : oneBalanceType === "virement" ? "text-green-600" : oneBalanceType === "prelevement" ? "text-red-600" : "text-primary"} font-medium`}>{oneData.description}</p>}
                 {oneData.category && <p className='text-xs w-24 sm:w-24 md:w-36 md:text-base px-3'>{oneData.category}</p>}
                 <p className='text-xs w-24 sm:w-24 md:w-36 md:text-base px-3'>{moment(oneData.date).format('DD/MM/YYYY')}</p>
-                <p className='text-xs w-24 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{oneData.amount}€</p>
+                <p className='text-xs w-24 sm:w-24 md:w-36 md:text-base px-3 text-primary font-medium'>{oneData.type ? (oneData.type === 'prelevement' ? '-' : '+') : '-'}{oneData.amount}€</p>
             </div>)
         } else {
             const keys = Object.keys(dataTypes[typeObject]);
@@ -242,10 +235,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                             {oneData.userIsDebtor ? `Je dois ${oneData.amount}€ à ${oneData.debtor}` : `${oneData.debtor} me doit ${oneData.amount}€`}
                         </p>
                         <div>
-                            <button className={`m-1 hover:text-green-600 transition-colors`} onClick={() => handleAccept(oneData["id"])}>
+                            <button className={`m-1 hover:text-green-600 transition-colors`} onClick={() => handleAction(oneData["id"], "accept")}>
                                 <FontAwesomeIcon icon={faCheck as IconProp} />
                             </button>
-                            <button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleDelete(oneData["id"])}>
+                            <button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleAction(oneData["id"], "delete")}>
                                 <FontAwesomeIcon icon={faTrash as IconProp} />
                             </button>
                         </div>
@@ -264,13 +257,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
 
                     {dataFunctionOfParams.accept && keys.length - 1 === i &&
-                        (<button className={`m-1 hover:text-green-600 transition-colors`} onClick={() => handleAccept(oneData["id"])}>
+                        (<button className={`m-1 hover:text-green-600 transition-colors`} onClick={() => handleAction(oneData["id"], "accept")}>
                             <FontAwesomeIcon icon={faCheck as IconProp} />
                         </button>)
                     }
 
                     {dataFunctionOfParams.delete && keys.length - 1 === i &&
-                        (<button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleDelete(oneData["id"])}>
+                        (<button className={`m-1 hover:text-red-600 transition-colors`} onClick={() => handleAction(oneData["id"], "delete")}>
                             <FontAwesomeIcon icon={faTrash as IconProp} />
                         </button>)
                     }
@@ -288,7 +281,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
     });
 
-    console.log(monthAndYearString, allMonthsData, allData)
     const linkAllValidSlugs = allValidSlugs.map((slug, i) => {
         const formattedSlug = slug.charAt(0).toUpperCase() + slug.slice(1);
         const isActive = slug === params.slug ? 'text-primary' : 'text-neutral-400';
@@ -301,7 +293,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     return (
         <>
-            {openConfirmationModal && <ConfirmationModal closeConfirmatinModal={closeConfirmatinModal} text={"Accepter ?"} action={handleAccept} />}
+            {openConfirmationModal && <ConfirmationModal closeConfirmationModal={closeConfirmationModal} text={"Êtes-vous sûr ?"} action={actionElement} id={idElement} launchAction={launchAction}/>}
 
             <div className="bg-neutral-900 w-full min-h-screen">
                 <div className='flex flex-col items-center my-14 min-h-screen'>

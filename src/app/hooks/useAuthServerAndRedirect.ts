@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/reducer/store';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 /**
  * Utilise un hook pour effectuer une vérification d'authentification côté serveur et redirige l'utilisateur si nécessaire.
@@ -16,7 +16,6 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 	const router = useRouter();
 	const token = useAppSelector(state => state.users.value).token
 
-	// console.log(useAppSelector(state => state.users.value));
 
 	useEffect(
 		() => {
@@ -32,10 +31,8 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 				const data = await response.json();
 
 				if (requireAuth && !data.isAuthenticated) {
-					// console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car non authentifié`)
 					router.push(redirect);
 				} else if (!requireAuth && data.isAuthenticated) {
-					// console.log(`Server : Redirigez l'utilisateur vers la ${redirect} car authentifié`)
 
 					router.push(redirect);
 				}

@@ -1,19 +1,19 @@
-import '../../app/globals.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useEffect, useState, useRef } from 'react';
-import { getBalance } from '../fetchRequest/getBalance';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from 'react';
+import '../../app/globals.css';
+import { getBalance } from '../fetchRequest/getBalance';
 import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
-import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import { setBalanceToStore, setDebtsToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
-import { getSaving } from '../fetchRequest/saving';
-import { getExpenses } from '../fetchRequest/expenses';
 import { useRouter } from 'next/navigation';
-import ContentLoader from "react-content-loader"
+import ContentLoader from "react-content-loader";
+import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import { getDebts } from '../fetchRequest/debts';
+import { getExpenses } from '../fetchRequest/expenses';
+import { getSaving } from '../fetchRequest/saving';
 
 type MiniCardProps = {
     icon: IconProp;
@@ -34,7 +34,6 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
     let [money, setMoney] = useState<number | undefined>(undefined)
     const token = useAppSelector(state => state.users.value).token;
     const moneys = useAppSelector(state => state.moneys.value);
-    // console.log(moneys)
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [option, setOption] = useState<objectOption[]>([]);
@@ -70,7 +69,6 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 case 'Debts':
                     const debts = await getDebts(token);
                     setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push('/dashboard/data/debts') }]);
-                    console.log("debts : ", debts);
                     dispatch(setDebtsToStore(debts))
                     setMoney(moneys.debts)
 

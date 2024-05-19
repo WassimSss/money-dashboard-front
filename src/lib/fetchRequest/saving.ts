@@ -60,7 +60,6 @@ export const getAllSaving = async (token: string): Promise<ObjectResponseAddSavi
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)
         return data
 
     }
@@ -94,7 +93,6 @@ export const deleteSaving = async (token: string, id: number): Promise<ObjectRes
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)
         return data
 
     }

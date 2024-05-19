@@ -25,7 +25,6 @@ const Budget: React.FC = () => {
     const [monthExpensesAmount, setMonthExpensesAmount] = useState<number | undefined>(undefined);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const token = useAppSelector(state => state.users.value).token;
-    // console.log('token : ', token);
     const [monthBudget, setMonthBudget] = useState<monthBudgetObject | undefined>(undefined);
     const [allMonthsBudget, setAllMonthsBudget] = useState<{ [key: string]: monthBudgetObject } | undefined>({});
     const [monthAmount, setMonthAmount] = useState<number | undefined>(undefined);
@@ -50,7 +49,6 @@ const Budget: React.FC = () => {
         const budget = await getMonthBudget(token, period, month + 1, year);
         // const budgetTest = await getMonthBudget(token, period, month + 1, year);
         const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
-        console.log("budget : ", budget)
         setMonthBudget(budget)
         setMonthExpensesAmount(budget?.expensesAmount);
         setMonthBudgetAmount(budget?.budgetAmount);

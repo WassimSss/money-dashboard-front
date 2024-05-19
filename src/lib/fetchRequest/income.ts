@@ -1,4 +1,3 @@
-import { useAppSelector } from '@/reducer/store';
 
 export const getIncome = async (token: string): Promise<number | undefined> => {
     try {
@@ -103,6 +102,38 @@ export const getVirementOfMonth = async (token: string, month: number): Promise<
     }
 
 }
+
+export const getVirementOfYear = async (token: string, year: number): Promise<number[] | undefined> => {
+    
+        try {
+    
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/virement/year/${year}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+            })
+    
+            if (!response.ok) {
+                // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
+                const errorData = await response.json();
+                console.error('Erreur lors de l\'envoi des données:', errorData);
+            }
+    
+            const getIncomeData = await response.json();
+    
+            if (getIncomeData.result) {
+                return getIncomeData.income
+            }
+    
+        }
+    
+        catch (error) {
+            console.error(error)
+        }
+    
+    }
 
 type ObjectResponseAddIncome = {
     result: boolean,

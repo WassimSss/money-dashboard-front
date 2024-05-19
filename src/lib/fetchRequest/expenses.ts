@@ -1,4 +1,3 @@
-import { useAppSelector } from '@/reducer/store';
 
 export const getExpenses = async (token: string): Promise<number | undefined> => {
     try {
@@ -21,7 +20,6 @@ export const getExpenses = async (token: string): Promise<number | undefined> =>
 
         const getExpensesData = await response.json();
 
-        // console.log(getExpensesData)
         if (getExpensesData.result) {
             return getExpensesData.expenses
         }
@@ -42,7 +40,7 @@ type ObjectResponseGetAllExpenses = {
 }
 
 // Recuperer toutes les dépenses du jour avec un fetch sur /users/getAllExpenses
-export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber: number | null = null): Promise<ObjectResponseGetAllExpenses | undefined> => {
+export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber: number | null = null): Promise<{result: boolean, expenses: number[]} | undefined> => {
     try {
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (yearNumber !== null ? `/${yearNumber}` : ''), {
@@ -94,7 +92,6 @@ export const getExpensesOfThePeriod = async (token: string, period: string, peri
 
 //         const getExpensesData = await response.json();
 
-//         console.log(getExpensesData)
 //         if (getExpensesData.result) {
 //             return getExpensesData.expenses
 //         }
@@ -137,7 +134,6 @@ type expensesObject = {
 
 //         const getExpensesData = await response.json();
 
-//         console.log("getExpensesOfTheMonth : ", getExpensesData)
 //         if (getExpensesData.result) {
 //             return getExpensesData
 //         }
@@ -227,7 +223,6 @@ export const getExpensesCategoriesLabel = async (token: string, period: string):
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)  
         return data
 
     }
@@ -260,7 +255,6 @@ export const addExpensesCategoriesLabel = async (token: string, category: string
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)  
         return data
 
     }
@@ -295,7 +289,6 @@ export const addBudgetOfExpensesCategory = async (token: string, category: strin
         }
 
         const data = await response.json();
-        // console.log('data.result : ', data.result)  
         return data
 
     }

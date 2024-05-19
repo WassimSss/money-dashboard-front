@@ -1,40 +1,30 @@
-import '../../app/globals.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js/auto';
-import { getExpensesOfThePeriod } from '../fetchRequest/expenses';
 import { useAppSelector } from '@/reducer/store';
-import { getVirementOfMonth } from '../fetchRequest/income';
-
+import Chart from 'chart.js/auto';
+import { useEffect, useRef, useState } from 'react';
+import '../../app/globals.css';
+import { getExpensesOfThePeriod } from '../fetchRequest/expenses';
+import { getVirementOfYear } from '../fetchRequest/income';
+const moment = require('moment');
 const Finances = () => {
+    const month = moment().format('MM');
+    const year = moment().format('YYYY');
+    
     const chartRef = useRef(null);
-    const [monthsExpenses, setMonthsExpenses] = useState<object[] | undefined>(undefined);
-    const [monthsVirements, setMonthsVirements] = useState<object[] | undefined>(undefined);
+    const [monthsExpenses, setMonthsExpenses] = useState<number[] | undefined>(undefined);
+    const [monthsVirements, setMonthsVirements] = useState<number[] | undefined>(undefined);
     const token = useAppSelector(state => state.users.value).token;
     const fetchMonthsExpenses = async () => {
-        const arrayOfMonthExpenses = []
-        for (let i = 1; i < 13; i++) {
-            let monthExpenses = await getExpensesOfThePeriod(token, "month", i);
+        let expensesOfYear = await getExpensesOfThePeriod(token, "year", null, year);
+        setMonthsExpenses(expensesOfYear?.expenses);
 
-            // console.log("monthExpenses : ", monthExpenses);
-            arrayOfMonthExpenses.push(monthExpenses?.amount)
-        }
-
-        // @ts-ignore
-        setMonthsExpenses(arrayOfMonthExpenses);
-        // console.log("arrayOfMonthExpenses : ", arrayOfMonthExpenses);
+   
 
     };
 
     const fetchMonthsVirements = async () => {
-        const arrayOfMonthVirements = []
-        for (let i = 1; i < 13; i++) {
-            let monthIncomes = await getVirementOfMonth(token, i);
-            arrayOfMonthVirements.push(monthIncomes)
-        }
-        // @ts-ignore
-        setMonthsVirements(arrayOfMonthVirements);
+        let virementOfYear = await getVirementOfYear(token, year);
+
+        setMonthsVirements(virementOfYear);
 
     }
 

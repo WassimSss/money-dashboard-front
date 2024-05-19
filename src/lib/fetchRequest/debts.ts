@@ -51,7 +51,6 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 
         const getDebtsData = await response.json();
 
-        console.log(getDebtsData);
         
         if (getDebtsData.result) {
             return getDebtsData
@@ -70,7 +69,6 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 export const addDebts = async (token: string, amount: Debt, debtor: string, userIsDebtor: boolean): Promise<ObjectResponseAddDebt> => {
 
     try {
-        console.log(token, amount, debtor, userIsDebtor)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/debts/add`, {
             method: 'POST',
             headers: {

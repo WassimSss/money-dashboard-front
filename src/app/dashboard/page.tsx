@@ -32,8 +32,7 @@ const Home: React.FC = () => {
     const [modalOpen, setModalOpen] = useState<string>("")
 
     const toggleAddModal = (modalName: string) => {
-        // console.log('test')
-        console.log('modalName : ', modalName)
+
         setModalOpen(modalName)
         // setIsAddBalanceModalOpen(true);
     };
@@ -79,13 +78,6 @@ const Home: React.FC = () => {
         );
     }
 
-    const mediaQueriesStyle = {
-        // twoXl: `${active ? 'bg-gradient-to-r from-primary to-secondary' : 'bg-neutral-800'} xl:w-40 xl:h-40 xl:m-8 xl:p-3 rounded-2xl text-white flex flex-col lg:w-28 lg:h-28`,
-        xlStyle: `xl:row-start-2 xl:row-end-3 xl:col-start-1 xl:col-end-4`,
-        lgStyle: `lg:row-start-2 lg:row-end-3 lg:col-start-1 lg:col-end-4`,
-        mdStyle: `md:row-start-2 md:row-end-3 md:col-start-1 md:col-end-5 justify-center`,
-        smStyle: `sm:row-start-2 sm:row-end-3 sm:col-start-1 sm:col-end-5 justify-center`,
-    }
     return (
         <>
             {modalOpen && <AddModal closeModal={closeAddModal} title={modalOpen} needsDate={true} />}

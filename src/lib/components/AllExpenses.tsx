@@ -1,14 +1,14 @@
-import '../../app/globals.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, faChevronDown, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { getExpensesOfThePeriod, getExpensesCategories } from '../fetchRequest/expenses';
-import { useAppDispatch, useAppSelector } from '@/reducer/store';
-import { useEffect, useRef, useState } from 'react';
 import { setExpensesOfTheDayToStore, setExpensesOfTheMonthToStore, setExpensesOfTheWeekToStore } from '@/reducer/slices/moneySlice';
-import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
+import { useAppDispatch, useAppSelector } from '@/reducer/store';
+import { faArrowLeft, faArrowRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Chart from 'chart.js/auto';
+import { useEffect, useRef, useState } from 'react';
 import ContentLoader from 'react-content-loader';
+import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import { Oval } from 'react-loader-spinner';
+import '../../app/globals.css';
+import { getExpensesOfThePeriod } from '../fetchRequest/expenses';
 const moment = require("moment");
 
 const AllExpenses: React.FC = () => {
@@ -54,13 +54,13 @@ const AllExpenses: React.FC = () => {
         // get number of the month with the date
         const expensesOfTheMonth = await getExpensesOfThePeriod(token, "month", month + 1, year);
         const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`
-        console.log("expensesOfTheMonth : ", expensesOfTheMonth);
         dispatch(setExpensesOfTheMonthToStore(expensesOfTheMonth?.amount))
         setExpensesMonth(moneys.expensesofTheMonth)
         setAllMonthsData({ ...allMonthsData, [monthAndYear]: expensesOfTheMonth });
     }
 
     useEffect(() => {
+        console.log("use effect reset with money", moneys)
         if (period === 'day') {
             fetchExpensesofTheDay()
         }
@@ -84,6 +84,8 @@ const AllExpenses: React.FC = () => {
 
 
     useEffect(() => {
+        console.log("use effect reset with moneys, period and month", moneys, period, month)
+
         fetchData();
     }, [moneys, period, month])
 
@@ -98,7 +100,6 @@ const AllExpenses: React.FC = () => {
     })
 
     useEffect(() => {
-        console.log("hello");
 
         const chartRefType = chartRef.current as HTMLCanvasElement | null;
         const ctx = chartRefType?.getContext('2d');
@@ -151,17 +152,8 @@ const AllExpenses: React.FC = () => {
         };
     }, [dataDougnut]);
 
-    useEffect(() => {
-        console.log('test')
-        console.log(setAllMonthsData);
-
-    }, [month])
-
-    const camembertColors = ["#2C4487", "#3F61C2", "#8CA0D9", "#C4CFED"]
-
     const option = [{ option: "Mois", action: () => setPeriod("month") }, { option: "Semaine", action: () => setPeriod('week') }, { option: "Jour", action: () => setPeriod('day') }]
     const optionLink = option.map((e, i) => {
-        // console.log(period)
         return (
             <a href="#" key={i} className="buttonAction block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100 hover:text-blue-800" role="menuitem" onClick={() => {
                 e.action(); // Exécute l'action si elle est définie
@@ -203,7 +195,6 @@ const AllExpenses: React.FC = () => {
 
     const handleDecrementMonth = () => {
         // a terme ne pas faire de fetch si les données sont déjà en cache
-        console.log("expensesCategories : ", expensesCategories)
         // fetchData();
         if (month > 0) {
             setMonth(month - 1);
@@ -214,10 +205,7 @@ const AllExpenses: React.FC = () => {
     }
 
     const handleIncrementMonth = () => {
-        // a terme ne pas faire de fetch si les données sont déjà en cache
-        console.log("expensesCategories : ", expensesCategories)
 
-        // fetchData();
 
         if (month < 11) {
             setMonth(month + 1);

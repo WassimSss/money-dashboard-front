@@ -1,22 +1,14 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
-import { useAppDispatch, useAppSelector } from '@/reducer/store';
-import { toast } from 'react-hot-toast';
-import { addBudgetOfMonth } from '../fetchRequest/budget';
-import { setBalance, getBalance } from '../fetchRequest/getBalance';
-import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
-import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
-import { addIncome, getIncome } from '../fetchRequest/income';
-import { addSaving, getSaving } from '../fetchRequest/saving';
-import { addDebts } from '../fetchRequest/debts';
+import { useAppSelector } from '@/reducer/store';
 
 var moment = require('moment');
 moment().format();
 
 
 // @ts-ignore
-const ConfirmationModal: React.FC<ModalProps> = ({ closeConfirmatinModal, text, action }) => {
+const ConfirmationModal: React.FC<ModalProps> = ({ closeConfirmationModal, text, action, id, launchAction }) => {
 
     const user = useAppSelector((state) => state.users.value);
 
@@ -36,9 +28,6 @@ const ConfirmationModal: React.FC<ModalProps> = ({ closeConfirmatinModal, text, 
     //     }
     // }
 
-    const handleAcceptAction = async () => {
-        handleAccept()
-    };
     return (
         <div>
             <div
@@ -69,14 +58,14 @@ const ConfirmationModal: React.FC<ModalProps> = ({ closeConfirmatinModal, text, 
                         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button
                                 type="button"
-                                onClick={() => closeConfirmatinModal()}
+                                onClick={() => closeConfirmationModal()}
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
                             >
                                 Non
                             </button>
                             <button
                                 type="button"
-                                onClick={() => console.log("ok")
+                                onClick={() => launchAction()
                                 }
                                 className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-green-600 text-white text-base font-medium  hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                             >

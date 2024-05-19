@@ -1,15 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
+import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { toast } from 'react-hot-toast';
 import { addBudgetOfMonth } from '../fetchRequest/budget';
-import { setBalance, getBalance } from '../fetchRequest/getBalance';
-import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
-import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategories, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
+import { addDebts } from '../fetchRequest/debts';
+import { addBudgetOfExpensesCategory, addExpenses, addExpensesCategoriesLabel, getExpenses, getExpensesCategoriesLabel } from '../fetchRequest/expenses';
+import { getBalance, setBalance } from '../fetchRequest/getBalance';
 import { addIncome, getIncome } from '../fetchRequest/income';
 import { addSaving, getSaving } from '../fetchRequest/saving';
-import { addDebts } from '../fetchRequest/debts';
 
 var moment = require('moment');
 moment().format();
@@ -110,6 +110,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 		name?: string
 	}
 	const user = useAppSelector((state) => state.users.value);
+
 	const dispatch = useAppDispatch();
 	const [amount, setAmount] = useState<string>("");
 	const [description, setDescription] = useState<string>('');
@@ -135,20 +136,15 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 	}, []);
 
 	const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		let str = e.target.value;
+
 		// Permettre uniquement les nombres et un seul point
-		const str = e.target.value;
-		if (!isNaN(parseFloat(str))) {
-			const decimalIndex = str.indexOf(".");
-			if (decimalIndex !== -1 && str.length - decimalIndex > 3) {
-				const truncatedNumber = parseFloat(str).toFixed(2);
-				setAmount(truncatedNumber.toString());
-			} else {
+		const regex = /^(\d+(\.\d{0,2})?)?$/;
+
+		if (regex.test(str)) {
 				setAmount(str);
-			}
-		} else if (str === "." && !amount.includes(".")) {
-			setAmount(amount + str);
 		}
-	};
+};
 
 	// Mettre un params date a true ou false (besoin de la date ou pas)
 	const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -212,6 +208,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 		if (title === "setBudget") {
 			handleAddBudgetCategory();
+			
 			refreshData();
 			return;
 		}
@@ -232,12 +229,13 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 		}
 
 		if (title === "Debts") {
-			console.log(user.token, amount, debtor, whoIsDebtor === "me")
 			const addDebtsRequest = await addDebts(user.token, amount, debtor, whoIsDebtor !== "me");
 			if (addDebtsRequest.result) {
 				toast.success('Dette ajoutée avec succès');
+				dispatch(categories[title]['setToStore'](addDebtsRequest[title.toLocaleLowerCase()]));
 				if (closeModalAfterAdding) {
 					closeModal();
+					
 				}
 			} else {
 				toast.error('Erreur lors de l\'ajout de la dette');
@@ -282,9 +280,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 	};
 	// @ts-ignore
 	const test = (e) => {
-		console.log(e.target.value)
 		setWhoIsDebtor(e.target.value)
-		console.log("state : ", whoIsDebtor)
 	}
 	return (
 		<div>

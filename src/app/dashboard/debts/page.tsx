@@ -40,7 +40,6 @@ export default function Debts() {
 
     const fetchData = async () => {
         const debtsData = await getAllDebts(token);
-        console.log(debtsData)
         setDebts(debtsData as debtObject[]);
     };
 

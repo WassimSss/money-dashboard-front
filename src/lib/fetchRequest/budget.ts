@@ -29,7 +29,6 @@ export const getBudget = async (token: string, period: string, monthNumber: numb
 
         const getBudgetData = await response.json();
 
-        console.log("getBudgetData : ", getBudgetData)
         if (getBudgetData.result) {
             return getBudgetData
         }
@@ -62,7 +61,6 @@ export const getMonthBudget = async (token: string, period: string, monthNumber:
 
         const getMonthBudgetData = await response.json();
 
-        console.log("getMonthBudgetData : ", getMonthBudgetData)
         if (getMonthBudgetData.result) {
             return getMonthBudgetData
         }
@@ -92,7 +90,6 @@ export const addBudgetOfMonth = async (token: string, month: number, year: numbe
 
         const addBudgetOfMonthData = await response.json();
 
-        console.log("addBudgetOfMonthData : ", addBudgetOfMonthData)
         if (addBudgetOfMonthData.result) {
             return true
         }
