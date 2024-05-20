@@ -8,6 +8,7 @@ const config: Config = {
     "./src/lib/**/*.{js,ts,jsx,tsx,mdx}",
 
   ],
+  darkMode: 'selector',
   theme: {
     extend: {
       colors: {

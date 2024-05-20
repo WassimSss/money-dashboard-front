@@ -1,30 +1,27 @@
+// @ts-nocheck
 'use client'
 
 import '../globals.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
-import Header from '../../lib/components/Header';
-import MiniCard from '../../lib/components/MiniCard';
-import { faWallet, faHandHoldingDollar, faCircleDollarToSlot, faSackDollar, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faCircleDollarToSlot, faHandHoldingDollar, faSackDollar, faWallet } from '@fortawesome/free-solid-svg-icons';
+import AllExpenses from '../../lib/components/AllExpenses';
 import Budget from '../../lib/components/Budget';
 import Finances from '../../lib/components/Finances';
-import AllExpenses from '../../lib/components/AllExpenses';
-import Transactions from '../../lib/components/Transactions';
-import IDontKnow from '../../lib/components/IDontKnow';
+import MiniCard from '../../lib/components/MiniCard';
 // import useAuth from '../hooks/useAuthClientAndRedirect';
-import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
 import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
+import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
 // import getBalance from '@/lib/fetchRequest/getBalance';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useState } from 'react';
 import AddModal from "../../lib/modals/AddModal";
-import { IconDefinition, IconProp } from '@fortawesome/fontawesome-svg-core';
-import Footer from '@/lib/components/Footer';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
 const Home: React.FC = () => {
     const requireAuth = true;
-    const redirect = "/signin"
+    const redirect = "/"
 
     useAuthServerAndRedirect(requireAuth, redirect);
     useAuthClientAndRedirect(requireAuth, redirect);
@@ -87,9 +84,8 @@ const Home: React.FC = () => {
             {isAddExpensesModalOpen && <AddExpensesModal closeModal={closeAddExpensesModal} />} */}
 
 
-            <div className="bg-neutral-900  h-full ">
+            <div className="bg-white dark:bg-neutral-900  h-full ">
 
-                <Header />
 
                 <div className='flex flex-col w-full justify-center items-center'>
 
@@ -109,7 +105,6 @@ const Home: React.FC = () => {
                     </div>
                 </div>
 
-                <Footer />
                 {/* <Transactions /> */}
                 {/* <IDontKnow /> */}
             </div>

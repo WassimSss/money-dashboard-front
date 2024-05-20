@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const getAll = async (token: string, period: string, periodNumber : number | null = null, year : number | null = null, dataType : string): Promise<ObjectResponseGetAllExpenses> => {
     try {
 

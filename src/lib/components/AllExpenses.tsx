@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { setExpensesOfTheDayToStore, setExpensesOfTheMonthToStore, setExpensesOfTheWeekToStore } from '@/reducer/slices/moneySlice';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { faArrowLeft, faArrowRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';

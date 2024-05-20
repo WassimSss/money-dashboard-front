@@ -1,12 +1,11 @@
 'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import useAuthServerAndRedirect from "../hooks/useAuthServerAndRedirect";
-import useAuthClientAndRedirect from "../hooks/useAuthClientAndRedirect";
 import { addTokenToUser } from "@/reducer/slices/usersSlice";
 import { useAppDispatch } from "@/reducer/store";
+import Link from "next/link";
+import { useState } from "react";
+import useAuthClientAndRedirect from "../hooks/useAuthClientAndRedirect";
+import useAuthServerAndRedirect from "../hooks/useAuthServerAndRedirect";
 
 export default function Signin() {
   const requireAuth = false;
@@ -84,14 +83,14 @@ export default function Signin() {
   }
 
   return (
-    <main className="bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
+    <main className="bg-white dark:bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
 
       <div className="flex justify-center items-center flex-col">
         <p className=" font-bold text-primary text-3xl text-center animate-fade-right animate-delay-600">Unlock the door to your financial journey. Log in now!</p>
-        <p className="font-bold text-white text-3xl text-center animate-fade-right animate-delay-300">Signin</p>
+        <p className="font-bold text-dark dark:text-white text-3xl text-center animate-fade-right animate-delay-300">Signin</p>
       </div>
 
-      <div className="bg-white rounded-2xl p-5 w-1/2  animate-fade-right animate-delay-200">
+      <div className="bg-neutral-800 dark:bg-white rounded-2xl p-5 w-1/2  animate-fade-right animate-delay-200">
         <div className="flex flex-col items-center justify-center">
           <input type="email" name="email" placeholder="E-mail" id="email" onChange={(e) => handleChangeFormData(e)} value={formData.email} className="w-full border border-gray-300 rounded-md py-2 px-3 m-3 focus:outline-none focus:border-primary" />
 
@@ -99,7 +98,7 @@ export default function Signin() {
         </div>
 
 
-        <div className="bg-white rounded-2xl p-5">
+        <div className="bg-neutral-800 text-white dark:bg-white dark:text-black rounded-2xl p-5">
           {/* Les champs de formulaire */}
 
           {/* Liste des erreurs */}

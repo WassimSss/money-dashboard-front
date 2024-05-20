@@ -1,15 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserState {
   value: {
-    token: string
+    token: string,
+    darkMode: boolean
   };
 }
 
 const initialState: UserState = {
   value: {
-    token: ""
+    token: "",
+    darkMode: true
   }
 };
 
@@ -22,9 +24,13 @@ export const usersSlice = createSlice({
     },
     disconnect: (state) => {
       state.value.token = ""
+    },
+    toggleDarkMode: (state) => {
+      state.value.darkMode = !state.value.darkMode;
     }
+
   },
 });
 
-export const { addTokenToUser, disconnect } = usersSlice.actions;
+export const { addTokenToUser, disconnect, toggleDarkMode } = usersSlice.actions;
 export const userReducer = usersSlice.reducer;

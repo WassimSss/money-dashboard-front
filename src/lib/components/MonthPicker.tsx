@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react';
 
 export default function monthPicker({ fetchData, monthGived, yearGived, animationDelay }: { fetchData: (month: number, year: number) => void, monthGived: number, yearGived: number, animationDelay: number }) {
     const moment = require('moment');
@@ -57,10 +57,10 @@ export default function monthPicker({ fetchData, monthGived, yearGived, animatio
         fetchData(month + 1, year);
     }
     return (
-        <div className={`flex justify-between m-4 text-white animate-fade-down animate-delay-${animationDelay}`} >
-            <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+        <div className={`flex justify-between m-4 text-black dark:text-white animate-fade-down animate-delay-${animationDelay}`} >
+            <FontAwesomeIcon icon={faArrowLeft} onClick={() => handleDecrementMonth()} className="text-dark dark:text-white cursor-pointer hover:text-primary transition-all" />
             <p className=' font-bold'>{getMonthName(month)} {year}</p>
-            <FontAwesomeIcon icon={faArrowRight} onClick={() => handleIncrementMonth()} className="text-white cursor-pointer hover:text-primary transition-all" />
+            <FontAwesomeIcon icon={faArrowRight} onClick={() => handleIncrementMonth()} className="text-dark dark:text-white cursor-pointer hover:text-primary transition-all" />
         </div >)
 
 };

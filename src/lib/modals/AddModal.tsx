@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X

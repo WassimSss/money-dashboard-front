@@ -1,16 +1,14 @@
 'use client'
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { useSelector, useDispatch } from 'react-redux';;
-import { useAppSelector, useAppDispatch } from "../../reducer/store";
-import { addTokenToUser } from "../../reducer/slices/usersSlice"
-import { RootState } from "@reduxjs/toolkit/query";
+import { addTokenToUser } from "../../reducer/slices/usersSlice";
+import { useAppDispatch, useAppSelector } from "../../reducer/store";
 // import { requireAuth } from "../modules/requireAuth";
 // import { useRouter } from "next/router";
-import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect'
-import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect'
+import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
+import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
 
 export default function Signup() {
   const requireAuth = false;
@@ -90,6 +88,7 @@ export default function Signup() {
       })
 
       if (!response.ok) {
+        console.log("error")
         // Si la réponse n'est pas OK, essayez de lire le corps de la réponse pour obtenir des détails sur l'erreur
         const errorData = await response.json();
         console.error('Erreur lors de l\'envoi des données:', errorData);
@@ -100,6 +99,10 @@ export default function Signup() {
           })
 
           setErrorsForm(errors)
+        }
+
+        if (errorData.result === false) {
+          setErrorsForm([errorData.message])
         }
 
         throw new Error(`Erreur ${response.status}: ${errorData.msg}`);
@@ -123,15 +126,15 @@ export default function Signup() {
   }
 
   return (
-    <main className="bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
+    <main className="bg-white dark:bg-neutral-900  w-full h-screen flex flex-col justify-around items-center">
 
       <div className="flex justify-center items-center flex-col">
         <p className=" font-bold text-primary text-3xl text-center animate-fade-right animate-delay-600">Start taking control of your finances today! </p>
-        <button className="font-bold text-white text-3xl text-center animate-fade-right animate-delay-300">Signup</button>
+        <button className="font-bold text-black dark:text-white text-3xl text-center animate-fade-right animate-delay-300">Signup</button>
 
       </div>
 
-      <div className="bg-white rounded-2xl p-5 w-1/2 animate-fade-right animate-delay-200">
+      <div className="bg-neutral-800 dark:bg-white rounded-2xl p-5 w-1/2 animate-fade-right animate-delay-200">
         <div>
           <div className="flex">
             <input type="text" name="first_name" id="firstName" placeholder="First Name" onChange={(e) => handleChangeFormData(e)} value={formData.firstName} className="w-full border border-gray-300 rounded-md py-2 px-3 m-3 focus:outline-none focus:border-primary" />
@@ -149,7 +152,7 @@ export default function Signup() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-5">
+        <div className="bg-neutral-800 text-white dark:bg-white dark:text-black rounded-2xl p-5">
           {/* Les champs de formulaire */}
 
           {/* Liste des erreurs */}

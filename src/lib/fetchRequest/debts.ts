@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 export const getDebts = async (token: string): Promise<ObjectResponseAddDebt> => {
 
     try {

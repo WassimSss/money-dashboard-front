@@ -12,8 +12,6 @@ const ConfirmationModal: React.FC<ModalProps> = ({ closeConfirmationModal, text,
 
     const user = useAppSelector((state) => state.users.value);
 
-
-
     // const handleAddBudgetCategory = async () => {
     //     const responseAdd = await addBudgetOfExpensesCategory(user.token, category, amount);
 
