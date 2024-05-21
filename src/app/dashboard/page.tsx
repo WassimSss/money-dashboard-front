@@ -5,9 +5,6 @@ import '../globals.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faBell, faMessage, faChevronDown, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { faAddressBook, faCircleDollarToSlot, faHandHoldingDollar, faSackDollar, faWallet } from '@fortawesome/free-solid-svg-icons';
-import AllExpenses from '../../lib/components/AllExpenses';
-import Budget from '../../lib/components/Budget';
-import Finances from '../../lib/components/Finances';
 import MiniCard from '../../lib/components/MiniCard';
 // import useAuth from '../hooks/useAuthClientAndRedirect';
 import useAuthClientAndRedirect from '../hooks/useAuthClientAndRedirect';
@@ -16,6 +13,7 @@ import useAuthServerAndRedirect from '../hooks/useAuthServerAndRedirect';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useState } from 'react';
 import AddModal from "../../lib/modals/AddModal";
+import AllExpenses from '@/lib/components/AllExpenses';
 // import { useEffect, useState } from 'react';import Modal from "../../lib/modals/Modal";
 
 
@@ -92,15 +90,15 @@ const Home: React.FC = () => {
 
                     <div className=' w-full flex flex-col lg:flex-row lg:px-8 justify-center items-center lg:items-stretch xl:items-start'>
                         <div className={`flex flex-column flex-wrap w-3/4 sm:w-1/2 justify-center items-center my-4 animate-fade-right animate-delay-600 animate-duration-600`}>
-                            {miniCardGroups}
+                            {/* {miniCardGroups} */}
                         </div>
-                        <Budget />
+                        {/* <Budget /> */}
                     </div>
 
 
 
                     <div className='w-full flex flex-col lg:flex-row lg:px-8 justify-center items-center lg:items-end'>
-                        <Finances />
+                        {/* <Finances /> */}
                         <AllExpenses />
                     </div>
                 </div>

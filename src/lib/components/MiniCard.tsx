@@ -37,6 +37,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [option, setOption] = useState<objectOption[]>([]);
+    const [hasFetched, setHasFetched] = useState(false);
 
     const dispatch = useAppDispatch()
     useEffect(() => {
@@ -81,8 +82,11 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
 
         }
 
+        // if (!hasFetched) {
+        // setHasFetched(true)
         fetchData()
-    }, [moneys])
+        // }
+    }, [])
 
     const optionLink = option.map((e, i) => {
         return (
