@@ -6,7 +6,6 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Chart from 'chart.js/auto';
 import { useEffect, useRef, useState } from 'react';
-import ContentLoader from 'react-content-loader';
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
 import { Oval } from 'react-loader-spinner';
 import '../../app/globals.css';
@@ -271,7 +270,7 @@ const AllExpenses: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-row  justify-around'>
+                {/* <div className='flex flex-row  justify-around'>
                     <div className='flex flex-col'>
                         <p className='text-neutral-400'>Daily</p>
                         {expensesDay !== undefined ? (
@@ -321,7 +320,7 @@ const AllExpenses: React.FC = () => {
                                 <rect x="0" y="0" rx="3" ry="3" width="50" height="15" />
                             </ContentLoader>
                         )}                    </div>
-                </div>
+                </div> */}
             </div>
         </div >
     );
