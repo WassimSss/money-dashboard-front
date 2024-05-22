@@ -4,16 +4,11 @@ import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import '../../app/globals.css';
-import { getBalance } from '../fetchRequest/getBalance';
-import { getIncome } from '../fetchRequest/income';
 // import { IconType } from "react-icons";
-import { setBalanceToStore, setDebtsToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { useRouter } from 'next/navigation';
 import ContentLoader from "react-content-loader";
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
-import { getDebts } from '../fetchRequest/debts';
-import { getExpenses } from '../fetchRequest/expenses';
-import { getSaving } from '../fetchRequest/saving';
+import { get } from '../fetchRequest/get/get';
 
 type MiniCardProps = {
     icon: IconProp;
@@ -40,38 +35,31 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
     const [hasFetched, setHasFetched] = useState(false);
 
     const dispatch = useAppDispatch()
+    const nameToLowerCase = name.toLowerCase()
     useEffect(() => {
         const fetchData = async () => {
+
+            const data = await get(token, nameToLowerCase)
+            console.log("data", name, data)
+            setMoney(data)
             switch (name) {
                 case 'Balance':
-                    const balance = await getBalance(token)
-                    setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push('/dashboard/data/balance') }]);
-                    dispatch(setBalanceToStore(balance))
-                    setMoney(moneys.balance)
+                    setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Income':
-                    const income = await getIncome(token)
-                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push('/dashboard/data/income') }]);
-                    dispatch(setIncomeToStore(income))
-                    setMoney(moneys.income)
+                    setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Saving':
-                    const saving = await getSaving(token)
-                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push('/dashboard/data/saving') }]);
-                    dispatch(setSavingToStore(saving))
-                    setMoney(moneys.saving)
+                    setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Expenses':
-                    const expenses = await getExpenses(token)
-                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push('/dashboard/data/expenses') }]);
-                    dispatch(setExpensesToStore(expenses))
-                    setMoney(moneys.expenses)
+                    setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Debts':
-                    const debts = await getDebts(token);
-                    setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push('/dashboard/data/debts') }]);
-                    dispatch(setDebtsToStore(debts))
-                    setMoney(moneys.debts)
+                    // const debts = await getDebts(token);
+                    setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
+                    // dispatch(setDebtsToStore(debts))
+                    // setMoney(moneys.debts)
 
 
                     break;
@@ -175,7 +163,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                 <p>{name}</p>
 
                 {money !== undefined ? (
-                    <p className='font-bold'>{money?.toFixed(2)}€</p>
+                    <p className='font-bold'>{money}€</p>
                 ) : (
                     <ContentLoader
                         speed={2}
