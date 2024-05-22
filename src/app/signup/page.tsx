@@ -79,7 +79,7 @@ export default function Signup() {
 
     try {
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signup`, {
+      const response = await fetch(`https://money-dashboard-back.vercel.app/users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

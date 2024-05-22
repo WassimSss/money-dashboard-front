@@ -2,7 +2,7 @@
 export const getIncome = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/get`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ type ObjectResponsegetAllIncome = {
 export const getAllIncome = async (token: string): Promise<ObjectResponsegetAllIncome> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/get-all`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const getVirementOfMonth = async (token: string, month: number): Promise<
 
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/virement/month/${month}`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/virement/month/${month}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export const getVirementOfYear = async (token: string, year: number): Promise<nu
     
         try {
     
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/virement/year/${year}`, {
+            const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/virement/year/${year}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ type ObjectResponseAddIncome = {
 export const addIncome = async (token: string, amount: number, type: string | undefined, date: Date, description: string | undefined = undefined, category: string | undefined = undefined): Promise<ObjectResponseAddIncome> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/add`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ type ObjectResponseDeleteIncome = {
 export const deleteIncome = async (token: string, id: number): Promise<ObjectResponseDeleteIncome> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/delete`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ export const deleteIncome = async (token: string, id: number): Promise<ObjectRes
 export const acceptIncome = async (token: string, id: number): Promise<ObjectResponseDeleteIncome> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/income/accept`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/income/accept`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

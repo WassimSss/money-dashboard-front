@@ -21,7 +21,7 @@ const useAuthServerAndRedirect = (requireAuth: boolean, redirect: string) => {
 		() => {
 			// Simulez une vérification d'authentification côté serveur
 			const checkAuth = async () => {
-				const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/check-auth  `, {
+				const response = await fetch(`https://money-dashboard-back.vercel.app/api/check-auth  `, {
 					method: 'GET',
 					cache: 'no-store',
 					headers: {

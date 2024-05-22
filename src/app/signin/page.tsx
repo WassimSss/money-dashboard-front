@@ -46,7 +46,7 @@ export default function Signin() {
   }
 
   const handleSubmitFormData = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signin`, {
+    const response = await fetch(`https://money-dashboard-back.vercel.app/users/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)

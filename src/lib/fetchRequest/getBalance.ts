@@ -1,5 +1,3 @@
-import { useAppSelector } from '@/reducer/store';
-import { log } from 'console';
 
 /**
  * Récupère le solde de l'utilisateur à partir de l'API.
@@ -10,7 +8,7 @@ import { log } from 'console';
 export const getBalance = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/get`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +48,7 @@ type ObjectResponseAddBalance = {
 export const getAllBalance = async (token: string): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/get-all`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +76,7 @@ export const getAllBalance = async (token: string): Promise<ObjectResponseAddBal
 export const setBalance = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/balance/set`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/set`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
