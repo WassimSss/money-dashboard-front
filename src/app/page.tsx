@@ -1,16 +1,15 @@
 'use client'
 
 import Link from "next/link";
-// import useAuthClientAndRedirect from "./hooks/useAuthClientAndRedirect";
-// import useAuthServerAndRedirect from "./hooks/useAuthServerAndRedirect";
+import useAuthClientAndRedirect from "./hooks/useAuthClientAndRedirect";
+import useAuthServerAndRedirect from "./hooks/useAuthServerAndRedirect";
 
 
 export default function Home() {
-  // const requireAuth = false;
-  // const redirect = "/dashboard"
-  console.log(process.env)
-  // useAuthServerAndRedirect(requireAuth, redirect);
-  // useAuthClientAndRedirect(requireAuth, redirect);
+  const requireAuth = false;
+  const redirect = "/dashboard"
+  useAuthServerAndRedirect(requireAuth, redirect);
+  useAuthClientAndRedirect(requireAuth, redirect);
   return (
     <>
       <section className="bg-primary">
