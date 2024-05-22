@@ -40,7 +40,6 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         const fetchData = async () => {
 
             const data = await get(token, nameToLowerCase)
-            console.log("data", name, data)
             setMoney(data)
             switch (name) {
                 case 'Balance':

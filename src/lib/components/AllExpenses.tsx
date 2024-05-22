@@ -36,7 +36,6 @@ const AllExpenses: React.FC = () => {
     // @ts-ignore
     const [allMonthsData, setAllMonthsData,] = useState<{ [key: string]: monthExpensesObject } | undefined>({});
 
-    console.log("reset");
 
     const dispatch = useAppDispatch();
 
@@ -65,7 +64,6 @@ const AllExpenses: React.FC = () => {
     }
 
     // useEffect(() => {
-    //     console.log("use effect reset with money", moneys)
     //     if (period === 'day') {
     //         fetchExpensesofTheDay()
     //     }
@@ -83,7 +81,6 @@ const AllExpenses: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        console.log(allMonthsData)
         const monthAndYear = `${fr.localeData().months(moment([year, month]))}_${year}`;
         if (!(monthAndYear in allMonthsData)) {
             setIsLoading(true);

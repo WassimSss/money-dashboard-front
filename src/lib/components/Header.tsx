@@ -9,7 +9,6 @@ const Header: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(state => state.users.value)
-    console.log("user.darkMode : ", user.darkMode)
 
     // const [chevronDownActive, setChevronDownActive] = useState<boolean>(false)
 
@@ -27,11 +26,9 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         if (user.darkMode) {
-            console.log("dark mode", user.darkMode)
             document.documentElement.classList.add("dark");
             return;
         }
-        console.log("light mode", user.darkMode)
         document.documentElement.classList.remove("dark");
     }, [user.darkMode])
 
