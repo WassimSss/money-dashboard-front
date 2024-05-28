@@ -8,7 +8,7 @@
 export const getBalance = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/get`, {
+        const response = await fetch(`http://localhost:3001/users/balance/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ type ObjectResponseAddBalance = {
 export const getAllBalance = async (token: string): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/get-all`, {
+        const response = await fetch(`http://localhost:3001/users/balance/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export const getAllBalance = async (token: string): Promise<ObjectResponseAddBal
 export const setBalance = async (token: string, amount: number, date: Date): Promise<ObjectResponseAddBalance> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/balance/set`, {
+        const response = await fetch(`http://localhost:3001/users/balance/set`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

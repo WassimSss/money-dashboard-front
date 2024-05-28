@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import '../../app/globals.css';
 // Remplacer import setBalance, getBalance par setX, get X from X
-import { setBalanceToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
+import { setBalanceToStore, setDebtsToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { toast } from 'react-hot-toast';
 import { addBudgetOfMonth } from '../fetchRequest/budget';
@@ -143,9 +143,9 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 		const regex = /^(\d+(\.\d{0,2})?)?$/;
 
 		if (regex.test(str)) {
-				setAmount(str);
+			setAmount(str);
 		}
-};
+	};
 
 	// Mettre un params date a true ou false (besoin de la date ou pas)
 	const handleDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -209,7 +209,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 		if (title === "setBudget") {
 			handleAddBudgetCategory();
-			
+
 			refreshData();
 			return;
 		}
@@ -231,15 +231,17 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 		if (title === "Debts") {
 			const addDebtsRequest = await addDebts(user.token, amount, debtor, whoIsDebtor !== "me");
+			console.log("addDebtsRequest : ", addDebtsRequest)
 			if (addDebtsRequest.result) {
+				console.log("add modal debts : ", addDebtsRequest)
 				toast.success('Dette ajoutée avec succès');
-				dispatch(categories[title]['setToStore'](addDebtsRequest[title.toLocaleLowerCase()]));
+				// dispatch(categories[title]['setToStore'](addDebtsRequest["debt"]));
+				dispatch(setDebtsToStore(addDebtsRequest["debt"]))
 				if (closeModalAfterAdding) {
 					closeModal();
-					
 				}
 			} else {
-				toast.error('Erreur lors de l\'ajout de la dette');
+				toast.error(addDebtsRequest.message);
 			}
 			return;
 		}
@@ -257,6 +259,7 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 			changeBalanceAmount
 		);
 
+		console.log("responseAdd : ", responseAdd)
 
 
 
@@ -267,10 +270,10 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 
 		if (categories[title]['setToStore']) {
 			// @ts-ignore
-			dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
 		}
 		if (responseAdd.result) {
 			toast.success('Revenu ajouté avec succès');
+			dispatch(categories[title]['setToStore'](responseAdd[title.toLocaleLowerCase()]));
 
 			if (closeModalAfterAdding) {
 				closeModal();
@@ -474,11 +477,11 @@ const AddModal: React.FC<ModalProps> = ({ closeModal, title, needsDate, refreshD
 												onChange={(e) => handleCheckboxChange(e)}
 											/>
 											<span className="ml-2">
-												Fermer la modal après l'ajout 
+												Fermer la modal après l'ajout
 											</span>
 										</label>
 										{(title === "Saving" || title === "Expenses") && (
-											
+
 											<label className="flex items-center">
 												<input
 													type="checkbox"

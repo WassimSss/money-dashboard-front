@@ -2,7 +2,7 @@
 export const getAll = async (token: string, period: string, periodNumber : number | null = null, year : number | null = null, dataType : string): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/${dataType}/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
+        const response = await fetch(`http://localhost:3001/users/${dataType}/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
             
             method: 'GET',
             headers: {

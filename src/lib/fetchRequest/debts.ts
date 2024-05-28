@@ -3,7 +3,7 @@ export const getDebts = async (token: string): Promise<ObjectResponseAddDebt> =>
 
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/debts/get`, {
+        const response = await fetch(`http://localhost:3001/users/debts/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/debts/get-all`, {
+        const response = await fetch(`http://localhost:3001/users/debts/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const getAllDebts = async (token: string): Promise<ObjectResponseAddDebt>
 export const addDebts = async (token: string, amount: Debt, debtor: string, userIsDebtor: boolean): Promise<ObjectResponseAddDebt> => {
 
     try {
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/debts/add`, {
+        const response = await fetch(`http://localhost:3001/users/debts/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,9 +87,9 @@ export const addDebts = async (token: string, amount: Debt, debtor: string, user
 
         const addDebtsData = await response.json();
 
-        if (addDebtsData.result) {
+     
             return addDebtsData
-        }
+        
 
     }
 
@@ -105,7 +105,7 @@ export const deleteDebts = async (token: string, id: number): Promise<ObjectResp
 
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/debts/delete`, {
+        const response = await fetch(`http://localhost:3001/users/debts/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export const acceptDebts = async (token: string, id: number): Promise<ObjectResp
 
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/debts/accept`, {
+        const response = await fetch(`http://localhost:3001/users/debts/accept`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

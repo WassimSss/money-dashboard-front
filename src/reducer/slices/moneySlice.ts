@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface MoneyState {
     value: {
@@ -33,6 +33,7 @@ export const moneySlice = createSlice({
     initialState,
     reducers: {
         setBalanceToStore: (state, action: PayloadAction<number | undefined>) => {
+            console.log(action.payload)
             state.value.balance = action.payload;
         },
         setIncomeToStore: (state, action: PayloadAction<number | undefined>) => {

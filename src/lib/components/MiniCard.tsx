@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import '../../app/globals.css';
 // import { IconType } from "react-icons";
+import { setBalanceToStore, setDebtsToStore, setExpensesToStore, setIncomeToStore, setSavingToStore } from '@/reducer/slices/moneySlice';
 import { useRouter } from 'next/navigation';
 import ContentLoader from "react-content-loader";
 import 'react-dropdown/style.css'; // Importez le CSS pour le style par défaut
@@ -40,24 +41,32 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         const fetchData = async () => {
 
             const data = await get(token, nameToLowerCase)
+            console.log("name : ", name)
+            console.log("data : ", data)
+
             setMoney(data)
             switch (name) {
                 case 'Balance':
+                    dispatch(setBalanceToStore(data))
                     setOption([{ option: "Modification de votre montant actuel", action: openModal }, { option: "Historique des actions", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Income':
+                    dispatch(setIncomeToStore(data))
                     setOption([{ option: "Ajouter un revenu", action: openModal }, { option: "Voir ses revenus", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Saving':
+                    console.log('saving : ', data)
+                    dispatch(setSavingToStore(data))
                     setOption([{ option: "Ajouter une économie", action: openModal }, { option: "Voir ses économies", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Expenses':
+                    dispatch(setExpensesToStore(data))
                     setOption([{ option: "Ajouter une dépense", action: openModal }, { option: "Voir ses dépenses", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
                     break;
                 case 'Debts':
                     // const debts = await getDebts(token);
+                    dispatch(setDebtsToStore(data))
                     setOption([{ option: "Ajouter une dette", action: openModal }, { option: "Voir les dettes", action: () => router.push(`/dashboard/data/${nameToLowerCase}`) }]);
-                    // dispatch(setDebtsToStore(debts))
                     // setMoney(moneys.debts)
 
 
@@ -74,6 +83,8 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         fetchData()
         // }
     }, [])
+
+    // console.log(moneys, nameToLowerCase)
 
     const optionLink = option.map((e, i) => {
         return (
@@ -120,6 +131,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
         };
     }, []);
 
+    console.log("moneys : ", moneys)
     const handleDropDown = () => {
         setShowDropdown(false); // Assurez-vous que setShowDropdown est défini dans votre composant
         setShowDropdown(!showDropdown)
@@ -161,8 +173,9 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
 
                 <p>{name}</p>
 
+
                 {money !== undefined ? (
-                    <p className='font-bold'>{money}€</p>
+                    <p className='font-bold'>{moneys[nameToLowerCase]}€</p>
                 ) : (
                     <ContentLoader
                         speed={2}
@@ -176,7 +189,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
                     </ContentLoader>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 

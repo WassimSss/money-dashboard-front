@@ -2,7 +2,7 @@
 export const getSaving = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/saving/get`, {
+        const response = await fetch(`http://localhost:3001/users/saving/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ type ObjectResponseAddSaving = {
 export const getAllSaving = async (token: string): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/saving/get-all`, {
+        const response = await fetch(`http://localhost:3001/users/saving/get-all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const getAllSaving = async (token: string): Promise<ObjectResponseAddSavi
 export const deleteSaving = async (token: string, id: number): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/saving/delete`, {
+        const response = await fetch(`http://localhost:3001/users/saving/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export const deleteSaving = async (token: string, id: number): Promise<ObjectRes
 export const addSaving = async (token: string, amount: number, type = undefined, date: Date, description: string|undefined = undefined, category: string|undefined = undefined, changeBalanceAmount  : boolean | null = null ): Promise<ObjectResponseAddSaving> => {
     try {
 
-        const response = await fetch(`https://money-dashboard-back.vercel.app/users/saving/add`, {
+        const response = await fetch(`http://localhost:3001/users/saving/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
