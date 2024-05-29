@@ -175,7 +175,7 @@ const MiniCard: React.FC<MiniCardProps> = ({ icon, name, /*money,*/ active, open
 
 
                 {money !== undefined ? (
-                    <p className='font-bold'>{moneys[nameToLowerCase]}€</p>
+                    <p className='font-bold'>{moneys[nameToLowerCase].toFixed(2)}€</p>
                 ) : (
                     <ContentLoader
                         speed={2}
