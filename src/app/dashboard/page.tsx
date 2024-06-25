@@ -15,7 +15,7 @@ import Budget from '@/lib/components/Budget';
 
 const Home: React.FC = () => {
     const requireAuth = true;
-    const redirect = "/"
+    const redirect = "/";
 
     useAuthServerAndRedirect(requireAuth, redirect);
     useAuthClientAndRedirect(requireAuth, redirect);
