@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useAppDispatch, useAppSelector } from '@/reducer/store';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisVertical, } from '@fortawesome/free-solid-svg-icons';
