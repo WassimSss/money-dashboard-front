@@ -2,7 +2,7 @@
 export const getExpenses = async (token: string): Promise<number | undefined> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses/get`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ type ObjectResponseGetAllExpenses = {
 export const getExpensesOfThePeriod = async (token: string, period: string, periodNumber: number | null = null, yearNumber: number | null = null): Promise<{result: boolean, expenses: number[]} | undefined> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (yearNumber !== null ? `/${yearNumber}` : ''), {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/get-by-period/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (yearNumber !== null ? `/${yearNumber}` : ''), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export const getExpensesOfThePeriod = async (token: string, period: string, peri
 // export const getExpensesOfTheWeek = async (token: string): Promise<number | undefined> => {
 //     try {
 
-//         const response = await fetch(`http://localhost:3001/users/getExpenses/week`, {
+//         const response = await fetch(`https://money-dashboard-back.vercel.app/users/getExpenses/week`, {
 //             method: 'GET',
 //             headers: {
 //                 'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ type expensesObject = {
 // export const getExpensesOfTheMonth = async (token: string, monthNumber: number): Promise<expensesObject | undefined> => {
 //     try {
 
-//         const response = await fetch(`http://localhost:3001/users/getExpenses/month/${monthNumber}`, {
+//         const response = await fetch(`https://money-dashboard-back.vercel.app/users/getExpenses/month/${monthNumber}`, {
 //             method: 'GET',
 //             headers: {
 //                 'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ type expensesObject = {
 export const getAllExpenses = async (token: string, period: string, periodNumber: number | null = null, year: number | null = null): Promise<ObjectResponseGetAllExpenses> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/get-all/${period}` + (periodNumber !== null ? `/${periodNumber}` : '') + (year !== null ? `/${year}` : ''), {
 
             method: 'GET',
             headers: {
@@ -204,7 +204,7 @@ type ObjectResponseExpensesCategories = {
 export const getExpensesCategoriesLabel = async (token: string, period: string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses-category/get`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses-category/get`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ export const getExpensesCategoriesLabel = async (token: string, period: string):
 export const addExpensesCategoriesLabel = async (token: string, category: string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses-category/add`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses-category/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -271,7 +271,7 @@ export const addExpensesCategoriesLabel = async (token: string, category: string
 export const addBudgetOfExpensesCategory = async (token: string, category: string | undefined, budget: number | string): Promise<ObjectResponseExpensesCategories> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses-category/add-budget`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses-category/add-budget`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -314,7 +314,7 @@ type ObjectResponseGetAllExpensesCategories = {
 export const getExpensesCategories = async (token: string, period: string): Promise<ObjectResponseGetAllExpensesCategories> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses/get-by-period/month/${period}`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/get-by-period/month/${period}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -345,7 +345,7 @@ export const addExpenses = async (token: string, amount: number, type = undefine
     try {
 
 
-        const response = await fetch(`http://localhost:3001/users/expenses/add`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -387,7 +387,7 @@ type ObjectResponseDeleteExpenses = {
 export const deleteExpenses = async (token: string, id: number): Promise<ObjectResponseDeleteExpenses> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/expenses/delete`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/expenses/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

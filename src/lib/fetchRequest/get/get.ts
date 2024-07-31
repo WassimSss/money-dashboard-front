@@ -7,7 +7,7 @@ type ObjectResponseGetAllExpenses = {
 export const get = async (token: string, dataType: string): Promise<ObjectResponseGetAllExpenses> => {
   try {
 
-      const response = await fetch(`http://localhost:3001/users/${dataType}/get`, {
+      const response = await fetch(`https://money-dashboard-back.vercel.app/users/${dataType}/get`, {
           
           method: 'GET',
           headers: {

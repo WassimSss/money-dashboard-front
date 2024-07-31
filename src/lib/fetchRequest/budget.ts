@@ -13,7 +13,7 @@ type monthBudgetObject = {
 export const getBudget = async (token: string, period: string, monthNumber: number | null = null, year: number | null = null): Promise<monthBudgetObject | undefined> => {
 
     try {
-        const response = await fetch(`http://localhost:3001/users/getBudget/${period}${monthNumber ? "/" + monthNumber : ""}`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/getBudget/${period}${monthNumber ? "/" + monthNumber : ""}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export const getBudget = async (token: string, period: string, monthNumber: numb
 export const getMonthBudget = async (token: string, period: string, monthNumber: number | null = null, year: number | null = null): Promise<monthBudgetObject | undefined> => {
     try {
 
-        const response = await fetch(`http://localhost:3001/users/getMonthBudget/${period}${monthNumber ? "/" + monthNumber : ""}${year ? "/" + year : ""}`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/getMonthBudget/${period}${monthNumber ? "/" + monthNumber : ""}${year ? "/" + year : ""}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const getMonthBudget = async (token: string, period: string, monthNumber:
 // addBudgetOfMonth
 export const addBudgetOfMonth = async (token: string, month: number, year: number, monthAmount: number): Promise<boolean | undefined> => {
     try {
-        const response = await fetch(`http://localhost:3001/users/setBudget`, {
+        const response = await fetch(`https://money-dashboard-back.vercel.app/users/setBudget`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
